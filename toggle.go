@@ -2,19 +2,17 @@ package prompt
 
 import (
 	"fmt"
-	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-type SelectModel struct {
-	cursor   int
+type ToggleModel struct {
 	quitting bool
-	err      error
 
-	choice  string
-	Choices []string
+	choice      bool
+	TrueString  string
+	FalseString string
 
 	Prompt             string
 	NormalPromptPrefix string
@@ -31,95 +29,87 @@ type SelectModel struct {
 	DonePromptSuffixStyle   lipgloss.Style
 }
 
-func (m SelectModel) Init() tea.Cmd {
+func (m ToggleModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m SelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m ToggleModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q", "esc":
+		case "ctrl+c", "q", "esc", "enter":
 			m.quitting = true
-			m.err = ErrUserQuit
 			return m, tea.Quit
 
-		case "enter":
-			m.choice = m.Choices[m.cursor]
-			return m, tea.Quit
-
-		case "down", "j":
-			m.cursor++
-			if m.cursor >= len(m.Choices) {
-				m.cursor = 0
-			}
-
-		case "up", "k":
-			m.cursor--
-			if m.cursor < 0 {
-				m.cursor = len(m.Choices) - 1
-			}
+		case "up", "down", "left", "right", "j", "k", "h", "l", "tab", "space":
+			m.choice = !m.choice
 		}
 	}
 
 	return m, nil
 }
 
-func (m SelectModel) View() string {
-	if m.choice != "" {
+func (m ToggleModel) choiceToString() string {
+	if m.choice {
+		return m.TrueString
+	} else {
+		return m.FalseString
+	}
+}
+
+func (m ToggleModel) View() string {
+	if m.quitting {
 		return fmt.Sprintf("%s %s %s %s\n",
 			m.DonePromptPrefixStyle.Render(m.DonePromptPrefix),
 			m.Prompt,
 			m.DonePromptSuffixStyle.Render(m.DonePromptSuffix),
-			m.ChoiceStyle.Render(m.choice),
+			m.ChoiceStyle.Render(m.choiceToString()),
 		)
 	}
-	if m.quitting {
-		return ""
+
+	var toggleString string
+
+	if m.choice {
+		toggleString = fmt.Sprintf("%s / %s",
+			m.SelectedItemStyle.Render(m.TrueString),
+			m.ItemStyle.Render(m.FalseString),
+		)
+	} else {
+		toggleString = fmt.Sprintf("%s / %s",
+			m.ItemStyle.Render(m.TrueString),
+			m.SelectedItemStyle.Render(m.FalseString),
+		)
 	}
 
-	s := strings.Builder{}
-	s.WriteString(fmt.Sprintf("%s %s %s\n",
+	return fmt.Sprintf("%s %s %s %s",
 		m.NormalPromptPrefixStyle.Render(m.NormalPromptPrefix),
 		m.Prompt,
 		m.NormalPromptSuffixStyle.Render(m.NormalPromptSuffix),
-	))
-
-	for i := 0; i < len(m.Choices); i++ {
-		if m.cursor == i {
-			s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
-		} else {
-			s.WriteString(m.ItemStyle.Render(fmt.Sprintf("  %s", m.Choices[i])))
-		}
-		s.WriteString("\n")
-	}
-
-	return s.String()
+		toggleString,
+	)
 }
 
-func SelectWithModel(m SelectModel) (string, error) {
+func ToggleWithModel(defaultValue bool, m ToggleModel) (bool, error) {
+	m.choice = defaultValue
 	p := tea.NewProgram(m)
 
 	tm, err := p.Run()
 	if err != nil {
-		return "", err
+		return defaultValue, err
 	}
 
-	m, ok := tm.(SelectModel)
-	if !ok {
-		return "", ErrModelConversion
-	}
-
-	if m.err != nil {
-		return "", m.err
-	} else {
+	m, ok := tm.(ToggleModel)
+	if ok {
 		return m.choice, nil
+	} else {
+		return defaultValue, nil
 	}
 }
 
-func Select(prompt string, choices []string) (string, error) {
-	m := SelectModel{
-		Choices:                 choices,
+func Toggle(prompt string, defaultValue bool) (bool, error) {
+	m := ToggleModel{
+		TrueString:              "Yes",
+		FalseString:             "No",
 		Prompt:                  prompt,
 		NormalPromptPrefix:      "?",
 		DonePromptPrefix:        "✔",
@@ -134,5 +124,5 @@ func Select(prompt string, choices []string) (string, error) {
 		DonePromptSuffixStyle:   lipgloss.NewStyle().Foreground(lipgloss.Color("6")),
 	}
 
-	return SelectWithModel(m)
+	return ToggleWithModel(defaultValue, m)
 }
