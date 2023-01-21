@@ -97,22 +97,8 @@ func (m SelectModel) View() string {
 	return s.String()
 }
 
-func Select(prompt string, choices []string) (string, error) {
-	p := tea.NewProgram(SelectModel{
-		Choices:                 choices,
-		Prompt:                  prompt,
-		NormalPromptPrefix:      "?",
-		DonePromptPrefix:        "✔",
-		NormalPromptSuffix:      "›",
-		DonePromptSuffix:        "…",
-		ItemStyle:               lipgloss.NewStyle(),
-		SelectedItemStyle:       lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
-		ChoiceStyle:             lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
-		NormalPromptPrefixStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
-		DonePromptPrefixStyle:   lipgloss.NewStyle().Foreground(lipgloss.Color("10")),
-		NormalPromptSuffixStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("6")),
-		DonePromptSuffixStyle:   lipgloss.NewStyle().Foreground(lipgloss.Color("6")),
-	})
+func SelectWithModel(m SelectModel) (string, error) {
+	p := tea.NewProgram(m)
 
 	tm, err := p.Run()
 	if err != nil {
@@ -129,4 +115,24 @@ func Select(prompt string, choices []string) (string, error) {
 	} else {
 		return m.Choice, nil
 	}
+}
+
+func Select(prompt string, choices []string) (string, error) {
+	m := SelectModel{
+		Choices:                 choices,
+		Prompt:                  prompt,
+		NormalPromptPrefix:      "?",
+		DonePromptPrefix:        "✔",
+		NormalPromptSuffix:      "›",
+		DonePromptSuffix:        "…",
+		ItemStyle:               lipgloss.NewStyle(),
+		SelectedItemStyle:       lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
+		ChoiceStyle:             lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
+		NormalPromptPrefixStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("14")),
+		DonePromptPrefixStyle:   lipgloss.NewStyle().Foreground(lipgloss.Color("10")),
+		NormalPromptSuffixStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("6")),
+		DonePromptSuffixStyle:   lipgloss.NewStyle().Foreground(lipgloss.Color("6")),
+	}
+
+	return SelectWithModel(m)
 }
