@@ -2,19 +2,16 @@ package prompt
 
 import (
 	"fmt"
-	"strings"
 
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-type SelectModel struct {
-	cursor   int
-	quitting bool
-	err      error
-
-	choice  string
-	Choices []string
+type InputModel struct {
+	textInput textinput.Model
+	err       error
+	quitting  bool
 
 	Prompt             string
 	NormalPromptPrefix string
@@ -31,74 +28,61 @@ type SelectModel struct {
 	DonePromptSuffixStyle   lipgloss.Style
 }
 
-func (m SelectModel) Init() tea.Cmd {
-	return nil
+func (m InputModel) Init() tea.Cmd {
+	return textinput.Blink
 }
 
-func (m SelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "ctrl+c", "q", "esc":
+		switch msg.Type {
+		case tea.KeyEnter:
+			m.quitting = true
+			return m, tea.Quit
+		case tea.KeyCtrlC, tea.KeyEsc:
 			m.quitting = true
 			m.err = ErrUserQuit
 			return m, tea.Quit
-
-		case "enter":
-			m.choice = m.Choices[m.cursor]
-			return m, tea.Quit
-
-		case "down", "j":
-			m.cursor++
-			if m.cursor >= len(m.Choices) {
-				m.cursor = 0
-			}
-
-		case "up", "k":
-			m.cursor--
-			if m.cursor < 0 {
-				m.cursor = len(m.Choices) - 1
-			}
 		}
 	}
 
-	return m, nil
+	m.textInput, cmd = m.textInput.Update(msg)
+	return m, cmd
 }
 
-func (m SelectModel) View() string {
-	if m.choice != "" {
+func (m InputModel) View() string {
+	if m.quitting {
 		return fmt.Sprintf("%s %s %s %s\n",
 			m.DonePromptPrefixStyle.Render(m.DonePromptPrefix),
 			m.Prompt,
 			m.DonePromptSuffixStyle.Render(m.DonePromptSuffix),
-			m.ChoiceStyle.Render(m.choice),
+			m.textInput.Value(),
 		)
-	}
-	if m.quitting {
-		return ""
+
 	}
 
-	s := strings.Builder{}
-	s.WriteString(fmt.Sprintf("%s %s %s\n",
+	return fmt.Sprintf(
+		"%s %s %s %s",
 		m.NormalPromptPrefixStyle.Render(m.NormalPromptPrefix),
 		m.Prompt,
 		m.NormalPromptSuffixStyle.Render(m.NormalPromptSuffix),
-	))
-
-	for i := 0; i < len(m.Choices); i++ {
-		if m.cursor == i {
-			s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
-		} else {
-			s.WriteString(m.ItemStyle.Render(fmt.Sprintf("  %s", m.Choices[i])))
-		}
-		s.WriteString("\n")
-	}
-
-	return s.String()
+		m.textInput.View(),
+	)
 }
 
-func SelectWithModel(m SelectModel) (string, error) {
+func InputWithModel(m InputModel, defaultValue string) (string, error) {
+	ti := textinput.New()
+	ti.Placeholder = defaultValue
+	ti.Focus()
+	ti.CharLimit = 156
+	ti.Width = 20
+	ti.Prompt = ""
+
+	m.textInput = ti
 	m.err = nil
+
 	p := tea.NewProgram(m)
 
 	tm, err := p.Run()
@@ -106,21 +90,22 @@ func SelectWithModel(m SelectModel) (string, error) {
 		return "", err
 	}
 
-	m, ok := tm.(SelectModel)
+	m, ok := tm.(InputModel)
 	if !ok {
 		return "", ErrModelConversion
 	}
 
 	if m.err != nil {
 		return "", m.err
+	} else if m.textInput.Value() == "" {
+		return defaultValue, nil
 	} else {
-		return m.choice, nil
+		return m.textInput.Value(), nil
 	}
 }
 
-func Select(prompt string, choices []string) (string, error) {
-	m := SelectModel{
-		Choices:                 choices,
+func Input(prompt string, defaultValue string) (string, error) {
+	m := InputModel{
 		Prompt:                  prompt,
 		NormalPromptPrefix:      DefaultNormalPromptPrefix,
 		DonePromptPrefix:        DefaultDonePromptPrefix,
@@ -135,5 +120,5 @@ func Select(prompt string, choices []string) (string, error) {
 		DonePromptSuffixStyle:   DefaultDonePromptSuffixStyle,
 	}
 
-	return SelectWithModel(m)
+	return InputWithModel(m, defaultValue)
 }

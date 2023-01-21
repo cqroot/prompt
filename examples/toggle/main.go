@@ -13,8 +13,8 @@ func main() {
 	}
 
 	if choice {
-		fmt.Println("you have confirmed")
+		fmt.Println("You have confirmed")
 	} else {
-		fmt.Println("you have declined")
+		fmt.Println("You have declined")
 	}
 }

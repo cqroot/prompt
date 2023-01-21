@@ -89,7 +89,7 @@ func (m ToggleModel) View() string {
 	)
 }
 
-func ToggleWithModel(defaultValue bool, m ToggleModel) (bool, error) {
+func ToggleWithModel(m ToggleModel, defaultValue bool) (bool, error) {
 	m.choice = defaultValue
 	p := tea.NewProgram(m)
 
@@ -124,5 +124,5 @@ func Toggle(prompt string, defaultValue bool) (bool, error) {
 		DonePromptSuffixStyle:   DefaultDonePromptSuffixStyle,
 	}
 
-	return ToggleWithModel(defaultValue, m)
+	return ToggleWithModel(m, defaultValue)
 }
