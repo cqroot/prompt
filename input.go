@@ -58,7 +58,7 @@ func (m InputModel) View() string {
 			m.DonePromptPrefixStyle.Render(m.DonePromptPrefix),
 			m.Prompt,
 			m.DonePromptSuffixStyle.Render(m.DonePromptSuffix),
-			m.textInput.Value(),
+			m.ChoiceStyle.Render(m.textInput.Value()),
 		)
 
 	}
