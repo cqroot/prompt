@@ -8,13 +8,15 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type selectModel struct {
+type SelectModel struct {
 	cursor   int
 	quitting bool
+	err      error
+
+	Choice  string
+	Choices []string
 
 	Prompt             string
-	Choice             string
-	Choices            []string
 	NormalPromptPrefix string
 	DonePromptPrefix   string
 	NormalPromptSuffix string
@@ -29,18 +31,17 @@ type selectModel struct {
 	DonePromptSuffixStyle   lipgloss.Style
 }
 
-var ()
-
-func (m selectModel) Init() tea.Cmd {
+func (m SelectModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m selectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m SelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
 			m.quitting = true
+			m.err = ErrUserQuit
 			return m, tea.Quit
 
 		case "enter":
@@ -64,7 +65,7 @@ func (m selectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m selectModel) View() string {
+func (m SelectModel) View() string {
 	if m.Choice != "" {
 		return fmt.Sprintf("%s %s %s %s\n",
 			m.DonePromptPrefixStyle.Render(m.DonePromptPrefix),
@@ -97,9 +98,9 @@ func (m selectModel) View() string {
 }
 
 func Select(prompt string, choices []string) (string, error) {
-	p := tea.NewProgram(selectModel{
-		Prompt:                  prompt,
+	p := tea.NewProgram(SelectModel{
 		Choices:                 choices,
+		Prompt:                  prompt,
 		NormalPromptPrefix:      "?",
 		DonePromptPrefix:        "✔",
 		NormalPromptSuffix:      "›",
@@ -118,10 +119,14 @@ func Select(prompt string, choices []string) (string, error) {
 		return "", err
 	}
 
-	m, ok := tm.(selectModel)
-	if ok && m.Choice != "" {
-		return m.Choice, nil
+	m, ok := tm.(SelectModel)
+	if !ok {
+		return "", ErrModelConversion
+	}
+
+	if m.err != nil {
+		return "", m.err
 	} else {
-		return "", nil
+		return m.Choice, nil
 	}
 }

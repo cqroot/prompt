@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/cqroot/prompt"
@@ -12,11 +13,12 @@ func main() {
 		[]string{"Taro", "Coffee", "Lychee", ""},
 	)
 	if err != nil {
-		panic(err)
-	}
-	if choice == "" {
-		fmt.Println("You have no choice.")
-		return
+		if errors.Is(err, prompt.ErrUserQuit) {
+			fmt.Println("You have no choice.")
+			return
+		} else {
+			panic(err)
+		}
 	}
 
 	fmt.Printf("You chose %s!\n", choice)
