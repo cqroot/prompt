@@ -9,9 +9,10 @@ import (
 )
 
 type data struct {
-	InputVal  string
-	ToggleVal bool
-	SelectVal string
+	InputVal       string
+	ToggleVal      bool
+	SelectVal      string
+	MultiSelectVal []string
 }
 
 func main() {
@@ -30,10 +31,15 @@ func main() {
 	)
 	checkErr(err)
 
-    fmt.Println()
-	fmt.Printf("  Input  result:  %+v\n", d.InputVal)
-	fmt.Printf("  Toggle result:  %+v\n", d.ToggleVal)
-	fmt.Printf("  Select result:  %+v\n", d.SelectVal)
+	d.MultiSelectVal, err = p.Ask("MultiSelect type:").MultiSelect(
+		[]string{"Option 1", "Option 2", "Option 3"},
+	)
+
+	fmt.Println()
+	fmt.Printf("  Input       result:  %+v\n", d.InputVal)
+	fmt.Printf("  Toggle      result:  %+v\n", d.ToggleVal)
+	fmt.Printf("  Select      result:  %+v\n", d.SelectVal)
+	fmt.Printf("  MultiSelect result:  %+v\n", d.MultiSelectVal)
 }
 
 func checkErr(err error) {

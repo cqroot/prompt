@@ -81,3 +81,39 @@ func (m ToggleModel) View() string {
 		toggleString,
 	)
 }
+
+func NewToggleModel() *ToggleModel {
+	m := ToggleModel{
+		TrueString:        "Yes",
+		FalseString:       "No",
+		ItemStyle:         DefaultItemStyle,
+		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChoiceStyle:       DefaultChoiceStyle,
+	}
+	return &m
+}
+
+func (p Prompt) ToggleWithModel(model *ToggleModel, defaultValue bool) (bool, error) {
+	model.choice = defaultValue
+	model.prompt = p
+
+	tm, err := tea.NewProgram(model).Run()
+	if err != nil {
+		return defaultValue, err
+	}
+
+	m, ok := tm.(ToggleModel)
+	if !ok {
+		return defaultValue, ErrModelConversion
+	}
+
+	if m.err != nil {
+		return defaultValue, m.err
+	} else {
+		return m.choice, nil
+	}
+}
+
+func (p Prompt) Toggle(defaultValue bool) (bool, error) {
+	return p.ToggleWithModel(NewToggleModel(), defaultValue)
+}

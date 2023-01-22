@@ -13,7 +13,7 @@ type SelectModel struct {
 	err      error
 	prompt   Prompt
 
-	cursor   int
+	cursor  int
 	choice  string
 	Choices []string
 
@@ -73,7 +73,8 @@ func (m SelectModel) View() string {
 
 	for i := 0; i < len(m.Choices); i++ {
 		if m.cursor == i {
-			s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
+			// s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
+			s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("• %s", m.Choices[i])))
 		} else {
 			s.WriteString(m.ItemStyle.Render(fmt.Sprintf("  %s", m.Choices[i])))
 		}
@@ -81,4 +82,39 @@ func (m SelectModel) View() string {
 	}
 
 	return s.String()
+}
+
+func NewSelectModel(choices []string) *SelectModel {
+	m := SelectModel{
+		Choices:           choices,
+		ItemStyle:         DefaultItemStyle,
+		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChoiceStyle:       DefaultChoiceStyle,
+	}
+	return &m
+}
+
+func (p Prompt) SelectWithModel(model *SelectModel) (string, error) {
+	model.err = nil
+	model.prompt = p
+
+	tm, err := tea.NewProgram(model).Run()
+	if err != nil {
+		return "", err
+	}
+
+	m, ok := tm.(SelectModel)
+	if !ok {
+		return "", ErrModelConversion
+	}
+
+	if m.err != nil {
+		return "", m.err
+	} else {
+		return m.choice, nil
+	}
+}
+
+func (p Prompt) Select(choices []string) (string, error) {
+	return p.SelectWithModel(NewSelectModel(choices))
 }

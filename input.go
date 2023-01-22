@@ -69,3 +69,47 @@ func (m InputModel) View() string {
 		m.textInput.View(),
 	)
 }
+
+func NewInputModel(defaultValue string) *InputModel {
+	ti := textinput.New()
+	ti.Placeholder = defaultValue
+	ti.Focus()
+	ti.CharLimit = 156
+	ti.Width = 20
+	ti.Prompt = ""
+
+	m := InputModel{
+		textInput: ti,
+		err:       nil,
+		df:        defaultValue,
+
+		ItemStyle:         DefaultItemStyle,
+		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChoiceStyle:       DefaultChoiceStyle,
+	}
+	return &m
+}
+
+func (p Prompt) InputWithModel(model *InputModel) (string, error) {
+	model.prompt = p
+
+	tm, err := tea.NewProgram(model).Run()
+	if err != nil {
+		return "", err
+	}
+
+	m, ok := tm.(InputModel)
+	if !ok {
+		return "", ErrModelConversion
+	}
+
+	if m.err != nil {
+		return "", m.err
+	} else {
+		return m.result, nil
+	}
+}
+
+func (p Prompt) Input(defaultValue string) (string, error) {
+	return p.InputWithModel(NewInputModel(defaultValue))
+}

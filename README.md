@@ -9,7 +9,7 @@
   </p>
 </div>
 
-# Types
+# Features
 
 | Type   | Return |
 | ------ | ------ |

@@ -1,7 +1,6 @@
 package prompt
 
 import (
-	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -30,45 +29,4 @@ func Default() Prompt {
 		SuffixStyle:       DefaultNormalPromptSuffixStyle,
 		FinishSuffixStyle: DefaultFinishPromptSuffixStyle,
 	}
-}
-
-func NewToggleModel() *ToggleModel {
-	m := ToggleModel{
-		TrueString:        "Yes",
-		FalseString:       "No",
-		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
-	}
-	return &m
-}
-
-func NewInputModel(defaultValue string) *InputModel {
-	ti := textinput.New()
-	ti.Placeholder = defaultValue
-	ti.Focus()
-	ti.CharLimit = 156
-	ti.Width = 20
-	ti.Prompt = ""
-
-	m := InputModel{
-		textInput: ti,
-		err:       nil,
-		df:        defaultValue,
-
-		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
-	}
-	return &m
-}
-
-func NewSelectModel(choices []string) *SelectModel {
-	m := SelectModel{
-		Choices:           choices,
-		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
-	}
-	return &m
 }
