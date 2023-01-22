@@ -20,7 +20,7 @@ func main() {
 	d := data{}
 	p := prompt.Default()
 
-	d.InputVal, err = p.Ask("Input type").Input("Anonymous")
+	d.InputVal, err = p.Ask("Input type:").Input("Default string")
 	checkErr(err)
 
 	d.ToggleVal, err = p.Ask("Toggle type:").Toggle(true)
