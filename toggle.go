@@ -9,24 +9,16 @@ import (
 
 type ToggleModel struct {
 	quitting bool
+	err      error
+	prompt   Prompt
 
 	choice      bool
 	TrueString  string
 	FalseString string
 
-	Prompt             string
-	NormalPromptPrefix string
-	DonePromptPrefix   string
-	NormalPromptSuffix string
-	DonePromptSuffix   string
-
-	ItemStyle               lipgloss.Style
-	SelectedItemStyle       lipgloss.Style
-	ChoiceStyle             lipgloss.Style
-	NormalPromptPrefixStyle lipgloss.Style
-	DonePromptPrefixStyle   lipgloss.Style
-	NormalPromptSuffixStyle lipgloss.Style
-	DonePromptSuffixStyle   lipgloss.Style
+	ItemStyle         lipgloss.Style
+	SelectedItemStyle lipgloss.Style
+	ChoiceStyle       lipgloss.Style
 }
 
 func (m ToggleModel) Init() tea.Cmd {
@@ -37,7 +29,12 @@ func (m ToggleModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q", "esc", "enter":
+		case "ctrl+c", "q", "esc":
+			m.quitting = true
+			m.err = ErrUserQuit
+			return m, tea.Quit
+
+		case "enter":
 			m.quitting = true
 			return m, tea.Quit
 
@@ -59,10 +56,8 @@ func (m ToggleModel) choiceToString() string {
 
 func (m ToggleModel) View() string {
 	if m.quitting {
-		return fmt.Sprintf("%s %s %s %s\n",
-			m.DonePromptPrefixStyle.Render(m.DonePromptPrefix),
-			m.Prompt,
-			m.DonePromptSuffixStyle.Render(m.DonePromptSuffix),
+		return fmt.Sprintf("%s %s\n",
+			m.prompt.finishView(),
 			m.ChoiceStyle.Render(m.choiceToString()),
 		)
 	}
@@ -81,48 +76,8 @@ func (m ToggleModel) View() string {
 		)
 	}
 
-	return fmt.Sprintf("%s %s %s %s",
-		m.NormalPromptPrefixStyle.Render(m.NormalPromptPrefix),
-		m.Prompt,
-		m.NormalPromptSuffixStyle.Render(m.NormalPromptSuffix),
+	return fmt.Sprintf("%s %s",
+		m.prompt.view(),
 		toggleString,
 	)
-}
-
-func ToggleWithModel(m ToggleModel, defaultValue bool) (bool, error) {
-	m.choice = defaultValue
-	p := tea.NewProgram(m)
-
-	tm, err := p.Run()
-	if err != nil {
-		return defaultValue, err
-	}
-
-	m, ok := tm.(ToggleModel)
-	if ok {
-		return m.choice, nil
-	} else {
-		return defaultValue, nil
-	}
-}
-
-func Toggle(prompt string, defaultValue bool) (bool, error) {
-	m := ToggleModel{
-		TrueString:              "Yes",
-		FalseString:             "No",
-		Prompt:                  prompt,
-		NormalPromptPrefix:      DefaultNormalPromptPrefix,
-		DonePromptPrefix:        DefaultDonePromptPrefix,
-		NormalPromptSuffix:      DefaultNormalPromptSuffix,
-		DonePromptSuffix:        DefaultDonePromptSuffix,
-		ItemStyle:               DefaultItemStyle,
-		SelectedItemStyle:       DefaultSelectedItemStyle,
-		ChoiceStyle:             DefaultChoiceStyle,
-		NormalPromptPrefixStyle: DefaultNormalPromptPrefixStyle,
-		DonePromptPrefixStyle:   DefaultDonePromptPrefixStyle,
-		NormalPromptSuffixStyle: DefaultNormalPromptSuffixStyle,
-		DonePromptSuffixStyle:   DefaultDonePromptSuffixStyle,
-	}
-
-	return ToggleWithModel(m, defaultValue)
 }
