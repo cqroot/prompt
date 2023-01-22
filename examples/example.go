@@ -9,10 +9,9 @@ import (
 )
 
 type data struct {
-	InputVal       string
-	SelectVal      string
-	MultiSelectVal []string
-	ToggleVal      bool
+	InputVal  string
+	ToggleVal bool
+	SelectVal string
 }
 
 func main() {
@@ -23,13 +22,18 @@ func main() {
 	d.InputVal, err = p.Ask("Input type").Input("Anonymous")
 	checkErr(err)
 
-	d.SelectVal, err = p.Ask("Select type:").Select([]string{"Taro", "Coffee", "Lychee", ""})
-	checkErr(err)
-
 	d.ToggleVal, err = p.Ask("Toggle type:").Toggle(true)
 	checkErr(err)
 
-	fmt.Printf("\ndata: %+v\n", d)
+	d.SelectVal, err = p.Ask("Select type:").Select(
+		[]string{"Option 1", "Option 2", "Option 3"},
+	)
+	checkErr(err)
+
+    fmt.Println()
+	fmt.Printf("  Input  result:  %+v\n", d.InputVal)
+	fmt.Printf("  Toggle result:  %+v\n", d.ToggleVal)
+	fmt.Printf("  Select result:  %+v\n", d.SelectVal)
 }
 
 func checkErr(err error) {

@@ -25,6 +25,14 @@ func (m InputModel) Init() tea.Cmd {
 	return textinput.Blink
 }
 
+func (m *InputModel) quit() {
+	m.quitting = true
+	m.result = m.textInput.Value()
+	if m.result == "" {
+		m.result = m.df
+	}
+}
+
 func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
@@ -32,11 +40,11 @@ func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyEnter:
-			m.quitting = true
+			m.quit()
 			return m, tea.Quit
 
 		case tea.KeyCtrlC, tea.KeyEsc:
-			m.quitting = true
+			m.quit()
 			m.err = ErrUserQuit
 			return m, tea.Quit
 		}
@@ -48,10 +56,6 @@ func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m InputModel) View() string {
 	if m.quitting {
-		m.result = m.textInput.Value()
-		if m.result == "" {
-			m.result = m.df
-		}
 		return fmt.Sprintf("%s %s\n",
 			m.prompt.finishView(),
 			m.ChoiceStyle.Render(m.result),
