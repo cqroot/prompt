@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/cqroot/prompt"
 )
@@ -18,7 +19,7 @@ type data struct {
 func main() {
 	var err error
 	d := data{}
-	p := prompt.Default()
+	p := prompt.New()
 
 	d.InputVal, err = p.Ask("Input type:").Input("Default string")
 	checkErr(err)
@@ -36,10 +37,10 @@ func main() {
 	)
 
 	fmt.Println()
-	fmt.Printf("  Input       result:  %+v\n", d.InputVal)
-	fmt.Printf("  Toggle      result:  %+v\n", d.ToggleVal)
-	fmt.Printf("  Select      result:  %+v\n", d.SelectVal)
-	fmt.Printf("  MultiSelect result:  %+v\n", d.MultiSelectVal)
+	fmt.Printf("  Input        result:  %+v\n", d.InputVal)
+	fmt.Printf("  Toggle       result:  %+v\n", d.ToggleVal)
+	fmt.Printf("  Select       result:  %+v\n", d.SelectVal)
+	fmt.Printf("  MultiSelect  result:  %s\n", strings.Join(d.MultiSelectVal, ", "))
 }
 
 func checkErr(err error) {

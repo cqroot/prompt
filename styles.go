@@ -18,7 +18,7 @@ var (
 	DefaultFinishPromptSuffixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("6"))
 )
 
-func Default() Prompt {
+func New() Prompt {
 	return Prompt{
 		NormalPrefix:      DefaultNormalPromptPrefix,
 		FinishPrefix:      DefaultFinishPromptPrefix,
