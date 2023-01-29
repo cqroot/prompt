@@ -45,7 +45,9 @@ func (m ChooseModel) View() string {
 }
 
 func ChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
-	tm, err := listWithStyle(&ChooseModel{}, choices, style, message, finishMessage)
+    model := ChooseModel{}
+    model.direction = directionVertical
+	tm, err := listWithStyle(&model, choices, style, message, finishMessage)
 	if err != nil {
 		return "", err
 	}

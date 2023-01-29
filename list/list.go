@@ -6,27 +6,6 @@ import (
 	"github.com/cqroot/prompt/perrors"
 )
 
-type IListBaseModel interface {
-	setQuitting(bool)
-	setErr(error)
-	getErr() error
-	setChoice(string)
-	getChoice() string
-	setCursor(int)
-	getCursor() int
-	setMessage(string)
-	getMessage() string
-	setFinishMessage(string)
-	getFinishMessage() string
-	setChoices([]string)
-	setStyle(*ListStyle)
-	getStyle() *ListStyle
-
-	Init() tea.Cmd
-	Update(msg tea.Msg) (tea.Model, tea.Cmd)
-	View() string
-}
-
 type ListBaseModel struct {
 	quitting      bool
 	err           error
@@ -36,6 +15,7 @@ type ListBaseModel struct {
 	choice        string
 	choices       []string
 	style         *ListStyle
+	direction     listDirection
 }
 
 func (m *ListBaseModel) setQuitting(quitting bool) {
@@ -111,13 +91,29 @@ func (m ListBaseModel) update(model IListBaseModel, msg tea.Msg) tea.Cmd {
 			model.setChoice(m.choices[model.getCursor()])
 			return tea.Quit
 
-		case "up", "k", "h":
+		case "up", "k", "left", "h":
+			if m.direction == directionVertical &&
+				msg.String() != "up" && msg.String() != "k" {
+				break
+			}
+			if m.direction == directionHorizontal &&
+				msg.String() != "left" && msg.String() != "h" {
+				break
+			}
 			model.setCursor(model.getCursor() - 1)
 			if model.getCursor() < 0 {
 				model.setCursor(len(m.choices) - 1)
 			}
 
-		case "down", "j", "l", "tab", "space":
+		case "down", "j", "right", "l", "tab", " ":
+			if m.direction == directionVertical &&
+				(msg.String() == "right" || msg.String() == "l") {
+				break
+			}
+			if m.direction == directionHorizontal &&
+				(msg.String() == "down" || msg.String() == "j") {
+				break
+			}
 			model.setCursor(model.getCursor() + 1)
 			if model.getCursor() >= len(m.choices) {
 				model.setCursor(0)

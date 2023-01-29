@@ -6,6 +6,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/cqroot/prompt/styles"
 )
 
 type MultiChooseModel struct {
@@ -72,7 +73,7 @@ func (m MultiChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q", "esc":
-            m.quit()
+			m.quit()
 			m.err = ErrUserQuit
 			return m, tea.Quit
 
@@ -80,7 +81,7 @@ func (m MultiChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.toggleChoice(m.cursor)
 
 		case "enter":
-            m.quit()
+			m.quit()
 			return m, tea.Quit
 
 		case "down", "j":
@@ -135,9 +136,9 @@ func (m MultiChooseModel) View() string {
 func NewMultiChooseModel(choices []string) *MultiChooseModel {
 	m := MultiChooseModel{
 		Choices:           choices,
-		ItemStyle:         DefaultItemStyle,
-		ChooseedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
+		ItemStyle:         styles.DefaultItemStyle,
+		ChooseedItemStyle: styles.DefaultSelectedItemStyle,
+		ChoiceStyle:       styles.DefaultChoiceStyle,
 	}
 	return &m
 }

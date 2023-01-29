@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/cqroot/prompt/styles"
 )
 
 type Prompt struct {
@@ -16,6 +17,19 @@ type Prompt struct {
 	FinishPrefixStyle lipgloss.Style
 	SuffixStyle       lipgloss.Style
 	FinishSuffixStyle lipgloss.Style
+}
+
+func New() Prompt {
+	return Prompt{
+		NormalPrefix:      styles.DefaultNormalPromptPrefix,
+		FinishPrefix:      styles.DefaultFinishPromptPrefix,
+		NormalSuffix:      styles.DefaultNormalPromptSuffix,
+		FinishSuffix:      styles.DefaultFinishPromptSuffix,
+		PrefixStyle:       styles.DefaultNormalPromptPrefixStyle,
+		FinishPrefixStyle: styles.DefaultFinishPromptPrefixStyle,
+		SuffixStyle:       styles.DefaultNormalPromptSuffixStyle,
+		FinishSuffixStyle: styles.DefaultFinishPromptSuffixStyle,
+	}
 }
 
 func (p *Prompt) Ask(message string) *Prompt {

@@ -46,7 +46,9 @@ func (m ToggleModel) View() string {
 }
 
 func ToggleWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
-	tm, err := listWithStyle(&ToggleModel{}, choices, style, message, finishMessage)
+	model := ToggleModel{}
+	model.direction = directionHorizontal
+	tm, err := listWithStyle(&model, choices, style, message, finishMessage)
 	if err != nil {
 		return "", err
 	}

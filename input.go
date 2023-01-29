@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/cqroot/prompt/styles"
 )
 
 type InputModel struct {
@@ -60,7 +61,6 @@ func (m InputModel) View() string {
 			m.prompt.finishView(),
 			m.ChoiceStyle.Render(m.result),
 		)
-
 	}
 
 	return fmt.Sprintf(
@@ -83,9 +83,9 @@ func NewInputModel(defaultValue string) *InputModel {
 		err:       nil,
 		df:        defaultValue,
 
-		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
+		ItemStyle:         styles.DefaultItemStyle,
+		SelectedItemStyle: styles.DefaultSelectedItemStyle,
+		ChoiceStyle:       styles.DefaultChoiceStyle,
 	}
 	return &m
 }
