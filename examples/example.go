@@ -12,8 +12,8 @@ import (
 type data struct {
 	InputVal       string
 	ToggleVal      bool
-	SelectVal      string
-	MultiSelectVal []string
+	ChooseVal      string
+	MultiChooseVal []string
 }
 
 func main() {
@@ -27,20 +27,20 @@ func main() {
 	d.ToggleVal, err = p.Ask("Toggle type:").Toggle(true)
 	checkErr(err)
 
-	d.SelectVal, err = p.Ask("Select type:").Select(
+	d.ChooseVal, err = p.Ask("Choose type:").Choose(
 		[]string{"Option 1", "Option 2", "Option 3"},
 	)
 	checkErr(err)
 
-	d.MultiSelectVal, err = p.Ask("MultiSelect type:").MultiSelect(
+	d.MultiChooseVal, err = p.Ask("MultiChoose type:").MultiChoose(
 		[]string{"Option 1", "Option 2", "Option 3"},
 	)
 
 	fmt.Println()
 	fmt.Printf("  Input        result:  %+v\n", d.InputVal)
 	fmt.Printf("  Toggle       result:  %+v\n", d.ToggleVal)
-	fmt.Printf("  Select       result:  %+v\n", d.SelectVal)
-	fmt.Printf("  MultiSelect  result:  %s\n", strings.Join(d.MultiSelectVal, ", "))
+	fmt.Printf("  Choose       result:  %+v\n", d.ChooseVal)
+	fmt.Printf("  MultiChoose  result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
 }
 
 func checkErr(err error) {

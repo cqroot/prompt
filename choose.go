@@ -8,7 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type SelectModel struct {
+type ChooseModel struct {
 	quitting bool
 	err      error
 	prompt   Prompt
@@ -18,15 +18,15 @@ type SelectModel struct {
 	Choices []string
 
 	ItemStyle         lipgloss.Style
-	SelectedItemStyle lipgloss.Style
+	ChooseedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
 }
 
-func (m SelectModel) Init() tea.Cmd {
+func (m ChooseModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m SelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m ChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -56,7 +56,7 @@ func (m SelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m SelectModel) View() string {
+func (m ChooseModel) View() string {
 	if m.choice != "" {
 		return fmt.Sprintf("%s %s\n",
 			m.prompt.finishView(),
@@ -73,8 +73,8 @@ func (m SelectModel) View() string {
 
 	for i := 0; i < len(m.Choices); i++ {
 		if m.cursor == i {
-			// s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
-			s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("• %s", m.Choices[i])))
+			// s.WriteString(m.ChooseedItemStyle.Render(fmt.Sprintf("❯ %s", m.Choices[i])))
+			s.WriteString(m.ChooseedItemStyle.Render(fmt.Sprintf("• %s", m.Choices[i])))
 		} else {
 			s.WriteString(m.ItemStyle.Render(fmt.Sprintf("  %s", m.Choices[i])))
 		}
@@ -84,17 +84,17 @@ func (m SelectModel) View() string {
 	return s.String()
 }
 
-func NewSelectModel(choices []string) *SelectModel {
-	m := SelectModel{
+func NewChooseModel(choices []string) *ChooseModel {
+	m := ChooseModel{
 		Choices:           choices,
 		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChooseedItemStyle: DefaultSelectedItemStyle,
 		ChoiceStyle:       DefaultChoiceStyle,
 	}
 	return &m
 }
 
-func (p Prompt) SelectWithModel(model *SelectModel) (string, error) {
+func (p Prompt) ChooseWithModel(model *ChooseModel) (string, error) {
 	model.err = nil
 	model.prompt = p
 
@@ -103,7 +103,7 @@ func (p Prompt) SelectWithModel(model *SelectModel) (string, error) {
 		return "", err
 	}
 
-	m, ok := tm.(SelectModel)
+	m, ok := tm.(ChooseModel)
 	if !ok {
 		return "", ErrModelConversion
 	}
@@ -115,6 +115,6 @@ func (p Prompt) SelectWithModel(model *SelectModel) (string, error) {
 	}
 }
 
-func (p Prompt) Select(choices []string) (string, error) {
-	return p.SelectWithModel(NewSelectModel(choices))
+func (p Prompt) Choose(choices []string) (string, error) {
+	return p.ChooseWithModel(NewChooseModel(choices))
 }

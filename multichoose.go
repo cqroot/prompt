@@ -8,7 +8,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type MultiSelectModel struct {
+type MultiChooseModel struct {
 	quitting bool
 	err      error
 	prompt   Prompt
@@ -19,20 +19,20 @@ type MultiSelectModel struct {
 	Choices []string
 
 	ItemStyle         lipgloss.Style
-	SelectedItemStyle lipgloss.Style
+	ChooseedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
 }
 
-func (m *MultiSelectModel) toggleChoice(index int) {
+func (m *MultiChooseModel) toggleChoice(index int) {
 	i := uint64(index)
-	if m.isSelected(index) {
+	if m.isChooseed(index) {
 		m.deselectItem(i)
 	} else {
 		m.selectItem(i)
 	}
 }
 
-func (m MultiSelectModel) isSelected(index int) bool {
+func (m MultiChooseModel) isChooseed(index int) bool {
 	i := uint64(index)
 	curr := uint64(1) << i
 	if (m.choice & curr) != 0 {
@@ -42,32 +42,32 @@ func (m MultiSelectModel) isSelected(index int) bool {
 	}
 }
 
-func (m *MultiSelectModel) selectItem(index uint64) {
+func (m *MultiChooseModel) selectItem(index uint64) {
 	curr := uint64(1) << index
 	m.choice = m.choice | curr
 }
 
-func (m *MultiSelectModel) deselectItem(index uint64) {
+func (m *MultiChooseModel) deselectItem(index uint64) {
 	curr := uint64(1) << index
 	m.choice = m.choice & (^curr)
 }
 
-func (m MultiSelectModel) Init() tea.Cmd {
+func (m MultiChooseModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m *MultiSelectModel) quit() {
+func (m *MultiChooseModel) quit() {
 	m.quitting = true
 	m.result = make([]string, 0)
 
 	for i := 0; i < len(m.Choices); i++ {
-		if m.isSelected(i) {
+		if m.isChooseed(i) {
 			m.result = append(m.result, m.Choices[i])
 		}
 	}
 }
 
-func (m MultiSelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m MultiChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -100,7 +100,7 @@ func (m MultiSelectModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m MultiSelectModel) View() string {
+func (m MultiChooseModel) View() string {
 	if m.quitting {
 		return fmt.Sprintf("%s %s\n",
 			m.prompt.finishView(),
@@ -114,13 +114,13 @@ func (m MultiSelectModel) View() string {
 
 	for i := 0; i < len(m.Choices); i++ {
 		if m.cursor == i {
-			if m.isSelected(i) {
-				s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("[x] %s", m.Choices[i])))
+			if m.isChooseed(i) {
+				s.WriteString(m.ChooseedItemStyle.Render(fmt.Sprintf("[x] %s", m.Choices[i])))
 			} else {
-				s.WriteString(m.SelectedItemStyle.Render(fmt.Sprintf("[•] %s", m.Choices[i])))
+				s.WriteString(m.ChooseedItemStyle.Render(fmt.Sprintf("[•] %s", m.Choices[i])))
 			}
 		} else {
-			if m.isSelected(i) {
+			if m.isChooseed(i) {
 				s.WriteString(m.ItemStyle.Render(fmt.Sprintf("[x] %s", m.Choices[i])))
 			} else {
 				s.WriteString(m.ItemStyle.Render(fmt.Sprintf("[ ] %s", m.Choices[i])))
@@ -132,17 +132,17 @@ func (m MultiSelectModel) View() string {
 	return s.String()
 }
 
-func NewMultiSelectModel(choices []string) *MultiSelectModel {
-	m := MultiSelectModel{
+func NewMultiChooseModel(choices []string) *MultiChooseModel {
+	m := MultiChooseModel{
 		Choices:           choices,
 		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChooseedItemStyle: DefaultSelectedItemStyle,
 		ChoiceStyle:       DefaultChoiceStyle,
 	}
 	return &m
 }
 
-func (p Prompt) MultiSelectWithModel(model *MultiSelectModel) ([]string, error) {
+func (p Prompt) MultiChooseWithModel(model *MultiChooseModel) ([]string, error) {
 	model.err = nil
 	model.prompt = p
 
@@ -151,7 +151,7 @@ func (p Prompt) MultiSelectWithModel(model *MultiSelectModel) ([]string, error) 
 		return nil, err
 	}
 
-	m, ok := tm.(MultiSelectModel)
+	m, ok := tm.(MultiChooseModel)
 	if !ok {
 		return nil, ErrModelConversion
 	}
@@ -163,6 +163,6 @@ func (p Prompt) MultiSelectWithModel(model *MultiSelectModel) ([]string, error) 
 	}
 }
 
-func (p Prompt) MultiSelect(choices []string) ([]string, error) {
-	return p.MultiSelectWithModel(NewMultiSelectModel(choices))
+func (p Prompt) MultiChoose(choices []string) ([]string, error) {
+	return p.MultiChooseWithModel(NewMultiChooseModel(choices))
 }
