@@ -7,7 +7,7 @@ import (
 )
 
 type Prompt struct {
-	Text              string
+	Message           string
 	NormalPrefix      string
 	FinishPrefix      string
 	NormalSuffix      string
@@ -18,11 +18,16 @@ type Prompt struct {
 	FinishSuffixStyle lipgloss.Style
 }
 
+func (p *Prompt) Ask(message string) *Prompt {
+	p.Message = message
+	return p
+}
+
 func (p Prompt) view() string {
 	return fmt.Sprintf(
 		"%s %s %s",
 		p.PrefixStyle.Render(p.NormalPrefix),
-		p.Text,
+		p.Message,
 		p.SuffixStyle.Render(p.NormalSuffix),
 	)
 }
@@ -30,12 +35,7 @@ func (p Prompt) view() string {
 func (p Prompt) finishView() string {
 	return fmt.Sprintf("%s %s %s",
 		p.FinishPrefixStyle.Render(p.FinishPrefix),
-		p.Text,
+		p.Message,
 		p.FinishSuffixStyle.Render(p.FinishSuffix),
 	)
-}
-
-func (p *Prompt) Ask(text string) *Prompt {
-	p.Text = text
-	return p
 }
