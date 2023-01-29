@@ -1,4 +1,4 @@
-package prompt
+package list
 
 import (
 	"github.com/charmbracelet/lipgloss"
@@ -17,19 +17,6 @@ var (
 	DefaultNormalPromptSuffixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("6"))
 	DefaultFinishPromptSuffixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("6"))
 )
-
-func New() Prompt {
-	return Prompt{
-		NormalPrefix:      DefaultNormalPromptPrefix,
-		FinishPrefix:      DefaultFinishPromptPrefix,
-		NormalSuffix:      DefaultNormalPromptSuffix,
-		FinishSuffix:      DefaultFinishPromptSuffix,
-		PrefixStyle:       DefaultNormalPromptPrefixStyle,
-		FinishPrefixStyle: DefaultFinishPromptPrefixStyle,
-		SuffixStyle:       DefaultNormalPromptSuffixStyle,
-		FinishSuffixStyle: DefaultFinishPromptSuffixStyle,
-	}
-}
 
 type ListStyle struct {
 	ItemStyle         lipgloss.Style
