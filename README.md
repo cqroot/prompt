@@ -11,8 +11,9 @@
 
 # Features
 
-| Type   | Return |
-| ------ | ------ |
-| Input  | string |
-| Toggle | bool   |
-| Select | string |
+| Type       | Return   |
+| ---------- | -------- |
+| Input      | string   |
+| Toggle     | string   |
+| Choose     | string   |
+| MultChoose | []string |
