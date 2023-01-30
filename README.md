@@ -9,8 +9,6 @@
   </p>
 </div>
 
-[![asciicast](https://asciinema.org/a/553415.svg)](https://asciinema.org/a/553415)
-
 # Features
 
 | Type   | Return |
