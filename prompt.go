@@ -19,8 +19,8 @@ type Prompt struct {
 	FinishSuffixStyle lipgloss.Style
 }
 
-func New() Prompt {
-	return Prompt{
+func New() *Prompt {
+	return &Prompt{
 		NormalPrefix:      styles.DefaultNormalPromptPrefix,
 		FinishPrefix:      styles.DefaultFinishPromptPrefix,
 		NormalSuffix:      styles.DefaultNormalPromptSuffix,
