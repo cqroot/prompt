@@ -9,34 +9,58 @@ import (
 )
 
 type ChooseModel struct {
-	ListBaseModel
+	choice  string
+	choices []string
+	ListHandler
+}
+
+func (m ChooseModel) Init() tea.Cmd {
+	return nil
 }
 
 func (m ChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	cmd := m.update(&m, msg)
-	return m, cmd
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "ctrl+c", "q", "esc":
+			m.Quit()
+			return m, tea.Quit
+
+		case "enter":
+			m.choice = m.choices[m.Cursor()]
+			return m, tea.Quit
+
+		case "up", "k":
+			m.MovePrev()
+
+		case "down", "j", "tab":
+			m.MoveNext()
+		}
+	}
+
+	return m, nil
 }
 
 func (m ChooseModel) View() string {
 	if m.choice != "" {
 		return fmt.Sprintf("%s %s\n",
-			m.getFinishMessage(),
-			m.getStyle().ChoiceStyle.Render(m.choice),
+			m.FinishMessage(),
+			m.Style().ChoiceStyle.Render(m.choice),
 		)
 	}
-	if m.quitting {
+	if m.Quitting() {
 		return ""
 	}
 
 	s := strings.Builder{}
-	s.WriteString(m.getMessage())
+	s.WriteString(m.Message())
 	s.WriteString("\n")
 
 	for i := 0; i < len(m.choices); i++ {
 		if m.cursor == i {
-			s.WriteString(m.getStyle().SelectedItemStyle.Render(fmt.Sprintf("• %s", m.choices[i])))
+			s.WriteString(m.Style().SelectedItemStyle.Render(fmt.Sprintf("• %s", m.choices[i])))
 		} else {
-			s.WriteString(m.getStyle().ItemStyle.Render(fmt.Sprintf("  %s", m.choices[i])))
+			s.WriteString(m.Style().ItemStyle.Render(fmt.Sprintf("  %s", m.choices[i])))
 		}
 		s.WriteString("\n")
 	}
@@ -45,9 +69,15 @@ func (m ChooseModel) View() string {
 }
 
 func ChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
-	model := ChooseModel{}
-	model.direction = directionVertical
-	tm, err := listWithStyle(&model, choices, style, message, finishMessage)
+	model := ChooseModel{
+		choices: choices,
+	}
+	model.SetChoiceCount(len(choices))
+	model.SetStyle(style)
+	model.SetMessage(message)
+	model.SetFinishMessage(message)
+
+	tm, err := tea.NewProgram(model).Run()
 	if err != nil {
 		return "", err
 	}
@@ -57,5 +87,9 @@ func ChooseWithStyle(choices []string, style *ListStyle, message string, finishM
 		return "", perrors.ErrModelConversion
 	}
 
-	return result(&m)
+	if err := m.err; err != nil {
+		return "", err
+	} else {
+		return m.choice, nil
+	}
 }

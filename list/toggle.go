@@ -9,19 +9,43 @@ import (
 )
 
 type ToggleModel struct {
-	ListBaseModel
+	choice  string
+	choices []string
+	ListHandler
+}
+
+func (m ToggleModel) Init() tea.Cmd {
+	return nil
 }
 
 func (m ToggleModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	cmd := m.update(&m, msg)
-	return m, cmd
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "ctrl+c", "q", "esc":
+			m.Quit()
+			return m, tea.Quit
+
+		case "enter":
+			m.choice = m.choices[m.Cursor()]
+			return m, tea.Quit
+
+		case "left", "up", "h", "j":
+			m.MovePrev()
+
+		case "right", "down", "l", "k", "tab":
+			m.MoveNext()
+		}
+	}
+
+	return m, nil
 }
 
 func (m ToggleModel) View() string {
 	if m.choice != "" {
 		return fmt.Sprintf("%s %s\n",
-			m.getFinishMessage(),
-			m.getStyle().ChoiceStyle.Render(m.choice),
+			m.FinishMessage(),
+			m.Style().ChoiceStyle.Render(m.choice),
 		)
 	}
 	if m.quitting {
@@ -29,15 +53,15 @@ func (m ToggleModel) View() string {
 	}
 
 	s := strings.Builder{}
-	s.WriteString(m.getMessage())
+	s.WriteString(m.Message())
 	s.WriteString(" ")
 
 	choices := make([]string, len(m.choices))
 	for index, choice := range m.choices {
 		if index == m.cursor {
-			choices[index] = m.getStyle().SelectedItemStyle.Render(choice)
+			choices[index] = m.Style().SelectedItemStyle.Render(choice)
 		} else {
-			choices[index] = m.getStyle().ItemStyle.Render(choice)
+			choices[index] = m.Style().ItemStyle.Render(choice)
 		}
 	}
 	s.WriteString(strings.Join(choices, " / "))
@@ -46,9 +70,15 @@ func (m ToggleModel) View() string {
 }
 
 func ToggleWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
-	model := ToggleModel{}
-	model.direction = directionHorizontal
-	tm, err := listWithStyle(&model, choices, style, message, finishMessage)
+	model := ToggleModel{
+		choices: choices,
+	}
+	model.SetChoiceCount(len(choices))
+	model.SetStyle(style)
+	model.SetMessage(message)
+	model.SetFinishMessage(message)
+
+	tm, err := tea.NewProgram(model).Run()
 	if err != nil {
 		return "", err
 	}
@@ -58,5 +88,9 @@ func ToggleWithStyle(choices []string, style *ListStyle, message string, finishM
 		return "", perrors.ErrModelConversion
 	}
 
-	return result(&m)
+	if err := m.err; err != nil {
+		return "", err
+	} else {
+		return m.choice, nil
+	}
 }

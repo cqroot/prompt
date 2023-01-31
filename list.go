@@ -19,3 +19,11 @@ func (p Prompt) Choose(choices []string) (string, error) {
 func (p Prompt) ChooseWithStyle(choices []string, style *list.ListStyle) (string, error) {
 	return list.ChooseWithStyle(choices, style, p.view(), p.finishView())
 }
+
+func (p Prompt) MultiChoose(choices []string) ([]string, error) {
+	return p.MultiChooseWithStyle(choices, list.NewListStyle())
+}
+
+func (p Prompt) MultiChooseWithStyle(choices []string, style *list.ListStyle) ([]string, error) {
+	return list.MultiChooseWithStyle(choices, style, p.view(), p.finishView())
+}

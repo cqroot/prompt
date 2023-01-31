@@ -19,6 +19,7 @@ type Prompt struct {
 	FinishSuffixStyle lipgloss.Style
 }
 
+// New returns a default style *Prompt.
 func New() *Prompt {
 	return &Prompt{
 		NormalPrefix:      styles.DefaultNormalPromptPrefix,
@@ -32,6 +33,7 @@ func New() *Prompt {
 	}
 }
 
+// Ask set prompt message
 func (p *Prompt) Ask(message string) *Prompt {
 	p.Message = message
 	return p

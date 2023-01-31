@@ -42,10 +42,10 @@ func main() {
 	)
 
 	fmt.Println()
-	fmt.Printf("  Input        result:  %+v\n", d.InputVal)
-	fmt.Printf("  Toggle 1     result:  %+v\n", d.ToggleVal_1)
-	fmt.Printf("  Toggle 2     result:  %+v\n", d.ToggleVal_2)
-	fmt.Printf("  Choose       result:  %+v\n", d.ChooseVal)
+	fmt.Printf("  Input        result:  %s\n", d.InputVal)
+	fmt.Printf("  Toggle 1     result:  %s\n", d.ToggleVal_1)
+	fmt.Printf("  Toggle 2     result:  %s\n", d.ToggleVal_2)
+	fmt.Printf("  Choose       result:  %s\n", d.ChooseVal)
 	fmt.Printf("  MultiChoose  result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
 }
 
