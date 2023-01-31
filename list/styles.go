@@ -5,9 +5,9 @@ import (
 )
 
 var (
-	DefaultItemStyle               = lipgloss.NewStyle()
-	DefaultSelectedItemStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
-	DefaultChoiceStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
+	DefaultItemStyle         = lipgloss.NewStyle()
+	DefaultSelectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
+	DefaultChoiceStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 )
 
 type ListStyle struct {

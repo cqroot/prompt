@@ -14,9 +14,9 @@ var (
 	DefaultNormalPromptSuffixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("6"))
 	DefaultFinishPromptSuffixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("6"))
 
-	DefaultItemStyle               = lipgloss.NewStyle()
-	DefaultSelectedItemStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
-	DefaultChoiceStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
+	DefaultItemStyle         = lipgloss.NewStyle()
+	DefaultSelectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
+	DefaultChoiceStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 )
 
 type ListStyle struct {
