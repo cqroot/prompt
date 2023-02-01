@@ -20,9 +20,9 @@
 
 # Features
 
-| Type       | Return   |
-| ---------- | -------- |
-| Input      | string   |
-| Toggle     | string   |
-| Choose     | string   |
-| MultChoose | []string |
+| Type        | Return   |
+| ----------- | -------- |
+| Input       | string   |
+| Toggle      | string   |
+| Choose      | string   |
+| MultiChoose | []string |
