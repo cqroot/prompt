@@ -69,7 +69,7 @@ func (m ToggleModel) View() string {
 	return s.String()
 }
 
-func ToggleWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
+func NewToggleStyle(choices []string, style *ListStyle, message string, finishMessage string) *ToggleModel {
 	model := ToggleModel{
 		choices: choices,
 	}
@@ -77,6 +77,12 @@ func ToggleWithStyle(choices []string, style *ListStyle, message string, finishM
 	model.SetStyle(style)
 	model.SetMessage(message)
 	model.SetFinishMessage(message)
+
+	return &model
+}
+
+func ToggleWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
+	model := NewToggleStyle(choices, style, message, finishMessage)
 
 	tm, err := tea.NewProgram(model).Run()
 	if err != nil {

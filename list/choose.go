@@ -68,7 +68,7 @@ func (m ChooseModel) View() string {
 	return s.String()
 }
 
-func ChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
+func NewChooseModel(choices []string, style *ListStyle, message string, finishMessage string) *ChooseModel {
 	model := ChooseModel{
 		choices: choices,
 	}
@@ -76,6 +76,12 @@ func ChooseWithStyle(choices []string, style *ListStyle, message string, finishM
 	model.SetStyle(style)
 	model.SetMessage(message)
 	model.SetFinishMessage(message)
+
+	return &model
+}
+
+func ChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) (string, error) {
+	model := NewChooseModel(choices, style, message, finishMessage)
 
 	tm, err := tea.NewProgram(model).Run()
 	if err != nil {

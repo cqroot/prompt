@@ -117,7 +117,7 @@ func (m MultiChooseModel) View() string {
 	return s.String()
 }
 
-func MultiChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) ([]string, error) {
+func NewMultiChooseModel(choices []string, style *ListStyle, message string, finishMessage string) *MultiChooseModel {
 	model := MultiChooseModel{
 		choices: choices,
 	}
@@ -125,6 +125,12 @@ func MultiChooseWithStyle(choices []string, style *ListStyle, message string, fi
 	model.SetStyle(style)
 	model.SetMessage(message)
 	model.SetFinishMessage(message)
+
+	return &model
+}
+
+func MultiChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) ([]string, error) {
+	model := NewMultiChooseModel(choices, style, message, finishMessage)
 
 	tm, err := tea.NewProgram(model).Run()
 	if err != nil {
