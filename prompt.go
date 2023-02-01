@@ -1,10 +1,10 @@
 package prompt
 
 import (
-	"fmt"
+	"strings"
 
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/cqroot/prompt/styles"
 )
 
 type Prompt struct {
@@ -17,19 +17,24 @@ type Prompt struct {
 	FinishPrefixStyle lipgloss.Style
 	SuffixStyle       lipgloss.Style
 	FinishSuffixStyle lipgloss.Style
+	isHelpVisible     bool
+	help              help.Model
+	keyMap            help.KeyMap
 }
 
 // New returns a default style *Prompt.
 func New() *Prompt {
 	return &Prompt{
-		NormalPrefix:      styles.DefaultNormalPromptPrefix,
-		FinishPrefix:      styles.DefaultFinishPromptPrefix,
-		NormalSuffix:      styles.DefaultNormalPromptSuffix,
-		FinishSuffix:      styles.DefaultFinishPromptSuffix,
-		PrefixStyle:       styles.DefaultNormalPromptPrefixStyle,
-		FinishPrefixStyle: styles.DefaultFinishPromptPrefixStyle,
-		SuffixStyle:       styles.DefaultNormalPromptSuffixStyle,
-		FinishSuffixStyle: styles.DefaultFinishPromptSuffixStyle,
+		NormalPrefix:      DefaultNormalPromptPrefix,
+		FinishPrefix:      DefaultFinishPromptPrefix,
+		NormalSuffix:      DefaultNormalPromptSuffix,
+		FinishSuffix:      DefaultFinishPromptSuffix,
+		PrefixStyle:       DefaultNormalPromptPrefixStyle,
+		FinishPrefixStyle: DefaultFinishPromptPrefixStyle,
+		SuffixStyle:       DefaultNormalPromptSuffixStyle,
+		FinishSuffixStyle: DefaultFinishPromptSuffixStyle,
+		isHelpVisible:     false,
+		help:              help.New(),
 	}
 }
 
@@ -39,19 +44,36 @@ func (p *Prompt) Ask(message string) *Prompt {
 	return p
 }
 
-func (p Prompt) view() string {
-	return fmt.Sprintf(
-		"%s %s %s",
-		p.PrefixStyle.Render(p.NormalPrefix),
-		p.Message,
-		p.SuffixStyle.Render(p.NormalSuffix),
-	)
+func (p *Prompt) SetHelpVisible(visible bool) {
+	p.isHelpVisible = visible
 }
 
-func (p Prompt) finishView() string {
-	return fmt.Sprintf("%s %s %s",
+func (p *Prompt) setKeyMap(keyMap help.KeyMap) {
+	p.keyMap = keyMap
+}
+
+func (p Prompt) view(content string) string {
+	s := strings.Builder{}
+	s.WriteString(p.PrefixStyle.Render(p.NormalPrefix))
+	s.WriteString(" ")
+	s.WriteString(p.Message)
+	s.WriteString(" ")
+	s.WriteString(p.SuffixStyle.Render(p.NormalSuffix))
+	s.WriteString(" ")
+	s.WriteString(content)
+	if p.isHelpVisible && p.keyMap != nil {
+		s.WriteString("\n")
+		s.WriteString(p.help.View(p.keyMap))
+	}
+
+	return s.String()
+}
+
+func (p Prompt) finishView(content string) string {
+	return strings.Join([]string{
 		p.FinishPrefixStyle.Render(p.FinishPrefix),
 		p.Message,
 		p.FinishSuffixStyle.Render(p.FinishSuffix),
-	)
+		content,
+	}, " ") + "\n"
 }

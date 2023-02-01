@@ -1,10 +1,8 @@
 package prompt
 
-import (
-	"github.com/cqroot/prompt/perrors"
-)
+import "errors"
 
 var (
-	ErrModelConversion = perrors.ErrModelConversion
-	ErrUserQuit        = perrors.ErrUserQuit
+	ErrModelConversion = errors.New("model conversion failed")
+	ErrUserQuit        = errors.New("user quit prompt")
 )

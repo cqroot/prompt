@@ -1,29 +1,99 @@
 package prompt
 
-import (
-	"github.com/cqroot/prompt/list"
-)
+import "github.com/charmbracelet/bubbles/key"
 
-func (p Prompt) Toggle(choices []string) (string, error) {
-	return p.ToggleWithStyle(choices, list.NewListStyle())
+type listKeyMap struct {
+	Prev   key.Binding
+	Next   key.Binding
+	Quit   key.Binding
+	Choose key.Binding
 }
 
-func (p Prompt) ToggleWithStyle(choices []string, style *list.ListStyle) (string, error) {
-	return list.ToggleWithStyle(choices, style, p.view(), p.finishView())
+func (k listKeyMap) ShortHelp() []key.Binding {
+	return []key.Binding{
+		k.Prev, k.Next, k.Choose, k.Quit,
+	}
 }
 
-func (p Prompt) Choose(choices []string) (string, error) {
-	return p.ChooseWithStyle(choices, list.NewListStyle())
+func (k listKeyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.Prev, k.Next, k.Choose, k.Quit},
+	}
 }
 
-func (p Prompt) ChooseWithStyle(choices []string, style *list.ListStyle) (string, error) {
-	return list.ChooseWithStyle(choices, style, p.view(), p.finishView())
+type ListHandler struct {
+	quitting      bool
+	err           error
+	cursor        int
+	choiceCount   int
+	message       string
+	finishMessage string
+	style         *ListStyle
+	Prompt
 }
 
-func (p Prompt) MultiChoose(choices []string) ([]string, error) {
-	return p.MultiChooseWithStyle(choices, list.NewListStyle())
+func NewListHandler(choiceCount int, style *ListStyle, message string, finishMessage string) *ListHandler {
+	lh := ListHandler{
+		quitting:      false,
+		err:           nil,
+		cursor:        0,
+		choiceCount:   choiceCount,
+		message:       message,
+		finishMessage: finishMessage,
+		style:         style,
+	}
+
+	return &lh
 }
 
-func (p Prompt) MultiChooseWithStyle(choices []string, style *list.ListStyle) ([]string, error) {
-	return list.MultiChooseWithStyle(choices, style, p.view(), p.finishView())
+func (p *Prompt) NewListHandler(choiceCount int, style *ListStyle) *ListHandler {
+	lh := ListHandler{
+		quitting:    false,
+		err:         nil,
+		cursor:      0,
+		choiceCount: choiceCount,
+		style:       style,
+		Prompt:      *p,
+	}
+
+	return &lh
+}
+
+func (h *ListHandler) MoveNext() {
+	h.cursor++
+	if h.cursor >= h.choiceCount {
+		h.cursor = 0
+	}
+}
+
+func (h *ListHandler) MovePrev() {
+	h.cursor--
+	if h.cursor < 0 {
+		h.cursor = h.choiceCount - 1
+	}
+}
+
+func (h *ListHandler) Quit() {
+	h.quitting = true
+	h.err = ErrUserQuit
+}
+
+func (h ListHandler) Quitting() bool {
+	return h.quitting
+}
+
+func (h ListHandler) Cursor() int {
+	return h.cursor
+}
+
+func (h ListHandler) Message() string {
+	return h.message
+}
+
+func (h ListHandler) FinishMessage() string {
+	return h.finishMessage
+}
+
+func (h ListHandler) Style() *ListStyle {
+	return h.style
 }

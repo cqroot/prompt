@@ -1,20 +1,17 @@
 package prompt
 
 import (
-	"fmt"
-
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/cqroot/prompt/styles"
 )
 
 type InputModel struct {
 	quitting bool
 	err      error
-	prompt   Prompt
 	df       string
 	result   string
+	Prompt
 
 	textInput         textinput.Model
 	ItemStyle         lipgloss.Style
@@ -57,17 +54,10 @@ func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m InputModel) View() string {
 	if m.quitting {
-		return fmt.Sprintf("%s %s\n",
-			m.prompt.finishView(),
-			m.ChoiceStyle.Render(m.result),
-		)
+		return m.finishView(m.ChoiceStyle.Render(m.result))
 	}
 
-	return fmt.Sprintf(
-		"%s %s",
-		m.prompt.view(),
-		m.textInput.View(),
-	)
+	return m.view(m.textInput.View())
 }
 
 func NewInputModel(defaultValue string) *InputModel {
@@ -83,15 +73,15 @@ func NewInputModel(defaultValue string) *InputModel {
 		err:       nil,
 		df:        defaultValue,
 
-		ItemStyle:         styles.DefaultItemStyle,
-		SelectedItemStyle: styles.DefaultSelectedItemStyle,
-		ChoiceStyle:       styles.DefaultChoiceStyle,
+		ItemStyle:         DefaultItemStyle,
+		SelectedItemStyle: DefaultSelectedItemStyle,
+		ChoiceStyle:       DefaultChoiceStyle,
 	}
 	return &m
 }
 
 func (p Prompt) InputWithModel(model *InputModel) (string, error) {
-	model.prompt = p
+	model.Prompt = p
 
 	tm, err := tea.NewProgram(model).Run()
 	if err != nil {

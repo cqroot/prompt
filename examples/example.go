@@ -18,9 +18,19 @@ type data struct {
 }
 
 func main() {
-	var err error
-	d := data{}
 	p := prompt.New()
+	example(p)
+
+    fmt.Println()
+    fmt.Println("Example with help message")
+    fmt.Println()
+	p.SetHelpVisible(true)
+	example(p)
+}
+
+func example(p *prompt.Prompt) {
+	d := data{}
+	var err error
 
 	d.InputVal, err = p.Ask("Input example:").Input("Default string")
 	checkErr(err)
@@ -42,11 +52,12 @@ func main() {
 	)
 
 	fmt.Println()
-	fmt.Printf("  Input        result:  %s\n", d.InputVal)
-	fmt.Printf("  Toggle 1     result:  %s\n", d.ToggleVal_1)
-	fmt.Printf("  Toggle 2     result:  %s\n", d.ToggleVal_2)
-	fmt.Printf("  Choose       result:  %s\n", d.ChooseVal)
-	fmt.Printf("  MultiChoose  result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
+	fmt.Printf("    Input        result:  %s\n", d.InputVal)
+	fmt.Printf("    Toggle 1     result:  %s\n", d.ToggleVal_1)
+	fmt.Printf("    Toggle 2     result:  %s\n", d.ToggleVal_2)
+	fmt.Printf("    Choose       result:  %s\n", d.ChooseVal)
+	fmt.Printf("    MultiChoose  result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
+	fmt.Println()
 }
 
 func checkErr(err error) {

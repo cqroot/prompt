@@ -1,17 +1,38 @@
-package list
+package prompt
 
 import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/cqroot/prompt/perrors"
 )
+
+type multiChooseKeyMap struct {
+	Prev    key.Binding
+	Next    key.Binding
+	Choose  key.Binding
+	Confirm key.Binding
+	Quit    key.Binding
+}
+
+func (k multiChooseKeyMap) ShortHelp() []key.Binding {
+	return []key.Binding{
+		k.Prev, k.Next, k.Choose, k.Confirm, k.Quit,
+	}
+}
+
+func (k multiChooseKeyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.Prev, k.Next, k.Choose, k.Confirm, k.Quit},
+	}
+}
 
 type MultiChooseModel struct {
 	choice  uint64
 	choices []string
 	result  []string
+	keys    multiChooseKeyMap
 	ListHandler
 }
 
@@ -87,14 +108,10 @@ func (m MultiChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m MultiChooseModel) View() string {
 	if m.quitting {
-		return fmt.Sprintf("%s %s\n",
-			m.FinishMessage(),
-			m.style.ChoiceStyle.Render(strings.Join(m.result, ", ")),
-		)
+		return m.finishView(m.style.ChoiceStyle.Render(strings.Join(m.result, ", ")))
 	}
 
 	s := strings.Builder{}
-	s.WriteString(m.Message())
 	s.WriteString("\n")
 
 	for i := 0; i < len(m.choices); i++ {
@@ -114,23 +131,45 @@ func (m MultiChooseModel) View() string {
 		s.WriteString("\n")
 	}
 
-	return s.String()
+	return m.view(s.String())
 }
 
-func NewMultiChooseModel(choices []string, style *ListStyle, message string, finishMessage string) *MultiChooseModel {
-	model := MultiChooseModel{
-		choices: choices,
+func (p *Prompt) NewMultiChooseModel(choices []string, style *ListStyle) *MultiChooseModel {
+	multiChooseKeys := multiChooseKeyMap{
+		Prev: key.NewBinding(
+			key.WithKeys("up", "k"),
+			key.WithHelp("↑/k", "move up"),
+		),
+		Next: key.NewBinding(
+			key.WithKeys("down", "j", "tab"),
+			key.WithHelp("↓/j/tab", "move down"),
+		),
+		Choose: key.NewBinding(
+			key.WithKeys("space"),
+			key.WithHelp("space", "choose"),
+		),
+		Confirm: key.NewBinding(
+			key.WithKeys("enter"),
+			key.WithHelp("enter", "confirm"),
+		),
+		Quit: key.NewBinding(
+			key.WithKeys("q", "esc", "ctrl+c"),
+			key.WithHelp("q", "quit"),
+		),
 	}
-	model.SetChoiceCount(len(choices))
-	model.SetStyle(style)
-	model.SetMessage(message)
-	model.SetFinishMessage(message)
+
+	model := MultiChooseModel{
+		choices:     choices,
+		keys:        multiChooseKeys,
+		ListHandler: *p.NewListHandler(len(choices), style),
+	}
+	model.setKeyMap(model.keys)
 
 	return &model
 }
 
-func MultiChooseWithStyle(choices []string, style *ListStyle, message string, finishMessage string) ([]string, error) {
-	model := NewMultiChooseModel(choices, style, message, finishMessage)
+func (p *Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
+	model := p.NewMultiChooseModel(choices, style)
 
 	tm, err := tea.NewProgram(model).Run()
 	if err != nil {
@@ -139,7 +178,7 @@ func MultiChooseWithStyle(choices []string, style *ListStyle, message string, fi
 
 	m, ok := tm.(MultiChooseModel)
 	if !ok {
-		return nil, perrors.ErrModelConversion
+		return nil, ErrModelConversion
 	}
 
 	if err := m.err; err != nil {
@@ -147,4 +186,8 @@ func MultiChooseWithStyle(choices []string, style *ListStyle, message string, fi
 	} else {
 		return m.result, nil
 	}
+}
+
+func (p *Prompt) MultiChoose(choices []string) ([]string, error) {
+	return p.MultiChooseWithStyle(choices, NewListStyle())
 }
