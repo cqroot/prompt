@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Prompt</h1>
-  <p><i>Go implementation of user-friendly interactive prompts.</i></p>
+  <p><i>User-friendly interactive prompts for Go.</i></p>
 
   <p>
     <a href="https://github.com/cqroot/prompt/actions">
