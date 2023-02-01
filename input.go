@@ -1,63 +1,48 @@
 package prompt
 
 import (
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type InputModel struct {
-	quitting bool
-	err      error
-	df       string
-	result   string
-	Prompt
-
+	df                string
 	textInput         textinput.Model
 	ItemStyle         lipgloss.Style
 	SelectedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
 }
 
+func (m InputModel) Data() any {
+	return m.DataString()
+}
+
+func (m InputModel) DataString() string {
+	if m.textInput.Value() == "" {
+		return m.textInput.Placeholder
+	} else {
+		return m.textInput.Value()
+	}
+}
+
+func (m InputModel) KeyBindings() []key.Binding {
+	return nil
+}
+
 func (m InputModel) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (m *InputModel) quit() {
-	m.quitting = true
-	m.result = m.textInput.Value()
-	if m.result == "" {
-		m.result = m.df
-	}
-}
-
 func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.Type {
-		case tea.KeyEnter:
-			m.quit()
-			return m, tea.Quit
-
-		case tea.KeyCtrlC, tea.KeyEsc:
-			m.quit()
-			m.err = ErrUserQuit
-			return m, tea.Quit
-		}
-	}
-
 	m.textInput, cmd = m.textInput.Update(msg)
 	return m, cmd
 }
 
 func (m InputModel) View() string {
-	if m.quitting {
-		return m.finishView(m.ChoiceStyle.Render(m.result))
-	}
-
-	return m.view(m.textInput.View())
+	return m.textInput.View()
 }
 
 func NewInputModel(defaultValue string) *InputModel {
@@ -70,7 +55,6 @@ func NewInputModel(defaultValue string) *InputModel {
 
 	m := InputModel{
 		textInput: ti,
-		err:       nil,
 		df:        defaultValue,
 
 		ItemStyle:         DefaultItemStyle,
@@ -80,26 +64,8 @@ func NewInputModel(defaultValue string) *InputModel {
 	return &m
 }
 
-func (p Prompt) InputWithModel(model *InputModel) (string, error) {
-	model.Prompt = p
-
-	tm, err := tea.NewProgram(model).Run()
-	if err != nil {
-		return "", err
-	}
-
-	m, ok := tm.(InputModel)
-	if !ok {
-		return "", ErrModelConversion
-	}
-
-	if m.err != nil {
-		return "", m.err
-	} else {
-		return m.result, nil
-	}
-}
-
 func (p Prompt) Input(defaultValue string) (string, error) {
-	return p.InputWithModel(NewInputModel(defaultValue))
+	pm := NewInputModel(defaultValue)
+	m, err := p.RunModel(*pm)
+	return m.DataString(), err
 }

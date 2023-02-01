@@ -21,9 +21,10 @@ func main() {
 	p := prompt.New()
 	example(p)
 
-    fmt.Println()
-    fmt.Println("Example with help message")
-    fmt.Println()
+	fmt.Println()
+	fmt.Println("Example with help message")
+	fmt.Println()
+
 	p.SetHelpVisible(true)
 	example(p)
 }
@@ -37,6 +38,7 @@ func example(p *prompt.Prompt) {
 
 	d.ToggleVal_1, err = p.Ask("Toggle example 1:").Toggle([]string{"Yes", "No"})
 	checkErr(err)
+
 	d.ToggleVal_2, err = p.Ask("Toggle example 2:").Toggle(
 		[]string{"Option 1", "Option 2", "Option 3"},
 	)

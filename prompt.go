@@ -1,13 +1,18 @@
 package prompt
 
 import (
-	"strings"
-
 	"github.com/charmbracelet/bubbles/help"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type Prompt struct {
+	quitting      bool
+	err           error
+	subModel      PromptModel
+	isHelpVisible bool
+	help          help.Model
+	// Style
 	Message           string
 	NormalPrefix      string
 	FinishPrefix      string
@@ -17,14 +22,16 @@ type Prompt struct {
 	FinishPrefixStyle lipgloss.Style
 	SuffixStyle       lipgloss.Style
 	FinishSuffixStyle lipgloss.Style
-	isHelpVisible     bool
-	help              help.Model
-	keyMap            help.KeyMap
 }
 
 // New returns a default style *Prompt.
 func New() *Prompt {
 	return &Prompt{
+		quitting:      false,
+		err:           nil,
+		isHelpVisible: false,
+		help:          help.New(),
+		// Style
 		NormalPrefix:      DefaultNormalPromptPrefix,
 		FinishPrefix:      DefaultFinishPromptPrefix,
 		NormalSuffix:      DefaultNormalPromptSuffix,
@@ -33,8 +40,6 @@ func New() *Prompt {
 		FinishPrefixStyle: DefaultFinishPromptPrefixStyle,
 		SuffixStyle:       DefaultNormalPromptSuffixStyle,
 		FinishSuffixStyle: DefaultFinishPromptSuffixStyle,
-		isHelpVisible:     false,
-		help:              help.New(),
 	}
 }
 
@@ -48,32 +53,18 @@ func (p *Prompt) SetHelpVisible(visible bool) {
 	p.isHelpVisible = visible
 }
 
-func (p *Prompt) setKeyMap(keyMap help.KeyMap) {
-	p.keyMap = keyMap
-}
+func (p *Prompt) RunModel(pm PromptModel) (PromptModel, error) {
+	p.subModel = pm
 
-func (p Prompt) view(content string) string {
-	s := strings.Builder{}
-	s.WriteString(p.PrefixStyle.Render(p.NormalPrefix))
-	s.WriteString(" ")
-	s.WriteString(p.Message)
-	s.WriteString(" ")
-	s.WriteString(p.SuffixStyle.Render(p.NormalSuffix))
-	s.WriteString(" ")
-	s.WriteString(content)
-	if p.isHelpVisible && p.keyMap != nil {
-		s.WriteString("\n")
-		s.WriteString(p.help.View(p.keyMap))
+	tm, err := tea.NewProgram(p).Run()
+	if err != nil {
+		return nil, err
 	}
 
-	return s.String()
-}
+	m, ok := tm.(Prompt)
+	if !ok {
+		return nil, ErrModelConversion
+	}
 
-func (p Prompt) finishView(content string) string {
-	return strings.Join([]string{
-		p.FinishPrefixStyle.Render(p.FinishPrefix),
-		p.Message,
-		p.FinishSuffixStyle.Render(p.FinishSuffix),
-		content,
-	}, " ") + "\n"
+	return m.subModel, nil
 }
