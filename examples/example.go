@@ -4,17 +4,20 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/cqroot/prompt"
 )
 
 type data struct {
-	InputVal       string
-	ToggleVal_1    string
-	ToggleVal_2    string
-	ChooseVal      string
-	MultiChooseVal []string
+	InputVal        string
+	InputIntegerVal int
+	InputNumberVal  float64
+	ToggleVal_1     string
+	ToggleVal_2     string
+	ChooseVal       string
+	MultiChooseVal  []string
 }
 
 func main() {
@@ -36,6 +39,17 @@ func example(p *prompt.Prompt) {
 	d.InputVal, err = p.Ask("Input example:").Input("Default string")
 	checkErr(err)
 
+	var tmp string
+	tmp, err = p.Ask("Input example (Only Integer):").InputWithLimit("", prompt.InputInteger)
+	checkErr(err)
+	d.InputIntegerVal, err = strconv.Atoi(tmp)
+	checkErr(err)
+
+	tmp, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.InputNumber)
+	checkErr(err)
+	d.InputNumberVal, err = strconv.ParseFloat(tmp, 64)
+	checkErr(err)
+
 	d.ToggleVal_1, err = p.Ask("Toggle example 1:").Toggle([]string{"Yes", "No"})
 	checkErr(err)
 
@@ -54,11 +68,13 @@ func example(p *prompt.Prompt) {
 	)
 
 	fmt.Println()
-	fmt.Printf("    Input        result:  %s\n", d.InputVal)
-	fmt.Printf("    Toggle 1     result:  %s\n", d.ToggleVal_1)
-	fmt.Printf("    Toggle 2     result:  %s\n", d.ToggleVal_2)
-	fmt.Printf("    Choose       result:  %s\n", d.ChooseVal)
-	fmt.Printf("    MultiChoose  result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
+	fmt.Printf("    Input string  result:  %s\n", d.InputVal)
+	fmt.Printf("    Input number  result:  %d\n", d.InputIntegerVal)
+	fmt.Printf("    Input integer result:  %f\n", d.InputNumberVal)
+	fmt.Printf("    Toggle 1      result:  %s\n", d.ToggleVal_1)
+	fmt.Printf("    Toggle 2      result:  %s\n", d.ToggleVal_2)
+	fmt.Printf("    Choose        result:  %s\n", d.ChooseVal)
+	fmt.Printf("    MultiChoose   result:  %s\n", strings.Join(d.MultiChooseVal, ", "))
 	fmt.Println()
 }
 
