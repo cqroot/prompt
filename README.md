@@ -50,3 +50,7 @@
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
 ![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
+
+# License
+
+Released under the [MIT License](https://github.com/cqroot/prompt/blob/main/LICENSE).
