@@ -86,7 +86,7 @@ func NewInputModel(defaultValue string) *InputModel {
 	ti.Placeholder = defaultValue
 	ti.Focus()
 	ti.CharLimit = 156
-	ti.Width = 20
+	ti.Width = 40
 	ti.Prompt = ""
 
 	m := InputModel{
