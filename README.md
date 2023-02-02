@@ -25,13 +25,23 @@
 3. `choose` lets the user choose one of several strings using the terminal ui.
 4. `multichoose` lets the user choose multiple strings from multiple strings using the terminal ui.
 
-# Types
+# Usage
 
 ## Input
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
 ![screenshot-input](https://user-images.githubusercontent.com/46901748/216246350-d14074b0-0895-4a0b-890f-11c0cd725a04.gif)
+
+`InputWithLimit` can limit the type of input:
+
+```go
+// Only integers can be entered
+val, err = p.Ask("Input example (Only Integer):").InputWithLimit("", prompt.InputInteger)
+
+// Only numbers (integers and decimals) can be entered
+val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.InputNumber)
+```
 
 ## Toggle
 
@@ -50,6 +60,17 @@
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
 ![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
+
+## Show help message
+
+`Prompt.SetHelpVisible(true)` displays the help message for key bindings.
+
+```go
+val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
+	Choose([]string{"Item 1", "Item 2", "Item 3"})
+```
+
+![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
 
 # License
 
