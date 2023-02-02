@@ -38,5 +38,10 @@ jobs:
           go-version-file: "go.mod"
           cache: true
 
-      - name: Test
+      - name: Install gofumpt
+        run: go install mvdan.cc/gofumpt@latest
+      - name: Format check
+        run: gofumpt -l .
+
+      - name: Go test
         run: go test -v
