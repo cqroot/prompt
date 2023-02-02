@@ -1,6 +1,8 @@
 package prompt
 
 import (
+	"errors"
+
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -49,12 +51,28 @@ func (p *Prompt) Ask(message string) *Prompt {
 	return p
 }
 
-func (p *Prompt) SetHelpVisible(visible bool) {
+func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 	p.isHelpVisible = visible
+	return p
 }
 
-func (p *Prompt) RunModel(pm PromptModel) (PromptModel, error) {
+func (p Prompt) Model() PromptModel {
+	return p.subModel
+}
+
+func (p *Prompt) SetModel(pm PromptModel) *Prompt {
 	p.subModel = pm
+	return p
+}
+
+func (p *Prompt) Error() error {
+	return p.err
+}
+
+func (p *Prompt) Run() (PromptModel, error) {
+	if p.subModel == nil {
+		return nil, errors.New("prompt has no model")
+	}
 
 	tm, err := tea.NewProgram(p).Run()
 	if err != nil {

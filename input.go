@@ -24,7 +24,7 @@ type InputModel struct {
 	ItemStyle         lipgloss.Style
 	SelectedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
-	inputType         InputLimit
+	inputLimit        InputLimit
 }
 
 func (m InputModel) Data() any {
@@ -39,6 +39,11 @@ func (m InputModel) DataString() string {
 	}
 }
 
+func (m *InputModel) SetInputLimit(inputLimit InputLimit) *InputModel {
+	m.inputLimit = inputLimit
+	return m
+}
+
 func (m InputModel) KeyBindings() []key.Binding {
 	return nil
 }
@@ -48,13 +53,13 @@ func (m InputModel) Init() tea.Cmd {
 }
 
 func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if m.inputType == InputNumber || m.inputType == InputInteger {
+	if m.inputLimit == InputNumber || m.inputLimit == InputInteger {
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
 			keypress := msg.String()
 			if len(keypress) == 1 {
 				if keypress == "." {
-					if m.inputType != InputNumber ||
+					if m.inputLimit != InputNumber ||
 						strings.Contains(m.textInput.Value(), ".") {
 						return m, nil
 					}
@@ -85,9 +90,9 @@ func NewInputModel(defaultValue string) *InputModel {
 	ti.Prompt = ""
 
 	m := InputModel{
-		textInput: ti,
-		df:        defaultValue,
-		inputType: InputAll,
+		textInput:  ti,
+		df:         defaultValue,
+		inputLimit: InputAll,
 
 		ItemStyle:         DefaultItemStyle,
 		SelectedItemStyle: DefaultSelectedItemStyle,
@@ -96,10 +101,11 @@ func NewInputModel(defaultValue string) *InputModel {
 	return &m
 }
 
-func (p Prompt) InputWithLimit(defaultValue string, inputType InputLimit) (string, error) {
+func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (string, error) {
 	pm := NewInputModel(defaultValue)
-	pm.inputType = inputType
-	m, err := p.RunModel(*pm)
+	pm.inputLimit = inputLimit
+	p.SetModel(*pm)
+	m, err := p.Run()
 	return m.DataString(), err
 }
 

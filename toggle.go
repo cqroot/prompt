@@ -60,7 +60,7 @@ func (m ToggleModel) View() string {
 	return s.String()
 }
 
-func (p Prompt) NewToggleModel(choices []string, style *ListStyle) *ToggleModel {
+func NewToggleModelWithStyle(choices []string, style *ListStyle) *ToggleModel {
 	toggleKeys := []key.Binding{
 		key.NewBinding(
 			key.WithKeys("left", "h", "j"),
@@ -81,9 +81,14 @@ func (p Prompt) NewToggleModel(choices []string, style *ListStyle) *ToggleModel 
 	return &model
 }
 
+func NewToggleModel(choices []string) *ToggleModel {
+	return NewToggleModelWithStyle(choices, NewListStyle())
+}
+
 func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, error) {
-	pm := p.NewToggleModel(choices, style)
-	m, err := p.RunModel(*pm)
+	pm := NewToggleModelWithStyle(choices, style)
+	p.SetModel(*pm)
+	m, err := p.Run()
 	return m.DataString(), err
 }
 

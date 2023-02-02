@@ -61,7 +61,7 @@ func (m ChooseModel) View() string {
 	return s.String()
 }
 
-func (p *Prompt) NewChooseModel(choices []string, style *ListStyle) *ChooseModel {
+func NewChooseModelWithStyle(choices []string, style *ListStyle) *ChooseModel {
 	chooseKeys := []key.Binding{
 		key.NewBinding(
 			key.WithKeys("up", "k"),
@@ -82,9 +82,14 @@ func (p *Prompt) NewChooseModel(choices []string, style *ListStyle) *ChooseModel
 	return &model
 }
 
+func NewChooseModel(choices []string) *ChooseModel {
+	return NewChooseModelWithStyle(choices, NewListStyle())
+}
+
 func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, error) {
-	pm := p.NewChooseModel(choices, style)
-	m, err := p.RunModel(*pm)
+	pm := NewChooseModelWithStyle(choices, style)
+	p.SetModel(*pm)
+	m, err := p.Run()
 	return m.DataString(), err
 }
 

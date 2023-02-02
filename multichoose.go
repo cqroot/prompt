@@ -109,7 +109,7 @@ func (m MultiChooseModel) View() string {
 	return s.String()
 }
 
-func (p *Prompt) NewMultiChooseModel(choices []string, style *ListStyle) *MultiChooseModel {
+func NewMultiChooseModelWithStyle(choices []string, style *ListStyle) *MultiChooseModel {
 	multiChooseKeys := []key.Binding{
 		key.NewBinding(
 			key.WithKeys("up", "k"),
@@ -134,9 +134,14 @@ func (p *Prompt) NewMultiChooseModel(choices []string, style *ListStyle) *MultiC
 	return &model
 }
 
+func NewMultiChooseModel(choices []string) *MultiChooseModel {
+	return NewMultiChooseModelWithStyle(choices, NewListStyle())
+}
+
 func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
-	pm := p.NewMultiChooseModel(choices, style)
-	m, err := p.RunModel(*pm)
+	pm := NewMultiChooseModelWithStyle(choices, style)
+	p.SetModel(*pm)
+	m, err := p.Run()
 	return m.Data().([]string), err
 }
 
