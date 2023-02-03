@@ -11,7 +11,7 @@ import (
 type Prompt struct {
 	quitting      bool
 	err           error
-	subModel      PromptModel
+	model         PromptModel
 	isHelpVisible bool
 	help          help.Model
 	// Style
@@ -57,11 +57,11 @@ func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 }
 
 func (p Prompt) Model() PromptModel {
-	return p.subModel
+	return p.model
 }
 
 func (p *Prompt) SetModel(pm PromptModel) *Prompt {
-	p.subModel = pm
+	p.model = pm
 	return p
 }
 
@@ -70,7 +70,7 @@ func (p *Prompt) Error() error {
 }
 
 func (p *Prompt) Run() (PromptModel, error) {
-	if p.subModel == nil {
+	if p.model == nil {
 		return nil, errors.New("prompt has no model")
 	}
 
@@ -84,5 +84,5 @@ func (p *Prompt) Run() (PromptModel, error) {
 		return nil, ErrModelConversion
 	}
 
-	return m.subModel, nil
+	return m.model, nil
 }

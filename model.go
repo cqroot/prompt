@@ -35,8 +35,8 @@ func (m Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	model, cmd := m.subModel.Update(msg)
-	m.subModel = model.(PromptModel)
+	model, cmd := m.model.Update(msg)
+	m.model = model.(PromptModel)
 	return m, cmd
 }
 
@@ -54,7 +54,7 @@ func (p Prompt) View() string {
 		s.WriteString(" ")
 		s.WriteString(p.FinishSuffixStyle.Render(p.FinishSuffix))
 		s.WriteString(" ")
-		s.WriteString(p.subModel.DataString())
+		s.WriteString(p.model.DataString())
 		s.WriteString("\n")
 		return s.String()
 	}
@@ -65,11 +65,11 @@ func (p Prompt) View() string {
 	s.WriteString(" ")
 	s.WriteString(p.SuffixStyle.Render(p.NormalSuffix))
 	s.WriteString(" ")
-	s.WriteString(p.subModel.View())
+	s.WriteString(p.model.View())
 
 	if p.isHelpVisible {
 		s.WriteString("\n\n")
-		keyBindings := p.subModel.KeyBindings()
+		keyBindings := p.model.KeyBindings()
 		keyBindings = append(
 			keyBindings,
 			key.NewBinding(
