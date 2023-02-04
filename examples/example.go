@@ -66,6 +66,7 @@ func example(p *prompt.Prompt) {
 	d.MultiChooseVal, err = p.Ask("MultiChoose example:").MultiChoose(
 		[]string{"Option 1", "Option 2", "Option 3"},
 	)
+	checkErr(err)
 
 	fmt.Println()
 	fmt.Printf("    Input string  result:  %s\n", d.InputVal)
