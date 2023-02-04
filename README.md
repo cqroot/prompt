@@ -6,6 +6,9 @@
     <a href="https://github.com/cqroot/prompt/actions">
       <img src="https://github.com/cqroot/prompt/workflows/test/badge.svg" alt="Action Status" />
     </a>
+    <a href="https://codecov.io/gh/cqroot/prompt" target="_blank">
+      <img src="https://codecov.io/gh/cqroot/prompt/branch/main/graph/badge.svg" alt="Codecov" />
+    </a>
     <a href="https://goreportcard.com/report/github.com/cqroot/prompt" target="_blank">
       <img src="https://goreportcard.com/badge/github.com/cqroot/prompt" alt="Go Reference" />
     </a>
