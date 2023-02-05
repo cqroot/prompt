@@ -14,30 +14,30 @@ type PromptModel interface {
 	KeyBindings() []key.Binding
 }
 
-func (m Prompt) Init() tea.Cmd {
+func (p Prompt) Init() tea.Cmd {
 	return nil
 }
 
-func (m Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (p Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.help.Width = msg.Width
+		p.help.Width = msg.Width
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			m.quitting = true
-			m.err = ErrUserQuit
-			return m, tea.Quit
+			p.quitting = true
+			p.err = ErrUserQuit
+			return p, tea.Quit
 
 		case "enter":
-			m.quitting = true
-			return m, tea.Quit
+			p.quitting = true
+			return p, tea.Quit
 		}
 	}
 
-	model, cmd := m.model.Update(msg)
-	m.model = model.(PromptModel)
-	return m, cmd
+	model, cmd := p.model.Update(msg)
+	p.model = model.(PromptModel)
+	return p, cmd
 }
 
 func (p Prompt) View() string {

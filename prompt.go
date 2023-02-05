@@ -54,10 +54,6 @@ func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 	return p
 }
 
-func (p *Prompt) Error() error {
-	return p.err
-}
-
 func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, error) {
 	p.model = pm
 
@@ -69,6 +65,10 @@ func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, er
 	m, ok := tm.(Prompt)
 	if !ok {
 		return nil, ErrModelConversion
+	}
+
+	if m.err != nil {
+		return nil, m.err
 	}
 
 	return m.model, nil
