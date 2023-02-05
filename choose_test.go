@@ -7,7 +7,7 @@ import (
 )
 
 func TestChoose(t *testing.T) {
-	testModel(t,
+	testPromptModel(t,
 		prompt.NewChooseModel([]string{"Item 1", "Item 2", "Item 3"}),
 		"jjjj", "Item 1", "Item 2",
 	)

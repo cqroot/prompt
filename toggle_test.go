@@ -7,7 +7,7 @@ import (
 )
 
 func TestToggle(t *testing.T) {
-	testModel(t,
+	testPromptModel(t,
 		prompt.NewToggleModel([]string{"Yes", "No"}),
 		"jjj", "Yes", "No",
 	)

@@ -2,6 +2,7 @@ package prompt_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -10,7 +11,7 @@ import (
 	"github.com/cqroot/prompt"
 )
 
-func testModel(t *testing.T, model prompt.PromptModel, input string, defaultVal string, val string) {
+func testPromptModel(t *testing.T, model prompt.PromptModel, input string, defaultVal string, val string) {
 	var out bytes.Buffer
 	var in bytes.Buffer
 
@@ -26,4 +27,16 @@ func testModel(t *testing.T, model prompt.PromptModel, input string, defaultVal 
 
 	require.Equal(t, defaultVal, p.Model().DataString())
 	require.Equal(t, val, tm.(prompt.Prompt).Model().DataString())
+
+	testPromptModel_Data(t, defaultVal, p.Model().Data())
+	testPromptModel_Data(t, val, tm.(prompt.Prompt).Model().Data())
+}
+
+func testPromptModel_Data(t *testing.T, expected string, actual any) {
+	dataString, ok := actual.(string)
+	if ok {
+		require.Equal(t, expected, dataString)
+	} else {
+		require.Equal(t, expected, strings.Join(actual.([]string), ", "))
+	}
 }

@@ -7,3 +7,7 @@ check:
 	golangci-lint run
 	@echo
 	gofumpt -l .
+
+.PHONY: cover
+cover:
+	go tool cover -html=coverage.out

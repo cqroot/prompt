@@ -10,5 +10,5 @@ func TestInput(t *testing.T) {
 	defaultVal := "default value"
 	val := "test value"
 
-	testModel(t, prompt.NewInputModel(defaultVal), val, defaultVal, val)
+	testPromptModel(t, prompt.NewInputModel(defaultVal), val, defaultVal, val)
 }
