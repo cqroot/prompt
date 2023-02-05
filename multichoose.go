@@ -140,8 +140,7 @@ func NewMultiChooseModel(choices []string) *MultiChooseModel {
 
 func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
 	pm := NewMultiChooseModelWithStyle(choices, style)
-	p.SetModel(*pm)
-	m, err := p.Run()
+	m, err := p.Run(*pm)
 	return m.Data().([]string), err
 }
 

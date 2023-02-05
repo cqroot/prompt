@@ -87,8 +87,7 @@ func NewToggleModel(choices []string) *ToggleModel {
 
 func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewToggleModelWithStyle(choices, style)
-	p.SetModel(*pm)
-	m, err := p.Run()
+	m, err := p.Run(*pm)
 	return m.DataString(), err
 }
 

@@ -104,8 +104,7 @@ func NewInputModel(defaultValue string) *InputModel {
 func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (string, error) {
 	pm := NewInputModel(defaultValue)
 	pm.inputLimit = inputLimit
-	p.SetModel(*pm)
-	m, err := p.Run()
+	m, err := p.Run(*pm)
 	return m.DataString(), err
 }
 

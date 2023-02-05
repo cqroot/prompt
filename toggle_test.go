@@ -9,25 +9,31 @@ import (
 func TestToggle(t *testing.T) {
 	testPromptModel(t,
 		prompt.NewToggleModel([]string{"Yes", "No"}),
+		[]byte{},
+		"Yes",
+	)
+
+	testPromptModel(t,
+		prompt.NewToggleModel([]string{"Yes", "No"}),
 		[]byte("lhh"),
-		"Yes", "No",
+		"No",
 	)
 
 	testPromptModel(t,
 		prompt.NewToggleModel([]string{"Yes", "No"}),
 		[]byte("kjj"),
-		"Yes", "No",
+		"No",
 	)
 
 	testPromptModel(t,
 		prompt.NewToggleModel([]string{"Yes", "No"}),
 		[]byte{KeyTab},
-		"Yes", "No",
+		"No",
 	)
 
 	testPromptModel(t,
 		prompt.NewToggleModel([]string{"Yes", "No"}),
 		[]byte{' '},
-		"Yes", "No",
+		"No",
 	)
 }

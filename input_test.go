@@ -11,7 +11,10 @@ func TestInput(t *testing.T) {
 	val := "test value"
 
 	testPromptModel(t, prompt.NewInputModel(defaultVal),
-		[]byte(val),
-		defaultVal, val,
+		[]byte{}, defaultVal,
+	)
+
+	testPromptModel(t, prompt.NewInputModel(defaultVal),
+		[]byte(val), val,
 	)
 }

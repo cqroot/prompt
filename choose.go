@@ -88,8 +88,7 @@ func NewChooseModel(choices []string) *ChooseModel {
 
 func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewChooseModelWithStyle(choices, style)
-	p.SetModel(*pm)
-	m, err := p.Run()
+	m, err := p.Run(*pm)
 	return m.DataString(), err
 }
 
