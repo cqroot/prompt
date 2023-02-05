@@ -11,13 +11,17 @@ import (
 	"github.com/cqroot/prompt"
 )
 
-func testPromptModel(t *testing.T, model prompt.PromptModel, input string, defaultVal string, val string) {
+const (
+	KeyTab byte = 9
+)
+
+func testPromptModel(t *testing.T, model prompt.PromptModel, input []byte, defaultVal string, val string) {
 	var out bytes.Buffer
 	var in bytes.Buffer
 
 	p := prompt.New().Ask("").SetModel(model)
 
-	in.Write([]byte(input))
+	in.Write(input)
 	in.Write([]byte("\r\n"))
 
 	prog := tea.NewProgram(p, tea.WithInput(&in), tea.WithOutput(&out))
