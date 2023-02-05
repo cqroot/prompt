@@ -30,6 +30,16 @@ func (mt ChooseModelTest) ViewTestcases() (prompt.PromptModel, string) {
 `
 }
 
+func (mt ChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
+	pm := mt.Model()
+	return pm, `?  › 
+• Item 1
+  Item 2
+  Item 3
+
+↑/k move up • ↓/j/tab move down • enter confirm • q quit`
+}
+
 func TestChoose(t *testing.T) {
 	testPromptModel(t, ChooseModelTest{})
 }

@@ -28,6 +28,13 @@ func (mt ToggleModelTest) ViewTestcases() (prompt.PromptModel, string) {
 	return pm, "?  › Yes / No"
 }
 
+func (mt ToggleModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
+	pm := mt.Model()
+	return pm, `?  › Yes / No
+
+←/h/j move left • →/l/k/tab/space move right • enter confirm • q quit`
+}
+
 func TestToggle(t *testing.T) {
 	testPromptModel(t, ToggleModelTest{})
 }

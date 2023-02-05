@@ -29,6 +29,13 @@ func (mt InputModelTest) ViewTestcases() (prompt.PromptModel, string) {
 	return pm, "?  › \x1b[7md\x1b[0mefault value"
 }
 
+func (mt InputModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
+	pm := mt.Model()
+	return pm, "?  › \x1b[7md\x1b[0mefault value" + `
+
+enter confirm • q quit`
+}
+
 func TestInput(t *testing.T) {
 	testPromptModel(t, InputModelTest{})
 }
