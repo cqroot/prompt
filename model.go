@@ -65,10 +65,16 @@ func (p Prompt) View() string {
 	s.WriteString(" ")
 	s.WriteString(p.SuffixStyle.Render(p.NormalSuffix))
 	s.WriteString(" ")
-	s.WriteString(p.model.View())
+
+	modelView := p.model.View()
+	s.WriteString(modelView)
 
 	if p.isHelpVisible {
-		s.WriteString("\n\n")
+		if len(modelView) > 1 && modelView[len(modelView)-1] == '\n' {
+			s.WriteString("\n")
+		} else {
+			s.WriteString("\n\n")
+		}
 		keyBindings := p.model.KeyBindings()
 		keyBindings = append(
 			keyBindings,
