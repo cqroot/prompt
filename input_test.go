@@ -6,15 +6,29 @@ import (
 	"github.com/cqroot/prompt"
 )
 
-func TestInput(t *testing.T) {
+type InputModelTest struct{}
+
+func (_ InputModelTest) Model() prompt.PromptModel {
+	defaultVal := "default value"
+	return prompt.NewInputModel(defaultVal)
+}
+
+func (mt InputModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
 	defaultVal := "default value"
 	val := "test value"
 
-	testPromptModel(t, prompt.NewInputModel(defaultVal),
-		[]byte{}, defaultVal,
-	)
+	pm := mt.Model()
+	return pm, []KVPair{
+		{[]byte{}, defaultVal},
+		{[]byte(val), val},
+	}
+}
 
-	testPromptModel(t, prompt.NewInputModel(defaultVal),
-		[]byte(val), val,
-	)
+func (mt InputModelTest) ViewTestcases() (prompt.PromptModel, string) {
+	pm := mt.Model()
+	return pm, "?  › \x1b[7md\x1b[0mefault value"
+}
+
+func TestInput(t *testing.T) {
+	testPromptModel(t, InputModelTest{})
 }

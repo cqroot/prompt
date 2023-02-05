@@ -15,7 +15,30 @@ const (
 	KeyTab byte = 9
 )
 
-func testPromptModel(t *testing.T, model prompt.PromptModel, input []byte, val string) {
+type KVPair struct {
+	Key []byte
+	Val string
+}
+
+type PromptModelTest interface {
+	Model() prompt.PromptModel
+	DataTestcases() (prompt.PromptModel, []KVPair)
+	ViewTestcases() (prompt.PromptModel, string)
+}
+
+func testPromptModel(t *testing.T, pmt PromptModelTest) {
+	model, pairs := pmt.DataTestcases()
+	for _, pair := range pairs {
+		testPromptModel_Data(t, model, pair.Key, pair.Val)
+	}
+
+	testPromptModel_Error(t, pmt.Model())
+
+	model, view := pmt.ViewTestcases()
+	testPromptModel_View(t, model, view)
+}
+
+func testPromptModel_Data(t *testing.T, model prompt.PromptModel, input []byte, val string) {
 	var out bytes.Buffer
 	var in bytes.Buffer
 	in.Write(input)
@@ -24,19 +47,25 @@ func testPromptModel(t *testing.T, model prompt.PromptModel, input []byte, val s
 	pm, err := prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
 	require.Nil(t, err)
 	require.Equal(t, val, pm.DataString())
-	testPromptModel_Data(t, val, pm.Data())
 
-	in.Reset()
+	dataString, ok := pm.Data().(string)
+	if ok {
+		require.Equal(t, val, dataString)
+	} else {
+		require.Equal(t, val, strings.Join(pm.Data().([]string), ", "))
+	}
+}
+
+func testPromptModel_Error(t *testing.T, model prompt.PromptModel) {
+	var out bytes.Buffer
+	var in bytes.Buffer
 	in.Write([]byte{'q'})
-	_, err = prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
+
+	_, err := prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)
 }
 
-func testPromptModel_Data(t *testing.T, expected string, actual any) {
-	dataString, ok := actual.(string)
-	if ok {
-		require.Equal(t, expected, dataString)
-	} else {
-		require.Equal(t, expected, strings.Join(actual.([]string), ", "))
-	}
+func testPromptModel_View(t *testing.T, model prompt.PromptModel, view string) {
+	p := prompt.New().Ask("").SetModel(model)
+	require.Equal(t, view, p.View())
 }

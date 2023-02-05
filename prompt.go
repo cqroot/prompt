@@ -54,6 +54,11 @@ func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 	return p
 }
 
+func (p *Prompt) SetModel(pm PromptModel) *Prompt {
+	p.model = pm
+	return p
+}
+
 func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, error) {
 	p.model = pm
 

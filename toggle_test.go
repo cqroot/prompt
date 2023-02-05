@@ -6,34 +6,28 @@ import (
 	"github.com/cqroot/prompt"
 )
 
+type ToggleModelTest struct{}
+
+func (_ ToggleModelTest) Model() prompt.PromptModel {
+	return prompt.NewToggleModel([]string{"Yes", "No"})
+}
+
+func (mt ToggleModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
+	pm := mt.Model()
+	return pm, []KVPair{
+		{[]byte{}, "Yes"},
+		{[]byte("lhh"), "No"},
+		{[]byte("kjj"), "No"},
+		{[]byte{KeyTab}, "No"},
+		{[]byte{' '}, "No"},
+	}
+}
+
+func (mt ToggleModelTest) ViewTestcases() (prompt.PromptModel, string) {
+	pm := mt.Model()
+	return pm, "?  › Yes / No"
+}
+
 func TestToggle(t *testing.T) {
-	testPromptModel(t,
-		prompt.NewToggleModel([]string{"Yes", "No"}),
-		[]byte{},
-		"Yes",
-	)
-
-	testPromptModel(t,
-		prompt.NewToggleModel([]string{"Yes", "No"}),
-		[]byte("lhh"),
-		"No",
-	)
-
-	testPromptModel(t,
-		prompt.NewToggleModel([]string{"Yes", "No"}),
-		[]byte("kjj"),
-		"No",
-	)
-
-	testPromptModel(t,
-		prompt.NewToggleModel([]string{"Yes", "No"}),
-		[]byte{KeyTab},
-		"No",
-	)
-
-	testPromptModel(t,
-		prompt.NewToggleModel([]string{"Yes", "No"}),
-		[]byte{' '},
-		"No",
-	)
+	testPromptModel(t, ToggleModelTest{})
 }
