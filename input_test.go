@@ -39,3 +39,43 @@ enter confirm • q quit`
 func TestInput(t *testing.T) {
 	testPromptModel(t, InputModelTest{})
 }
+
+type InputModelWithIntegerLimitTest struct {
+	InputModelTest
+}
+
+func (_ InputModelWithIntegerLimitTest) Model() prompt.PromptModel {
+	defaultVal := "default value"
+	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputInteger)
+}
+
+func (mt InputModelWithIntegerLimitTest) DataTestcases() (prompt.PromptModel, []KVPair) {
+	pm := mt.Model()
+	return pm, []KVPair{
+		{[]byte("test-123.321.test.123"), "123321123"},
+	}
+}
+
+func TestInputWithIntegerLimit(t *testing.T) {
+	testPromptModel(t, InputModelWithIntegerLimitTest{})
+}
+
+type InputModelWithNumberLimitTest struct {
+	InputModelTest
+}
+
+func (_ InputModelWithNumberLimitTest) Model() prompt.PromptModel {
+	defaultVal := "default value"
+	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputNumber)
+}
+
+func (mt InputModelWithNumberLimitTest) DataTestcases() (prompt.PromptModel, []KVPair) {
+	pm := mt.Model()
+	return pm, []KVPair{
+		{[]byte("test-123.321.test.123"), "123.321123"},
+	}
+}
+
+func TestInputWithNumberLimit(t *testing.T) {
+	testPromptModel(t, InputModelWithNumberLimitTest{})
+}
