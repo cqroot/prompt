@@ -138,12 +138,16 @@ func NewMultiChooseModel(choices []string) *MultiChooseModel {
 	return NewMultiChooseModelWithStyle(choices, NewListStyle())
 }
 
+// MultiChooseWithStyle lets the user choose one of the given choices.
+// Appearance uses the given style.
 func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
 	pm := NewMultiChooseModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
 	return m.Data().([]string), err
 }
 
+// MultiChoose lets the user choose multiples from the given choices.
+// Appearance uses the default style.
 func (p Prompt) MultiChoose(choices []string) ([]string, error) {
 	return p.MultiChooseWithStyle(choices, NewListStyle())
 }

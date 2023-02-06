@@ -24,7 +24,7 @@ type Prompt struct {
 	FinishSuffixStyle lipgloss.Style
 }
 
-// New returns a default style *Prompt.
+// New returns a *Prompt using the default style.
 func New() *Prompt {
 	return &Prompt{
 		quitting:      false,
@@ -49,16 +49,21 @@ func (p *Prompt) Ask(message string) *Prompt {
 	return p
 }
 
+// SetHelpVisible sets whether the help of the keymap is visible
 func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 	p.isHelpVisible = visible
 	return p
 }
 
+// SetModel sets the model used by the prompt. In most cases you won't need to
+// use this.
 func (p *Prompt) SetModel(pm PromptModel) *Prompt {
 	p.model = pm
 	return p
 }
 
+// Run runs the program using the given model, blocking until the user chooses
+// or exits.
 func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, error) {
 	p.model = pm
 

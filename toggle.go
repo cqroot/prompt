@@ -85,12 +85,16 @@ func NewToggleModel(choices []string) *ToggleModel {
 	return NewToggleModelWithStyle(choices, NewListStyle())
 }
 
+// ToggleWithStyle lets the user choose one of the given choices. Appearance
+// uses the given style.
 func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewToggleModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
 	return m.DataString(), err
 }
 
+// Toggle lets the user choose one of the given choices. Appearance uses the
+// default style.
 func (p Prompt) Toggle(choices []string) (string, error) {
 	return p.ToggleWithStyle(choices, NewListStyle())
 }

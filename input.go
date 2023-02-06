@@ -13,9 +13,9 @@ import (
 type InputLimit int
 
 const (
-	InputAll InputLimit = iota
-	InputInteger
-	InputNumber
+	InputAll     InputLimit = iota // allow any input.
+	InputInteger                   // only integers can be entered.
+	InputNumber                    // only integers and decimals can be entered.
 )
 
 type InputModel struct {
@@ -101,6 +101,8 @@ func NewInputModel(defaultValue string) *InputModel {
 	return &m
 }
 
+// Input asks the user to enter a string. It restricts the types of characters
+// the user can enter.
 func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (string, error) {
 	pm := NewInputModel(defaultValue)
 	pm.inputLimit = inputLimit
@@ -108,6 +110,8 @@ func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (stri
 	return m.DataString(), err
 }
 
+// Input asks the user to enter a string. You can use InputWithLimit to limit
+// what the user can enter.
 func (p Prompt) Input(defaultValue string) (string, error) {
 	return p.InputWithLimit(defaultValue, InputAll)
 }
