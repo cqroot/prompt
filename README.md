@@ -30,16 +30,29 @@
   </p>
 </div>
 
-# Features
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+  - [Input](#input)
+  - [Toggle](#toggle)
+  - [Choose](#choose)
+  - [MultiChoose](#multichoose)
+  - [Show help message](#show-help-message)
+- [License](#license)
+
+## Features
 
 1. `input` lets the user enter a string using the terminal ui.
+   You can specify that only **numbers** or **integers** are allowed.
 2. `toggle` lets the user choose one of several strings using the terminal ui (Usually used for yes or no choices).
 3. `choose` lets the user choose one of several strings using the terminal ui.
 4. `multichoose` lets the user choose multiple strings from multiple strings using the terminal ui.
+5. Show help message for keymaps.
 
-# Usage
+## Usage
 
-## Input
+### Input
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
@@ -55,27 +68,27 @@ val, err = p.Ask("Input example (Only Integer):").InputWithLimit("", prompt.Inpu
 val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.InputNumber)
 ```
 
-## Toggle
+### Toggle
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/toggle/main.go)
 
 ![screenshot-toggle](https://user-images.githubusercontent.com/46901748/216246356-fb3eb7df-7240-4a09-8899-45797bfe79c7.gif)
 
-## Choose
+### Choose
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
 
 ![screenshot-choose](https://user-images.githubusercontent.com/46901748/216246342-da8d8b67-983c-41b8-b85d-a4ef2dcab0bd.gif)
 
-## MultiChoose
+### MultiChoose
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
 ![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
 
-## Show help message
+### Show help message
 
-`Prompt.SetHelpVisible(true)` displays the help message for key bindings.
+`Prompt.SetHelpVisible(true)` displays the help message for keymaps.
 
 ```go
 val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
@@ -84,6 +97,6 @@ val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
 
 ![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
 
-# License
+## License
 
-Released under the [MIT License](https://github.com/cqroot/prompt/blob/main/LICENSE).
+[MIT License](https://github.com/cqroot/prompt/blob/main/LICENSE).
