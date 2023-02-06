@@ -17,6 +17,9 @@ func (mt MultiChooseModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
 	return pm, []KVPair{
 		{[]byte{}, ""},
 		{[]byte("kk jj "), "Item 1, Item 2"},
+		{[]byte("kk  jj "), "Item 1"},
+		{[]byte("kk jj  "), "Item 2"},
+		{[]byte("kk  jj  "), ""},
 		{[]byte{'k', 'k', ' ', KeyTab, KeyTab, ' '}, "Item 1, Item 2"},
 	}
 }
