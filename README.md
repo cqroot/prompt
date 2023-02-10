@@ -1,18 +1,25 @@
 <div align="center">
   <h1>Prompt</h1>
-  <p><i>User-friendly interactive prompts for Go.</i></p>
+  <p>
+    <i>User-friendly interactive prompts for Go.</i>
+    <br />
+    <i>
+      Based on <a href="https://github.com/charmbracelet/bubbletea" alt="Bubble Tea">Bubble Tea</a>.
+      Inspired by <a href="https://github.com/terkelg/prompts" alt="prompts">Prompts</a>
+    </i>
+  </p>
 
   <p>
     <a href="https://github.com/cqroot/prompt/actions">
       <img src="https://github.com/cqroot/prompt/workflows/test/badge.svg" alt="Action Status" />
     </a>
-    <a href="https://codecov.io/gh/cqroot/prompt" target="_blank">
+    <a href="https://codecov.io/gh/cqroot/prompt">
       <img src="https://codecov.io/gh/cqroot/prompt/branch/main/graph/badge.svg" alt="Codecov" />
     </a>
-    <a href="https://goreportcard.com/report/github.com/cqroot/prompt" target="_blank">
+    <a href="https://goreportcard.com/report/github.com/cqroot/prompt">
       <img src="https://goreportcard.com/badge/github.com/cqroot/prompt" alt="Go Reference" />
     </a>
-    <a href="https://pkg.go.dev/github.com/cqroot/prompt" target="_blank">
+    <a href="https://pkg.go.dev/github.com/cqroot/prompt">
       <img src="https://pkg.go.dev/badge/github.com/cqroot/prompt.svg" alt="Go Reference" />
     </a>
     <a href="https://github.com/cqroot/prompt/tags">
