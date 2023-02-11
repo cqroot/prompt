@@ -1,7 +1,11 @@
 package prompt_test
 
 import (
+	"bytes"
 	"testing"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/stretchr/testify/require"
 
 	"github.com/cqroot/prompt"
 )
@@ -40,6 +44,15 @@ func (mt ChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
 ↑/k move up • ↓/j/tab move down • enter confirm • q quit`
 }
 
-func TestChoose(t *testing.T) {
+func TestChooseModel(t *testing.T) {
 	testPromptModel(t, ChooseModelTest{})
+}
+
+func TestChoose(t *testing.T) {
+	var out bytes.Buffer
+	var in bytes.Buffer
+	in.Write([]byte{'q'})
+
+	_, err := prompt.New().Choose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
+	require.Equal(t, prompt.ErrUserQuit, err)
 }

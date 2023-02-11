@@ -1,7 +1,11 @@
 package prompt_test
 
 import (
+	"bytes"
 	"testing"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/stretchr/testify/require"
 
 	"github.com/cqroot/prompt"
 )
@@ -36,7 +40,7 @@ func (mt InputModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
 enter confirm • q quit`
 }
 
-func TestInput(t *testing.T) {
+func TestInputModel(t *testing.T) {
 	testPromptModel(t, InputModelTest{})
 }
 
@@ -56,7 +60,7 @@ func (mt InputModelWithIntegerLimitTest) DataTestcases() (prompt.PromptModel, []
 	}
 }
 
-func TestInputWithIntegerLimit(t *testing.T) {
+func TestInputModelWithIntegerLimit(t *testing.T) {
 	testPromptModel(t, InputModelWithIntegerLimitTest{})
 }
 
@@ -76,6 +80,15 @@ func (mt InputModelWithNumberLimitTest) DataTestcases() (prompt.PromptModel, []K
 	}
 }
 
-func TestInputWithNumberLimit(t *testing.T) {
+func TestInputModelWithNumberLimit(t *testing.T) {
 	testPromptModel(t, InputModelWithNumberLimitTest{})
+}
+
+func TestInput(t *testing.T) {
+	var out bytes.Buffer
+	var in bytes.Buffer
+	in.Write([]byte{'q'})
+
+	_, err := prompt.New().Input("", tea.WithInput(&in), tea.WithOutput(&out))
+	require.Equal(t, prompt.ErrUserQuit, err)
 }

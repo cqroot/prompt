@@ -27,6 +27,8 @@ type PromptModelTest interface {
 	ViewWithHelpTestcases() (prompt.PromptModel, string)
 }
 
+// testPromptModelData tests whether the returned result is as expected after
+// the specified key input.
 func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, val string) {
 	var out bytes.Buffer
 	var in bytes.Buffer
@@ -45,6 +47,8 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 	}
 }
 
+// testPromptModelError tests whether the corresponding error is returned after
+// the user quits.
 func testPromptModelError(t *testing.T, model prompt.PromptModel) {
 	var out bytes.Buffer
 	var in bytes.Buffer
@@ -54,11 +58,14 @@ func testPromptModelError(t *testing.T, model prompt.PromptModel) {
 	require.Equal(t, prompt.ErrUserQuit, err)
 }
 
+// testPromptModelView tests that the model's interface displays as expected.
 func testPromptModelView(t *testing.T, model prompt.PromptModel, view string) {
 	p := prompt.New().Ask("").SetModel(model)
 	require.Equal(t, view, p.View())
 }
 
+// testPromptModel_ViewWithHelp tests that the model interface with the help
+// message displays as expected
 func testPromptModel_ViewWithHelp(t *testing.T, model prompt.PromptModel, view string) {
 	p := prompt.New().Ask("").SetModel(model).SetHelpVisible(true)
 	require.Equal(t, view, p.View())

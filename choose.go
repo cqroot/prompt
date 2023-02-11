@@ -88,9 +88,9 @@ func NewChooseModel(choices []string) *ChooseModel {
 
 // ChooseWithStyle lets the user choose one of the given choices. Appearance
 // uses the given style.
-func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, error) {
+func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle, opts ...tea.ProgramOption) (string, error) {
 	pm := NewChooseModelWithStyle(choices, style)
-	m, err := p.Run(*pm)
+	m, err := p.Run(*pm, opts...)
 	if err != nil {
 		return "", err
 	}
@@ -99,6 +99,6 @@ func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, err
 
 // Choose lets the user choose one of the given choices. Appearance uses the
 // default style.
-func (p Prompt) Choose(choices []string) (string, error) {
-	return p.ChooseWithStyle(choices, NewListStyle())
+func (p Prompt) Choose(choices []string, opts ...tea.ProgramOption) (string, error) {
+	return p.ChooseWithStyle(choices, NewListStyle(), opts...)
 }
