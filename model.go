@@ -12,6 +12,7 @@ type PromptModel interface {
 	Data() any
 	DataString() string
 	KeyBindings() []key.Binding
+	UseKeyQ() bool
 }
 
 func (p Prompt) Init() tea.Cmd {
@@ -24,7 +25,15 @@ func (p Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		p.help.Width = msg.Width
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "q", "ctrl+c":
+		case "q":
+			if p.model.UseKeyQ() {
+				break
+			}
+			p.quitting = true
+			p.err = ErrUserQuit
+			return p, tea.Quit
+
+		case "ctrl+c":
 			p.quitting = true
 			p.err = ErrUserQuit
 			return p, tea.Quit
@@ -76,16 +85,27 @@ func (p Prompt) View() string {
 			s.WriteString("\n\n")
 		}
 		keyBindings := p.model.KeyBindings()
+
+		var quitKeyBinding key.Binding
+		if p.model.UseKeyQ() {
+			quitKeyBinding = key.NewBinding(
+				key.WithKeys("ctrl+c"),
+				key.WithHelp("ctrl+c", "quit"),
+			)
+		} else {
+			quitKeyBinding = key.NewBinding(
+				key.WithKeys("q", "ctrl+c"),
+				key.WithHelp("q/ctrl+c", "quit"),
+			)
+		}
+
 		keyBindings = append(
 			keyBindings,
 			key.NewBinding(
 				key.WithKeys("enter"),
 				key.WithHelp("enter", "confirm"),
 			),
-			key.NewBinding(
-				key.WithKeys("q", "esc", "ctrl+c"),
-				key.WithHelp("q", "quit"),
-			),
+			quitKeyBinding,
 		)
 		s.WriteString(p.help.ShortHelpView(keyBindings))
 	}

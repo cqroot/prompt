@@ -48,6 +48,10 @@ func (m InputModel) KeyBindings() []key.Binding {
 	return nil
 }
 
+func (m InputModel) UseKeyQ() bool {
+	return true
+}
+
 func (m InputModel) Init() tea.Cmd {
 	return textinput.Blink
 }

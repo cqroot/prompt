@@ -37,7 +37,7 @@ func (mt InputModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
 	pm := mt.Model()
 	return pm, "?  › \x1b[7md\x1b[0mefault value" + `
 
-enter confirm • q quit`
+enter confirm • ctrl+c quit`
 }
 
 func TestInputModel(t *testing.T) {
@@ -87,7 +87,7 @@ func TestInputModelWithNumberLimit(t *testing.T) {
 func TestInput(t *testing.T) {
 	var out bytes.Buffer
 	var in bytes.Buffer
-	in.Write([]byte{'q'})
+	in.Write([]byte{KeyCtrlC})
 
 	_, err := prompt.New().Input("", tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)

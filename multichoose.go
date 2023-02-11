@@ -34,6 +34,10 @@ func (m MultiChooseModel) KeyBindings() []key.Binding {
 	return m.keys
 }
 
+func (m MultiChooseModel) UseKeyQ() bool {
+	return false
+}
+
 func (m *MultiChooseModel) toggleChoice(index int) {
 	i := uint64(index)
 	if m.isChooseed(index) {

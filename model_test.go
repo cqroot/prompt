@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	KeyTab byte = 9
+	KeyTab   byte = 9
+	KeyCtrlC byte = 3
 )
 
 type KVPair struct {
@@ -52,9 +53,19 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 func testPromptModelError(t *testing.T, model prompt.PromptModel) {
 	var out bytes.Buffer
 	var in bytes.Buffer
-	in.Write([]byte{'q'})
+	in.Write([]byte{KeyCtrlC})
 
 	_, err := prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
+	require.Equal(t, prompt.ErrUserQuit, err)
+
+	if model.UseKeyQ() {
+		return
+	}
+
+	in.Reset()
+	in.Write([]byte{'q'})
+
+	_, err = prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)
 }
 

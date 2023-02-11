@@ -25,6 +25,10 @@ func (m ToggleModel) KeyBindings() []key.Binding {
 	return m.keys
 }
 
+func (m ToggleModel) UseKeyQ() bool {
+	return false
+}
+
 func (m ToggleModel) Init() tea.Cmd {
 	return nil
 }

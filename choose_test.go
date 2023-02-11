@@ -41,7 +41,7 @@ func (mt ChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
   Item 2
   Item 3
 
-↑/k move up • ↓/j/tab move down • enter confirm • q quit`
+↑/k move up • ↓/j/tab move down • enter confirm • q/ctrl+c quit`
 }
 
 func TestChooseModel(t *testing.T) {

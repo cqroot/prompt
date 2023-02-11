@@ -44,7 +44,7 @@ func (mt MultiChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, stri
 [ ] Item 2
 [ ] Item 3
 
-↑/k move up • ↓/j/tab move down • space choose • enter confirm • q quit`
+↑/k move up • ↓/j/tab move down • space choose • enter confirm • q/ctrl+c quit`
 }
 
 func TestMultiChooseModel(t *testing.T) {

@@ -36,7 +36,7 @@ func (mt ToggleModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
 	pm := mt.Model()
 	return pm, `?  › Yes / No
 
-←/h/j move left • →/l/k/tab/space move right • enter confirm • q quit`
+←/h/j move left • →/l/k/tab/space move right • enter confirm • q/ctrl+c quit`
 }
 
 func TestToggleModel(t *testing.T) {

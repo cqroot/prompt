@@ -26,6 +26,10 @@ func (m ChooseModel) KeyBindings() []key.Binding {
 	return m.keys
 }
 
+func (m ChooseModel) UseKeyQ() bool {
+	return false
+}
+
 func (m ChooseModel) Init() tea.Cmd {
 	return nil
 }
