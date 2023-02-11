@@ -19,7 +19,7 @@ func (_ InputModelTest) Model() prompt.PromptModel {
 
 func (mt InputModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
 	defaultVal := "default value"
-	val := "test value"
+	val := `abcdefghijklmnopqrstuvwxyz1234567890-=~!@#$%^&*()_+[]\{}|;':",./<>?`
 
 	pm := mt.Model()
 	return pm, []KVPair{
