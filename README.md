@@ -56,6 +56,8 @@
 3. `choose` lets the user choose one of several strings using the terminal ui.
 4. `multichoose` lets the user choose multiple strings from multiple strings using the terminal ui.
 5. Show help message for keymaps.
+6. Based on [Bubble Tea]("https://github.com/charmbracelet/bubbletea").
+   `prompt.Prompt` and all child models implement `tea.Model`.
 
 ## Usage
 
