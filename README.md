@@ -102,6 +102,13 @@ val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
 	Choose([]string{"Item 1", "Item 2", "Item 3"})
 ```
 
+Examples:
+
+1. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
+2. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
+3. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
+4. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
+
 ![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
 
 ## License
