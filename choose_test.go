@@ -55,4 +55,15 @@ func TestChoose(t *testing.T) {
 
 	_, err := prompt.New().Choose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)
+
+	_, testcases := ChooseModelTest{}.DataTestcases()
+	for _, testcase := range testcases {
+		in.Reset()
+		in.Write(testcase.Key)
+		in.Write([]byte("\r\n"))
+
+		val, err := prompt.New().Choose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
+		require.Nil(t, err)
+		require.Equal(t, testcase.Val, val)
+	}
 }

@@ -91,4 +91,15 @@ func TestInput(t *testing.T) {
 
 	_, err := prompt.New().Input("", tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)
+
+	_, testcases := InputModelTest{}.DataTestcases()
+	for _, testcase := range testcases {
+		in.Reset()
+		in.Write(testcase.Key)
+		in.Write([]byte("\r\n"))
+
+		val, err := prompt.New().Input("default value", tea.WithInput(&in), tea.WithOutput(&out))
+		require.Nil(t, err)
+		require.Equal(t, testcase.Val, val)
+	}
 }

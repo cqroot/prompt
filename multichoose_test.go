@@ -2,6 +2,7 @@ package prompt_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -58,4 +59,19 @@ func TestMultiChoose(t *testing.T) {
 
 	_, err := prompt.New().MultiChoose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
 	require.Equal(t, prompt.ErrUserQuit, err)
+
+	_, testcases := MultiChooseModelTest{}.DataTestcases()
+	for _, testcase := range testcases {
+		in.Reset()
+		in.Write(testcase.Key)
+		in.Write([]byte("\r\n"))
+
+		val, err := prompt.New().MultiChoose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
+		require.Nil(t, err)
+		if testcase.Val == "" {
+			require.Equal(t, []string{}, val)
+		} else {
+			require.Equal(t, strings.Split(testcase.Val, ", "), val)
+		}
+	}
 }
