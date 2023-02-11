@@ -90,7 +90,10 @@ func NewToggleModel(choices []string) *ToggleModel {
 func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewToggleModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
-	return m.DataString(), err
+	if err != nil {
+		return "", err
+	}
+	return m.DataString(), nil
 }
 
 // Toggle lets the user choose one of the given choices. Appearance uses the

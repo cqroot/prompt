@@ -143,7 +143,10 @@ func NewMultiChooseModel(choices []string) *MultiChooseModel {
 func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
 	pm := NewMultiChooseModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
-	return m.Data().([]string), err
+	if err != nil {
+		return nil, err
+	}
+	return m.Data().([]string), nil
 }
 
 // MultiChoose lets the user choose multiples from the given choices.

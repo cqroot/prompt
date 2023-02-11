@@ -107,7 +107,10 @@ func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (stri
 	pm := NewInputModel(defaultValue)
 	pm.inputLimit = inputLimit
 	m, err := p.Run(*pm)
-	return m.DataString(), err
+	if err != nil {
+		return "", err
+	}
+	return m.DataString(), nil
 }
 
 // Input asks the user to enter a string. You can use InputWithLimit to limit

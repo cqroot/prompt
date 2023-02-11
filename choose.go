@@ -91,7 +91,10 @@ func NewChooseModel(choices []string) *ChooseModel {
 func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewChooseModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
-	return m.DataString(), err
+	if err != nil {
+		return "", err
+	}
+	return m.DataString(), nil
 }
 
 // Choose lets the user choose one of the given choices. Appearance uses the
