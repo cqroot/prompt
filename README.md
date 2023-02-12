@@ -82,6 +82,8 @@ val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.Input
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
+![screenshot-textarea](https://user-images.githubusercontent.com/46901748/218293644-16b41bae-66b3-4926-afa8-fc26466fa8f5.gif)
+
 ### Toggle
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/toggle/main.go)
