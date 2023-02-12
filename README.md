@@ -42,6 +42,7 @@
 - [Features](#features)
 - [Usage](#usage)
   - [Input](#input)
+  - [TextArea](#textarea)
   - [Toggle](#toggle)
   - [Choose](#choose)
   - [MultiChoose](#multichoose)
@@ -77,6 +78,10 @@ val, err = p.Ask("Input example (Only Integer):").InputWithLimit("", prompt.Inpu
 val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.InputNumber)
 ```
 
+### TextArea
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
+
 ### Toggle
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/toggle/main.go)
@@ -97,19 +102,20 @@ val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.Input
 
 ### Show help message
 
-`Prompt.SetHelpVisible(true)` displays the help message for keymaps.
+`Prompt.WithHelp(true)` displays the help message for keymaps.
 
 ```go
-val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
+val, err := prompt.New().Ask("Choose value:").WithHelp(true).
 	Choose([]string{"Item 1", "Item 2", "Item 3"})
 ```
 
 Examples:
 
 1. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
-2. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
-3. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
-4. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
+2. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
+3. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
+4. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
+5. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
 
 ![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
 

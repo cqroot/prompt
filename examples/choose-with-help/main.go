@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	val, err := prompt.New().Ask("Choose value:").SetHelpVisible(true).
+	val, err := prompt.New().Ask("Choose value:").WithHelp(true).
 		Choose([]string{"Item 1", "Item 2", "Item 3"})
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {

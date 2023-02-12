@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	val, err := prompt.New().Ask("Input your name:").SetHelpVisible(true).
+	val, err := prompt.New().Ask("Input your name:").WithHelp(true).
 		Input("Your Name")
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {

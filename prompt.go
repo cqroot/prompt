@@ -10,7 +10,7 @@ type Prompt struct {
 	quitting       bool
 	err            error
 	model          PromptModel
-	isHelpVisible  bool
+	enableHelp     bool
 	help           help.Model
 	programOptions []tea.ProgramOption
 	// Style
@@ -28,10 +28,10 @@ type Prompt struct {
 // New returns a *Prompt using the default style.
 func New() *Prompt {
 	return &Prompt{
-		quitting:      false,
-		err:           nil,
-		isHelpVisible: false,
-		help:          help.New(),
+		quitting:   false,
+		err:        nil,
+		enableHelp: false,
+		help:       help.New(),
 		// Style
 		NormalPrefix:      DefaultNormalPromptPrefix,
 		FinishPrefix:      DefaultFinishPromptPrefix,
@@ -50,9 +50,15 @@ func (p *Prompt) Ask(message string) *Prompt {
 	return p
 }
 
+// Deprecated: SetHelpVisible is deprecated. Please use `Prompt.WithHelp`.
 // SetHelpVisible sets whether the help of the keymap is visible
 func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
-	p.isHelpVisible = visible
+	return p.WithHelp(visible)
+}
+
+// WithHelp sets whether the help of the keymap is visible
+func (p *Prompt) WithHelp(enable bool) *Prompt {
+	p.enableHelp = enable
 	return p
 }
 

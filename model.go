@@ -86,7 +86,7 @@ func (p Prompt) View() string {
 	modelView := p.model.View()
 	s.WriteString(modelView)
 
-	if p.isHelpVisible {
+	if p.enableHelp {
 		if len(modelView) > 1 && modelView[len(modelView)-1] == '\n' {
 			s.WriteString("\n")
 		} else {
