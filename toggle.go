@@ -91,9 +91,9 @@ func NewToggleModel(choices []string) *ToggleModel {
 
 // ToggleWithStyle lets the user choose one of the given choices. Appearance
 // uses the given style.
-func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle, opts ...tea.ProgramOption) (string, error) {
+func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, error) {
 	pm := NewToggleModelWithStyle(choices, style)
-	m, err := p.Run(*pm, opts...)
+	m, err := p.Run(*pm)
 	if err != nil {
 		return "", err
 	}
@@ -102,6 +102,6 @@ func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle, opts ...tea.
 
 // Toggle lets the user choose one of the given choices. Appearance uses the
 // default style.
-func (p Prompt) Toggle(choices []string, opts ...tea.ProgramOption) (string, error) {
-	return p.ToggleWithStyle(choices, NewListStyle(), opts...)
+func (p Prompt) Toggle(choices []string) (string, error) {
+	return p.ToggleWithStyle(choices, NewListStyle())
 }

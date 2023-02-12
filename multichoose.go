@@ -144,9 +144,9 @@ func NewMultiChooseModel(choices []string) *MultiChooseModel {
 
 // MultiChooseWithStyle lets the user choose one of the given choices.
 // Appearance uses the given style.
-func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle, opts ...tea.ProgramOption) ([]string, error) {
+func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle) ([]string, error) {
 	pm := NewMultiChooseModelWithStyle(choices, style)
-	m, err := p.Run(*pm, opts...)
+	m, err := p.Run(*pm)
 	if err != nil {
 		return nil, err
 	}
@@ -155,6 +155,6 @@ func (p Prompt) MultiChooseWithStyle(choices []string, style *ListStyle, opts ..
 
 // MultiChoose lets the user choose multiples from the given choices.
 // Appearance uses the default style.
-func (p Prompt) MultiChoose(choices []string, opts ...tea.ProgramOption) ([]string, error) {
-	return p.MultiChooseWithStyle(choices, NewListStyle(), opts...)
+func (p Prompt) MultiChoose(choices []string) ([]string, error) {
+	return p.MultiChooseWithStyle(choices, NewListStyle())
 }

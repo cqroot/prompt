@@ -57,7 +57,9 @@ func TestMultiChoose(t *testing.T) {
 	var in bytes.Buffer
 	in.Write([]byte{'q'})
 
-	_, err := prompt.New().MultiChoose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
+	_, err := prompt.New().
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
 	require.Equal(t, prompt.ErrUserQuit, err)
 
 	_, testcases := MultiChooseModelTest{}.DataTestcases()
@@ -66,7 +68,9 @@ func TestMultiChoose(t *testing.T) {
 		in.Write(testcase.Key)
 		in.Write([]byte("\r\n"))
 
-		val, err := prompt.New().MultiChoose([]string{"Item 1", "Item 2", "Item 3"}, tea.WithInput(&in), tea.WithOutput(&out))
+		val, err := prompt.New().
+			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+			MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
 		require.Nil(t, err)
 		if testcase.Val == "" {
 			require.Equal(t, []string{}, val)

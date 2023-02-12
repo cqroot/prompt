@@ -107,10 +107,10 @@ func NewInputModel(defaultValue string) *InputModel {
 
 // Input asks the user to enter a string. It restricts the types of characters
 // the user can enter.
-func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit, opts ...tea.ProgramOption) (string, error) {
+func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (string, error) {
 	pm := NewInputModel(defaultValue)
 	pm.inputLimit = inputLimit
-	m, err := p.Run(*pm, opts...)
+	m, err := p.Run(*pm)
 	if err != nil {
 		return "", err
 	}
@@ -119,6 +119,6 @@ func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit, opts 
 
 // Input asks the user to enter a string. You can use InputWithLimit to limit
 // what the user can enter.
-func (p Prompt) Input(defaultValue string, opts ...tea.ProgramOption) (string, error) {
-	return p.InputWithLimit(defaultValue, InputAll, opts...)
+func (p Prompt) Input(defaultValue string) (string, error) {
+	return p.InputWithLimit(defaultValue, InputAll)
 }

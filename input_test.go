@@ -89,7 +89,9 @@ func TestInput(t *testing.T) {
 	var in bytes.Buffer
 	in.Write([]byte{KeyCtrlC})
 
-	_, err := prompt.New().Input("", tea.WithInput(&in), tea.WithOutput(&out))
+	_, err := prompt.New().
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		Input("")
 	require.Equal(t, prompt.ErrUserQuit, err)
 
 	_, testcases := InputModelTest{}.DataTestcases()
@@ -98,7 +100,9 @@ func TestInput(t *testing.T) {
 		in.Write(testcase.Key)
 		in.Write([]byte("\r\n"))
 
-		val, err := prompt.New().Input("default value", tea.WithInput(&in), tea.WithOutput(&out))
+		val, err := prompt.New().
+			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+			Input("default value")
 		require.Nil(t, err)
 		require.Equal(t, testcase.Val, val)
 	}

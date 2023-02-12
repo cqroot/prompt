@@ -7,11 +7,12 @@ import (
 )
 
 type Prompt struct {
-	quitting      bool
-	err           error
-	model         PromptModel
-	isHelpVisible bool
-	help          help.Model
+	quitting       bool
+	err            error
+	model          PromptModel
+	isHelpVisible  bool
+	help           help.Model
+	programOptions []tea.ProgramOption
 	// Style
 	Message           string
 	NormalPrefix      string
@@ -62,12 +63,20 @@ func (p *Prompt) SetModel(pm PromptModel) *Prompt {
 	return p
 }
 
+// WithProgramOptions sets the `tea.ProgramOption` passed when calling
+// `tea.NewProgram`. This function is mainly used for testing, usually you
+// don't need to use this function.
+func (p *Prompt) WithProgramOptions(opts ...tea.ProgramOption) *Prompt {
+	p.programOptions = append(p.programOptions, opts...)
+	return p
+}
+
 // Run runs the program using the given model, blocking until the user chooses
 // or exits.
-func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, error) {
+func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 	p.model = pm
 
-	tm, err := tea.NewProgram(p, opts...).Run()
+	tm, err := tea.NewProgram(p, p.programOptions...).Run()
 	if err != nil {
 		return nil, err
 	}

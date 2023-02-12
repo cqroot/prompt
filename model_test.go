@@ -36,7 +36,9 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 	in.Write(input)
 	in.Write([]byte("\r\n"))
 
-	pm, err := prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
+	pm, err := prompt.New().Ask("").
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		Run(model)
 	require.Nil(t, err)
 	require.Equal(t, val, pm.DataString())
 
@@ -55,7 +57,9 @@ func testPromptModelError(t *testing.T, model prompt.PromptModel) {
 	var in bytes.Buffer
 	in.Write([]byte{KeyCtrlC})
 
-	_, err := prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
+	_, err := prompt.New().Ask("").
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		Run(model)
 	require.Equal(t, prompt.ErrUserQuit, err)
 
 	if model.UseKeyQ() {
@@ -65,7 +69,9 @@ func testPromptModelError(t *testing.T, model prompt.PromptModel) {
 	in.Reset()
 	in.Write([]byte{'q'})
 
-	_, err = prompt.New().Ask("").Run(model, tea.WithInput(&in), tea.WithOutput(&out))
+	_, err = prompt.New().Ask("").
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		Run(model)
 	require.Equal(t, prompt.ErrUserQuit, err)
 }
 

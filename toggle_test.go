@@ -48,7 +48,9 @@ func TestToggle(t *testing.T) {
 	var in bytes.Buffer
 	in.Write([]byte{'q'})
 
-	_, err := prompt.New().Toggle([]string{"Yes", "No"}, tea.WithInput(&in), tea.WithOutput(&out))
+	_, err := prompt.New().
+		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+		Toggle([]string{"Yes", "No"})
 	require.Equal(t, prompt.ErrUserQuit, err)
 
 	_, testcases := ToggleModelTest{}.DataTestcases()
@@ -57,7 +59,9 @@ func TestToggle(t *testing.T) {
 		in.Write(testcase.Key)
 		in.Write([]byte("\r\n"))
 
-		val, err := prompt.New().Toggle([]string{"Yes", "No"}, tea.WithInput(&in), tea.WithOutput(&out))
+		val, err := prompt.New().
+			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
+			Toggle([]string{"Yes", "No"})
 		require.Nil(t, err)
 		require.Equal(t, testcase.Val, val)
 	}
