@@ -46,6 +46,7 @@
     - [Password input like linux (do not display any characters)](<#password-input-like-linux-(do-not-display-any-characters)>)
     - [Only integers can be entered](#only-integers-can-be-entered)
     - [Only numbers can be entered](#only-numbers-can-be-entered)
+    - [Input with validation](#input-with-validation)
   - [TextArea](#textarea)
   - [Toggle](#toggle)
   - [Choose](#choose)
@@ -91,6 +92,12 @@
 #### Only numbers can be entered
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-number-only/main.go)
+
+#### Input with validation
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/input-with-validation/main.go)
+
+![screenshot-input-with-validation](https://user-images.githubusercontent.com/46901748/218308650-dff43d9c-61d4-4373-8ac0-876ad2e329ae.gif)
 
 ### TextArea
 
