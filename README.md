@@ -77,13 +77,13 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-password/main.go)
 
-![screenshot-input-echo-password](https://user-images.githubusercontent.com/46901748/218305925-37de2c0c-2d6b-419e-9448-afad7e40e1d2.gif)
+![screenshot-input-echo-password](https://user-images.githubusercontent.com/46901748/218309893-754711a2-88f9-42de-a20f-6a86aeefeba0.gif)
 
 #### Password input like linux (do not display any characters)
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-none/main.go)
 
-![screenshot-input-echo-none](https://user-images.githubusercontent.com/46901748/218305921-87e607a6-3b7f-4040-ada6-79406e65cdc7.gif)
+![screenshot-input-echo-none](https://user-images.githubusercontent.com/46901748/218309957-468a1da3-f07c-4dc3-aa57-e1844f4f4c0e.gif)
 
 #### Only integers can be entered
 
