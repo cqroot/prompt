@@ -40,3 +40,11 @@ func WithInputMode(mode InputMode) InputOption {
 		m.WithInputMode(mode)
 	}
 }
+
+type ValidateFunc func(string) error
+
+func WithValidateFunc(vf ValidateFunc) InputOption {
+	return func(m *InputModel) {
+		m.WithValidateFunc(vf)
+	}
+}

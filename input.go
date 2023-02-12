@@ -13,10 +13,11 @@ import (
 type InputModel struct {
 	df                string
 	textInput         textinput.Model
+	validateFunc      ValidateFunc
+	inputMode         InputMode
 	ItemStyle         lipgloss.Style
 	SelectedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
-	inputMode         InputMode
 }
 
 func (m InputModel) Data() any {
@@ -50,6 +51,11 @@ func (m *InputModel) WithInputMode(mode InputMode) *InputModel {
 
 func (m *InputModel) WithEchoMode(mode EchoMode) *InputModel {
 	m.textInput.EchoMode = mode
+	return m
+}
+
+func (m *InputModel) WithValidateFunc(vf ValidateFunc) *InputModel {
+	m.validateFunc = vf
 	return m
 }
 
@@ -95,7 +101,19 @@ func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m InputModel) View() string {
-	return m.textInput.View()
+	view := m.textInput.View()
+
+	if m.textInput.Value() != "" && m.validateFunc != nil {
+		err := m.validateFunc(m.textInput.Value())
+		if err != nil {
+			view = view + DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
+				DefaultNoteStyle.Render(err.Error())
+		} else {
+			view = view + DefaultFinishPromptPrefixStyle.Render("\n✔")
+		}
+	}
+
+	return view
 }
 
 func NewInputModel(defaultValue string) *InputModel {
