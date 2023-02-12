@@ -16,27 +16,24 @@ func (_ ChooseModelTest) Model() prompt.PromptModel {
 	return prompt.NewChooseModel([]string{"Item 1", "Item 2", "Item 3"})
 }
 
-func (mt ChooseModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte{}, "Item 1"},
-		{[]byte("kkjjj"), "Item 2"},
-		{[]byte{'k', 'k', KeyTab, KeyTab, KeyTab}, "Item 2"},
+func (mt ChooseModelTest) DataTestcases() []KVPair {
+	return []KVPair{
+		{Key: []byte{}, Val: "Item 1", View: "Item 1"},
+		{Key: []byte("kkjjj"), Val: "Item 2", View: "Item 2"},
+		{Key: []byte{'k', 'k', KeyTab, KeyTab, KeyTab}, Val: "Item 2", View: "Item 2"},
 	}
 }
 
-func (mt ChooseModelTest) ViewTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, `?  › 
+func (mt ChooseModelTest) InitViewTestcase() string {
+	return `?  › 
 • Item 1
   Item 2
   Item 3
 `
 }
 
-func (mt ChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, `?  › 
+func (mt ChooseModelTest) InitViewWithHelpTestcase() string {
+	return `?  › 
 • Item 1
   Item 2
   Item 3
@@ -58,7 +55,7 @@ func TestChoose(t *testing.T) {
 		Choose([]string{"Item 1", "Item 2", "Item 3"})
 	require.Equal(t, prompt.ErrUserQuit, err)
 
-	_, testcases := ChooseModelTest{}.DataTestcases()
+	testcases := ChooseModelTest{}.DataTestcases()
 	for _, testcase := range testcases {
 		in.Reset()
 		in.Write(testcase.Key)

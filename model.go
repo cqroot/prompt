@@ -9,8 +9,8 @@ import (
 
 type PromptModel interface {
 	tea.Model
-	Data() any
-	DataString() string
+	Data() any          // Returns the final result.
+	DataString() string // Returns a string for display in the result position.
 	KeyBindings() []key.Binding
 	UseKeyQ() bool
 	UseKeyEnter() bool

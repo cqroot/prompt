@@ -17,30 +17,27 @@ func (_ MultiChooseModelTest) Model() prompt.PromptModel {
 	return prompt.NewMultiChooseModel([]string{"Item 1", "Item 2", "Item 3"})
 }
 
-func (mt MultiChooseModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte{}, ""},
-		{[]byte("kk jj "), "Item 1, Item 2"},
-		{[]byte("kk  jj "), "Item 1"},
-		{[]byte("kk jj  "), "Item 2"},
-		{[]byte("kk  jj  "), ""},
-		{[]byte{'k', 'k', ' ', KeyTab, KeyTab, ' '}, "Item 1, Item 2"},
+func (mt MultiChooseModelTest) DataTestcases() []KVPair {
+	return []KVPair{
+		{Key: []byte{}, Val: "", View: ""},
+		{Key: []byte("kk jj "), Val: "Item 1, Item 2", View: "Item 1, Item 2"},
+		{Key: []byte("kk  jj "), Val: "Item 1", View: "Item 1"},
+		{Key: []byte("kk jj  "), Val: "Item 2", View: "Item 2"},
+		{Key: []byte("kk  jj  "), Val: "", View: ""},
+		{Key: []byte{'k', 'k', ' ', KeyTab, KeyTab, ' '}, Val: "Item 1, Item 2", View: "Item 1, Item 2"},
 	}
 }
 
-func (mt MultiChooseModelTest) ViewTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, `?  › 
+func (mt MultiChooseModelTest) InitViewTestcase() string {
+	return `?  › 
 [•] Item 1
 [ ] Item 2
 [ ] Item 3
 `
 }
 
-func (mt MultiChooseModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, `?  › 
+func (mt MultiChooseModelTest) InitViewWithHelpTestcase() string {
+	return `?  › 
 [•] Item 1
 [ ] Item 2
 [ ] Item 3
@@ -62,7 +59,7 @@ func TestMultiChoose(t *testing.T) {
 		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
 	require.Equal(t, prompt.ErrUserQuit, err)
 
-	_, testcases := MultiChooseModelTest{}.DataTestcases()
+	testcases := MultiChooseModelTest{}.DataTestcases()
 	for _, testcase := range testcases {
 		in.Reset()
 		in.Write(testcase.Key)

@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("Example with help message")
 	fmt.Println()
 
-	p.SetHelpVisible(true)
+	p.WithHelp(true)
 	example(p)
 }
 

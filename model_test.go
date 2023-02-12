@@ -18,20 +18,21 @@ const (
 )
 
 type KVPair struct {
-	Key []byte
-	Val string
+	Key  []byte
+	Val  string
+	View string
 }
 
 type PromptModelTest interface {
 	Model() prompt.PromptModel
-	DataTestcases() (prompt.PromptModel, []KVPair)
-	ViewTestcases() (prompt.PromptModel, string)
-	ViewWithHelpTestcases() (prompt.PromptModel, string)
+	DataTestcases() []KVPair
+	InitViewTestcase() string
+	InitViewWithHelpTestcase() string
 }
 
 // testPromptModelData tests whether the returned result is as expected after
 // the specified key input.
-func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, val string) {
+func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, val string, view string) {
 	var out bytes.Buffer
 	var in bytes.Buffer
 	in.Write(input)
@@ -45,7 +46,6 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
 		Run(model)
 	require.Nil(t, err)
-	require.Equal(t, val, pm.DataString())
 
 	dataString, ok := pm.Data().(string)
 	if ok {
@@ -53,6 +53,8 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 	} else {
 		require.Equal(t, val, strings.Join(pm.Data().([]string), ", "))
 	}
+
+	require.Equal(t, view, pm.DataString())
 }
 
 // testPromptModelError tests whether the corresponding error is returned after
@@ -89,21 +91,21 @@ func testPromptModelView(t *testing.T, model prompt.PromptModel, view string) {
 // testPromptModel_ViewWithHelp tests that the model interface with the help
 // message displays as expected
 func testPromptModel_ViewWithHelp(t *testing.T, model prompt.PromptModel, view string) {
-	p := prompt.New().Ask("").SetModel(model).SetHelpVisible(true)
+	p := prompt.New().Ask("").SetModel(model).WithHelp(true)
 	require.Equal(t, view, p.View())
 }
 
 func testPromptModel(t *testing.T, pmt PromptModelTest) {
-	model, pairs := pmt.DataTestcases()
+	pairs := pmt.DataTestcases()
 	for _, pair := range pairs {
-		testPromptModelData(t, model, pair.Key, pair.Val)
+		testPromptModelData(t, pmt.Model(), pair.Key, pair.Val, pair.View)
 	}
 
 	testPromptModelError(t, pmt.Model())
 
-	model, view := pmt.ViewTestcases()
-	testPromptModelView(t, model, view)
+	view := pmt.InitViewTestcase()
+	testPromptModelView(t, pmt.Model(), view)
 
-	model, view = pmt.ViewWithHelpTestcases()
-	testPromptModel_ViewWithHelp(t, model, view)
+	view = pmt.InitViewWithHelpTestcase()
+	testPromptModel_ViewWithHelp(t, pmt.Model(), view)
 }

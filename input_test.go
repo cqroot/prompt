@@ -17,25 +17,22 @@ func (_ InputModelTest) Model() prompt.PromptModel {
 	return prompt.NewInputModel(defaultVal)
 }
 
-func (mt InputModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
+func (mt InputModelTest) DataTestcases() []KVPair {
 	defaultVal := "default value"
 	val := `abcdefghijklmnopqrstuvwxyz1234567890-=~!@#$%^&*()_+[]\{}|;':",./<>?`
 
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte{}, defaultVal},
-		{[]byte(val), val},
+	return []KVPair{
+		{Key: []byte{}, Val: defaultVal, View: defaultVal},
+		{Key: []byte(val), Val: val, View: val},
 	}
 }
 
-func (mt InputModelTest) ViewTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, "?  › \x1b[7md\x1b[0mefault value"
+func (mt InputModelTest) InitViewTestcase() string {
+	return "?  › \x1b[7md\x1b[0mefault value"
 }
 
-func (mt InputModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, "?  › \x1b[7md\x1b[0mefault value" + `
+func (mt InputModelTest) InitViewWithHelpTestcase() string {
+	return "?  › \x1b[7md\x1b[0mefault value" + `
 
 enter confirm • ctrl+c quit`
 }
@@ -53,10 +50,9 @@ func (_ InputModelWithIntegerLimitTest) Model() prompt.PromptModel {
 	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputInteger)
 }
 
-func (mt InputModelWithIntegerLimitTest) DataTestcases() (prompt.PromptModel, []KVPair) {
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte("test-123.321.test.123"), "123321123"},
+func (mt InputModelWithIntegerLimitTest) DataTestcases() []KVPair {
+	return []KVPair{
+		{Key: []byte("test-123.321.test.123"), Val: "123321123", View: "123321123"},
 	}
 }
 
@@ -73,10 +69,9 @@ func (_ InputModelWithNumberLimitTest) Model() prompt.PromptModel {
 	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputNumber)
 }
 
-func (mt InputModelWithNumberLimitTest) DataTestcases() (prompt.PromptModel, []KVPair) {
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte("test-123.321.test.123"), "123.321123"},
+func (mt InputModelWithNumberLimitTest) DataTestcases() []KVPair {
+	return []KVPair{
+		{Key: []byte("test-123.321.test.123"), Val: "123.321123", View: "123.321123"},
 	}
 }
 
@@ -94,7 +89,7 @@ func TestInput(t *testing.T) {
 		Input("")
 	require.Equal(t, prompt.ErrUserQuit, err)
 
-	_, testcases := InputModelTest{}.DataTestcases()
+	testcases := InputModelTest{}.DataTestcases()
 	for _, testcase := range testcases {
 		in.Reset()
 		in.Write(testcase.Key)

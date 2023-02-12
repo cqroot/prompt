@@ -10,27 +10,32 @@ import (
 	"github.com/cqroot/prompt"
 )
 
-type TextAreaModelTest struct{}
-
-func (_ TextAreaModelTest) Model() prompt.PromptModel {
-	defaultVal := "default value"
-	return prompt.NewTextAreaModel(defaultVal)
+type TextAreaModelTest struct {
+	defaultVal string
 }
 
-func (mt TextAreaModelTest) DataTestcases() (prompt.PromptModel, []KVPair) {
-	defaultVal := "default value"
-	val := `abcdefghijklmnopqrstuvwxyz1234567890-=~!@#$%^&*()_+[]\{}|;':",./<>?`
-
-	pm := mt.Model()
-	return pm, []KVPair{
-		{[]byte{}, defaultVal},
-		{[]byte(val), val},
+func NewTextAreaModelTest() *TextAreaModelTest {
+	return &TextAreaModelTest{
+		defaultVal: "default value",
 	}
 }
 
-func (mt TextAreaModelTest) ViewTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, "?  › \n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
+func (mt TextAreaModelTest) Model() prompt.PromptModel {
+	return prompt.NewTextAreaModel(mt.defaultVal)
+}
+
+func (mt TextAreaModelTest) DataTestcases() []KVPair {
+	val := `abcdefghijklmnopqrstuvwxyz1234567890-=~!@#$%^&*()_+[]\{}|;':",./<>?`
+
+	return []KVPair{
+		{Key: []byte{}, Val: mt.defaultVal, View: mt.defaultVal},
+		{Key: []byte(val), Val: val, View: val},
+		{Key: []byte("test\r\naaa"), Val: "test\naaa", View: "...(8 bytes)"},
+	}
+}
+
+func (mt TextAreaModelTest) InitViewTestcase() string {
+	return "?  › \n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
 		`┃  ~                                    
 ┃  ~                                    
 ┃  ~                                    
@@ -38,9 +43,8 @@ func (mt TextAreaModelTest) ViewTestcases() (prompt.PromptModel, string) {
 ┃  ~                                    `
 }
 
-func (mt TextAreaModelTest) ViewWithHelpTestcases() (prompt.PromptModel, string) {
-	pm := mt.Model()
-	return pm, "?  › \n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
+func (mt TextAreaModelTest) InitViewWithHelpTestcase() string {
+	return "?  › \n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
 		`┃  ~                                    
 ┃  ~                                    
 ┃  ~                                    
@@ -51,7 +55,7 @@ ctrl+s confirm • ctrl+c quit`
 }
 
 func TestTextAreaModel(t *testing.T) {
-	testPromptModel(t, TextAreaModelTest{})
+	testPromptModel(t, NewTextAreaModelTest())
 }
 
 func TestTextArea(t *testing.T) {
@@ -64,7 +68,7 @@ func TestTextArea(t *testing.T) {
 		TextArea("")
 	require.Equal(t, prompt.ErrUserQuit, err)
 
-	_, testcases := TextAreaModelTest{}.DataTestcases()
+	testcases := NewTextAreaModelTest().DataTestcases()
 	for _, testcase := range testcases {
 		in.Reset()
 		in.Write(testcase.Key)
@@ -72,7 +76,7 @@ func TestTextArea(t *testing.T) {
 
 		val, err := prompt.New().
 			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
-			TextArea("default value")
+			TextArea(NewTextAreaModelTest().defaultVal)
 		require.Nil(t, err)
 		require.Equal(t, testcase.Val, val)
 	}
