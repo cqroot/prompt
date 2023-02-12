@@ -52,6 +52,10 @@ func (m InputModel) UseKeyQ() bool {
 	return true
 }
 
+func (m InputModel) UseKeyEnter() bool {
+	return false
+}
+
 func (m InputModel) Init() tea.Cmd {
 	return textinput.Blink
 }

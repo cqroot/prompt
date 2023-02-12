@@ -38,6 +38,10 @@ func (m MultiChooseModel) UseKeyQ() bool {
 	return false
 }
 
+func (m MultiChooseModel) UseKeyEnter() bool {
+	return false
+}
+
 func (m *MultiChooseModel) toggleChoice(index int) {
 	i := uint64(index)
 	if m.isChooseed(index) {

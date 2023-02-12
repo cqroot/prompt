@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	KeyTab   byte = 9
 	KeyCtrlC byte = 3
+	KeyTab   byte = 9
+	KeyCtrlS byte = 19
 )
 
 type KVPair struct {
@@ -34,7 +35,11 @@ func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, v
 	var out bytes.Buffer
 	var in bytes.Buffer
 	in.Write(input)
-	in.Write([]byte("\r\n"))
+	if model.UseKeyEnter() {
+		in.Write([]byte{KeyCtrlS})
+	} else {
+		in.Write([]byte("\r\n"))
+	}
 
 	pm, err := prompt.New().Ask("").
 		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).

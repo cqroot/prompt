@@ -30,6 +30,10 @@ func (m ChooseModel) UseKeyQ() bool {
 	return false
 }
 
+func (m ChooseModel) UseKeyEnter() bool {
+	return false
+}
+
 func (m ChooseModel) Init() tea.Cmd {
 	return nil
 }
