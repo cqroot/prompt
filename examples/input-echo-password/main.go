@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	val, err := prompt.New().Ask("Input an integer:").
+	val, err := prompt.New().Ask("Input your password:").
 		Input("", prompt.WithEchoMode(prompt.EchoPassword))
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
