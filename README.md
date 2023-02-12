@@ -42,6 +42,10 @@
 - [Features](#features)
 - [Usage](#usage)
   - [Input](#input)
+    - [Password input](#password-input)
+    - [Password input like linux (do not display any characters)](<#password-input-like-linux-(do-not-display-any-characters)>)
+    - [Only integers can be entered](#only-integers-can-be-entered)
+    - [Only numbers can be entered](#only-numbers-can-be-entered)
   - [TextArea](#textarea)
   - [Toggle](#toggle)
   - [Choose](#choose)
@@ -68,21 +72,31 @@
 
 ![screenshot-input](https://user-images.githubusercontent.com/46901748/216246350-d14074b0-0895-4a0b-890f-11c0cd725a04.gif)
 
-`InputWithLimit` can limit the type of input:
+#### Password input
 
-```go
-// Only integers can be entered
-val, err = p.Ask("Input example (Only Integer):").InputWithLimit("", prompt.InputInteger)
+[example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-password/main.go)
 
-// Only numbers (integers and decimals) can be entered
-val, err = p.Ask("Input example (Only Number):").InputWithLimit("", prompt.InputNumber)
-```
+![screenshot-input-echo-password](https://user-images.githubusercontent.com/46901748/218305925-37de2c0c-2d6b-419e-9448-afad7e40e1d2.gif)
+
+#### Password input like linux (do not display any characters)
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-none/main.go)
+
+![screenshot-input-echo-none](https://user-images.githubusercontent.com/46901748/218305921-87e607a6-3b7f-4040-ada6-79406e65cdc7.gif)
+
+#### Only integers can be entered
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/input-integer-only/main.go)
+
+#### Only numbers can be entered
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/input-number-only/main.go)
 
 ### TextArea
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
-![screenshot-textarea](https://user-images.githubusercontent.com/46901748/218293644-16b41bae-66b3-4926-afa8-fc26466fa8f5.gif)
+![screenshot-textarea](https://user-images.githubusercontent.com/46901748/218306061-d5f0ba9f-e6d5-43c8-ae04-88ae1cf8e758.gif)
 
 ### Toggle
 

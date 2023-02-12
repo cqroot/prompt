@@ -50,7 +50,7 @@ func (p *Prompt) Ask(message string) *Prompt {
 	return p
 }
 
-// Deprecated: SetHelpVisible is deprecated. Please use `Prompt.WithHelp`.
+// Deprecated: use Prompt.WithHelp instead.
 // SetHelpVisible sets whether the help of the keymap is visible
 func (p *Prompt) SetHelpVisible(visible bool) *Prompt {
 	return p.WithHelp(visible)

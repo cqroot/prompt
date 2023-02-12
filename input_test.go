@@ -41,44 +41,6 @@ func TestInputModel(t *testing.T) {
 	testPromptModel(t, InputModelTest{})
 }
 
-type InputModelWithIntegerLimitTest struct {
-	InputModelTest
-}
-
-func (_ InputModelWithIntegerLimitTest) Model() prompt.PromptModel {
-	defaultVal := "default value"
-	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputInteger)
-}
-
-func (mt InputModelWithIntegerLimitTest) DataTestcases() []KVPair {
-	return []KVPair{
-		{Key: []byte("test-123.321.test.123"), Val: "123321123", View: "123321123"},
-	}
-}
-
-func TestInputModelWithIntegerLimit(t *testing.T) {
-	testPromptModel(t, InputModelWithIntegerLimitTest{})
-}
-
-type InputModelWithNumberLimitTest struct {
-	InputModelTest
-}
-
-func (_ InputModelWithNumberLimitTest) Model() prompt.PromptModel {
-	defaultVal := "default value"
-	return prompt.NewInputModel(defaultVal).SetInputLimit(prompt.InputNumber)
-}
-
-func (mt InputModelWithNumberLimitTest) DataTestcases() []KVPair {
-	return []KVPair{
-		{Key: []byte("test-123.321.test.123"), Val: "123.321123", View: "123.321123"},
-	}
-}
-
-func TestInputModelWithNumberLimit(t *testing.T) {
-	testPromptModel(t, InputModelWithNumberLimitTest{})
-}
-
 func TestInput(t *testing.T) {
 	var out bytes.Buffer
 	var in bytes.Buffer

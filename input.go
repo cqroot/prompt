@@ -10,28 +10,16 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type InputLimit int
-
-const (
-	InputAll     InputLimit = iota // allow any input.
-	InputInteger                   // only integers can be entered.
-	InputNumber                    // only integers and decimals can be entered.
-)
-
 type InputModel struct {
 	df                string
 	textInput         textinput.Model
 	ItemStyle         lipgloss.Style
 	SelectedItemStyle lipgloss.Style
 	ChoiceStyle       lipgloss.Style
-	inputLimit        InputLimit
+	inputMode         InputMode
 }
 
 func (m InputModel) Data() any {
-	return m.DataString()
-}
-
-func (m InputModel) DataString() string {
 	if m.textInput.Value() == "" {
 		return m.textInput.Placeholder
 	} else {
@@ -39,8 +27,29 @@ func (m InputModel) DataString() string {
 	}
 }
 
-func (m *InputModel) SetInputLimit(inputLimit InputLimit) *InputModel {
-	m.inputLimit = inputLimit
+func (m InputModel) DataString() string {
+	if m.textInput.EchoMode == EchoNormal {
+		return m.Data().(string)
+	}
+	m.textInput.Blur()
+	str := m.textInput.View()
+	m.textInput.Focus()
+	return str
+}
+
+// Deprecated: use InputModel.WithInputMode instead.
+func (m *InputModel) SetInputLimit(inputLimit InputMode) *InputModel {
+	m.inputMode = inputLimit
+	return m
+}
+
+func (m *InputModel) WithInputMode(mode InputMode) *InputModel {
+	m.inputMode = mode
+	return m
+}
+
+func (m *InputModel) WithEchoMode(mode EchoMode) *InputModel {
+	m.textInput.EchoMode = mode
 	return m
 }
 
@@ -61,13 +70,13 @@ func (m InputModel) Init() tea.Cmd {
 }
 
 func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if m.inputLimit == InputNumber || m.inputLimit == InputInteger {
+	if m.inputMode == InputNumber || m.inputMode == InputInteger {
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
 			keypress := msg.String()
 			if len(keypress) == 1 {
 				if keypress == "." {
-					if m.inputLimit != InputNumber ||
+					if m.inputMode != InputNumber ||
 						strings.Contains(m.textInput.Value(), ".") {
 						return m, nil
 					}
@@ -98,9 +107,9 @@ func NewInputModel(defaultValue string) *InputModel {
 	ti.Prompt = ""
 
 	m := InputModel{
-		textInput:  ti,
-		df:         defaultValue,
-		inputLimit: InputAll,
+		textInput: ti,
+		df:        defaultValue,
+		inputMode: InputAll,
 
 		ItemStyle:         DefaultItemStyle,
 		SelectedItemStyle: DefaultSelectedItemStyle,
@@ -109,20 +118,30 @@ func NewInputModel(defaultValue string) *InputModel {
 	return &m
 }
 
+// Deprecated: use InputModel.Input("", prompt.WithInputMode()) instead.
 // Input asks the user to enter a string. It restricts the types of characters
 // the user can enter.
-func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputLimit) (string, error) {
+func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputMode) (string, error) {
 	pm := NewInputModel(defaultValue)
-	pm.inputLimit = inputLimit
+	pm.inputMode = inputLimit
 	m, err := p.Run(*pm)
 	if err != nil {
 		return "", err
 	}
-	return m.DataString(), nil
+	return m.Data().(string), nil
 }
 
-// Input asks the user to enter a string. You can use InputWithLimit to limit
-// what the user can enter.
-func (p Prompt) Input(defaultValue string) (string, error) {
-	return p.InputWithLimit(defaultValue, InputAll)
+// Input asks the user to enter a string.
+func (p Prompt) Input(defaultValue string, opts ...InputOption) (string, error) {
+	pm := NewInputModel(defaultValue)
+
+	for _, opt := range opts {
+		opt(pm)
+	}
+
+	m, err := p.Run(*pm)
+	if err != nil {
+		return "", err
+	}
+	return m.Data().(string), nil
 }
