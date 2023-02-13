@@ -46,7 +46,7 @@ func (p Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			p.quitting = true
 			return p, tea.Quit
 
-		case "ctrl+s":
+		case "esc", "ctrl+s":
 			p.quitting = true
 			return p, tea.Quit
 		}
@@ -97,8 +97,8 @@ func (p Prompt) View() string {
 		var confirmKeyBinding key.Binding
 		if p.model.UseKeyEnter() {
 			confirmKeyBinding = key.NewBinding(
-				key.WithKeys("ctrl+s"),
-				key.WithHelp("ctrl+s", "confirm"),
+				key.WithKeys("esc/ctrl+s"),
+				key.WithHelp("esc/ctrl+s", "confirm"),
 			)
 		} else {
 			confirmKeyBinding = key.NewBinding(
