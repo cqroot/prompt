@@ -18,7 +18,7 @@ func (m ToggleModel) Data() any {
 }
 
 func (m ToggleModel) DataString() string {
-	return m.choices[m.Cursor()]
+	return m.Data().(string)
 }
 
 func (m ToggleModel) KeyBindings() []key.Binding {
@@ -101,7 +101,7 @@ func (p Prompt) ToggleWithStyle(choices []string, style *ListStyle) (string, err
 	if err != nil {
 		return "", err
 	}
-	return m.DataString(), nil
+	return m.Data().(string), nil
 }
 
 // Toggle lets the user choose one of the given choices. Appearance uses the

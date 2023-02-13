@@ -2,7 +2,6 @@ package prompt_test
 
 import (
 	"bytes"
-	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -13,99 +12,102 @@ import (
 
 const (
 	KeyCtrlC byte = 3
+	KeyCtrlD byte = 4
 	KeyTab   byte = 9
 	KeyCtrlS byte = 19
 )
 
-type KVPair struct {
-	Key  []byte
-	Val  string
-	View string
+func expectedFinalView(result string) string {
+	return "✔  … " + result + "\n"
 }
 
-type PromptModelTest interface {
-	Model() prompt.PromptModel
-	DataTestcases() []KVPair
-	InitViewTestcase() string
-	InitViewWithHelpTestcase() string
+type StringModelTestcase struct {
+	Keys   []byte
+	Result string
+	View   string
 }
 
-// testPromptModelData tests whether the returned result is as expected after
-// the specified key input.
-func testPromptModelData(t *testing.T, model prompt.PromptModel, input []byte, val string, view string) {
-	var out bytes.Buffer
-	var in bytes.Buffer
-	in.Write(input)
-	if model.UseKeyEnter() {
-		in.Write([]byte{KeyCtrlS})
-	} else {
-		in.Write([]byte("\r\n"))
+type StringModelResultFunc func(*prompt.Prompt) (string, error)
+
+func testStringModelResult(t *testing.T,
+	resultFunc StringModelResultFunc,
+	testcases []StringModelTestcase, confirmKey []byte,
+) {
+	for _, testcase := range testcases {
+		var in bytes.Buffer
+		var out bytes.Buffer
+
+		in.Write(testcase.Keys)
+		in.Write(confirmKey)
+		p := prompt.New().
+			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out))
+		result, err := resultFunc(p)
+
+		require.Nil(t, err)
+		require.Equal(t, testcase.Result, result)
 	}
+}
 
-	pm, err := prompt.New().Ask("").
+func testStringModelView(t *testing.T,
+	resultFunc StringModelResultFunc, initView string, confirmKey []byte,
+) {
+	var in bytes.Buffer
+	var out bytes.Buffer
+	var _initView, _finalView string
+
+	in.Write(confirmKey)
+	p := prompt.New().
 		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
-		Run(model)
+		WithTestView(&_initView, &_finalView)
+	result, err := resultFunc(p)
+
 	require.Nil(t, err)
-
-	dataString, ok := pm.Data().(string)
-	if ok {
-		require.Equal(t, val, dataString)
-	} else {
-		require.Equal(t, val, strings.Join(pm.Data().([]string), ", "))
-	}
-
-	require.Equal(t, view, pm.DataString())
+	require.Equal(t, initView, _initView)
+	require.Equal(t, expectedFinalView(result), _finalView)
 }
 
-// testPromptModelError tests whether the corresponding error is returned after
-// the user quits.
-func testPromptModelError(t *testing.T, model prompt.PromptModel) {
-	var out bytes.Buffer
+func testStringModelViewWithHelp(t *testing.T,
+	resultFunc StringModelResultFunc, initViewWithHelp string, confirmKey []byte,
+) {
 	var in bytes.Buffer
-	in.Write([]byte{KeyCtrlC})
+	var out bytes.Buffer
+	var _initView, _finalView string
 
-	_, err := prompt.New().Ask("").
+	in.Write(confirmKey)
+	p := prompt.New().WithHelp(true).
 		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
-		Run(model)
-	require.Equal(t, prompt.ErrUserQuit, err)
+		WithTestView(&_initView, &_finalView)
+	result, err := resultFunc(p)
 
-	if model.UseKeyQ() {
-		return
+	require.Nil(t, err)
+	require.Equal(t, initViewWithHelp, _initView)
+	require.Equal(t, expectedFinalView(result), _finalView)
+}
+
+func testStringModelUserQuitError(t *testing.T,
+	resultFunc StringModelResultFunc, quitKeys []byte,
+) {
+	for _, quitKey := range quitKeys {
+		var in bytes.Buffer
+		var out bytes.Buffer
+
+		in.Write([]byte{quitKey})
+		p := prompt.New().
+			WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out))
+		_, err := resultFunc(p)
+
+		require.Equal(t, prompt.ErrUserQuit, err)
 	}
-
-	in.Reset()
-	in.Write([]byte{'q'})
-
-	_, err = prompt.New().Ask("").
-		WithProgramOptions(tea.WithInput(&in), tea.WithOutput(&out)).
-		Run(model)
-	require.Equal(t, prompt.ErrUserQuit, err)
 }
 
-// testPromptModelView tests that the model's interface displays as expected.
-func testPromptModelView(t *testing.T, model prompt.PromptModel, view string) {
-	p := prompt.New().Ask("").SetModel(model)
-	require.Equal(t, view, p.View())
-}
-
-// testPromptModel_ViewWithHelp tests that the model interface with the help
-// message displays as expected
-func testPromptModel_ViewWithHelp(t *testing.T, model prompt.PromptModel, view string) {
-	p := prompt.New().Ask("").SetModel(model).WithHelp(true)
-	require.Equal(t, view, p.View())
-}
-
-func testPromptModel(t *testing.T, pmt PromptModelTest) {
-	pairs := pmt.DataTestcases()
-	for _, pair := range pairs {
-		testPromptModelData(t, pmt.Model(), pair.Key, pair.Val, pair.View)
-	}
-
-	testPromptModelError(t, pmt.Model())
-
-	view := pmt.InitViewTestcase()
-	testPromptModelView(t, pmt.Model(), view)
-
-	view = pmt.InitViewWithHelpTestcase()
-	testPromptModel_ViewWithHelp(t, pmt.Model(), view)
+func testStringModel(t *testing.T,
+	testcases []StringModelTestcase,
+	resultFunc StringModelResultFunc,
+	initView string, initViewWithHelp string,
+	quitKeys []byte, confirmKey []byte,
+) {
+	testStringModelResult(t, resultFunc, testcases, confirmKey)
+	testStringModelView(t, resultFunc, initView, confirmKey)
+	testStringModelViewWithHelp(t, resultFunc, initViewWithHelp, confirmKey)
+	testStringModelUserQuitError(t, resultFunc, quitKeys)
 }

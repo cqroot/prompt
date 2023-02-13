@@ -13,6 +13,8 @@ type Prompt struct {
 	enableHelp     bool
 	help           help.Model
 	programOptions []tea.ProgramOption
+	initView       *string
+	finalView      *string
 	// Style
 	Message           string
 	NormalPrefix      string
@@ -77,10 +79,20 @@ func (p *Prompt) WithProgramOptions(opts ...tea.ProgramOption) *Prompt {
 	return p
 }
 
+func (p *Prompt) WithTestView(initView *string, finalView *string) *Prompt {
+	p.initView = initView
+	p.finalView = finalView
+	return p
+}
+
 // Run runs the program using the given model, blocking until the user chooses
 // or exits.
 func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 	p.model = pm
+
+	if p.initView != nil {
+		*(p.initView) = p.View()
+	}
 
 	tm, err := tea.NewProgram(p, p.programOptions...).Run()
 	if err != nil {
@@ -94,6 +106,10 @@ func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 
 	if m.err != nil {
 		return nil, m.err
+	}
+
+	if p.finalView != nil {
+		*(p.finalView) = m.View()
 	}
 
 	return m.model, nil

@@ -34,7 +34,7 @@ func (p Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			p.err = ErrUserQuit
 			return p, tea.Quit
 
-		case "ctrl+c":
+		case "ctrl+c", "ctrl+d":
 			p.quitting = true
 			p.err = ErrUserQuit
 			return p, tea.Quit

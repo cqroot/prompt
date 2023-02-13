@@ -19,7 +19,7 @@ func (m ChooseModel) Data() any {
 }
 
 func (m ChooseModel) DataString() string {
-	return m.choices[m.Cursor()]
+	return m.Data().(string)
 }
 
 func (m ChooseModel) KeyBindings() []key.Binding {
@@ -102,7 +102,7 @@ func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, err
 	if err != nil {
 		return "", err
 	}
-	return m.DataString(), nil
+	return m.Data().(string), nil
 }
 
 // Choose lets the user choose one of the given choices. Appearance uses the
