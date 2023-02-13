@@ -33,7 +33,7 @@ func TestTextArea(t *testing.T) {
 ┃  ~                                    
 ┃  ~                                    
 
-ctrl+s confirm • ctrl+c quit`,
+esc/ctrl+s confirm • ctrl+c quit`,
 		[]byte{KeyCtrlC, KeyCtrlD},
 		[]byte{KeyCtrlS},
 	)
