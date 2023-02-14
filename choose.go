@@ -1,25 +1,52 @@
 package prompt
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type ChooseModel struct {
 	choices []string
+	cursor  int
 	keys    []key.Binding
-	ListHandler
+	theme   ChooseTheme
 }
 
 func (m ChooseModel) Data() any {
-	return m.choices[m.Cursor()]
+	return m.choices[m.cursor]
 }
 
 func (m ChooseModel) DataString() string {
 	return m.Data().(string)
+}
+
+func (m *ChooseModel) initKeys() {
+	chooseKeys := make([]key.Binding, 0, 4)
+	if m.theme.Direction == ChooseDirectionH || m.theme.Direction == ChooseDirectionAll {
+		chooseKeys = append(chooseKeys,
+			key.NewBinding(
+				key.WithKeys("left", "h"),
+				key.WithHelp("←/h", "move left"),
+			),
+			key.NewBinding(
+				key.WithKeys("right", "l", "tab", " "),
+				key.WithHelp("→/l/tab/space", "move right"),
+			),
+		)
+	}
+	if m.theme.Direction == ChooseDirectionV || m.theme.Direction == ChooseDirectionAll {
+		chooseKeys = append(chooseKeys,
+			key.NewBinding(
+				key.WithKeys("up", "k"),
+				key.WithHelp("↑/k", "move up"),
+			),
+			key.NewBinding(
+				key.WithKeys("down", "j", "tab"),
+				key.WithHelp("↓/j/tab", "move down"),
+			),
+		)
+	}
+	m.keys = chooseKeys
 }
 
 func (m ChooseModel) KeyBindings() []key.Binding {
@@ -43,10 +70,16 @@ func (m ChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.keys[0]):
-			m.MovePrev()
+			m.cursor--
+			if m.cursor < 0 {
+				m.cursor = len(m.choices) - 1
+			}
 
 		case key.Matches(msg, m.keys[1]):
-			m.MoveNext()
+			m.cursor++
+			if m.cursor >= len(m.choices) {
+				m.cursor = 0
+			}
 		}
 	}
 
@@ -54,59 +87,30 @@ func (m ChooseModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m ChooseModel) View() string {
-	s := strings.Builder{}
-	s.WriteString("\n")
-
-	for i := 0; i < len(m.choices); i++ {
-		if m.cursor == i {
-			s.WriteString(m.Style().SelectedItemStyle.Render(fmt.Sprintf("• %s", m.choices[i])))
-		} else {
-			s.WriteString(m.Style().ItemStyle.Render(fmt.Sprintf("  %s", m.choices[i])))
-		}
-		s.WriteString("\n")
-	}
-
-	return s.String()
+	return m.theme.View(m.choices, m.cursor)
 }
 
-func NewChooseModelWithStyle(choices []string, style *ListStyle) *ChooseModel {
-	chooseKeys := []key.Binding{
-		key.NewBinding(
-			key.WithKeys("up", "k"),
-			key.WithHelp("↑/k", "move up"),
-		),
-		key.NewBinding(
-			key.WithKeys("down", "j", "tab"),
-			key.WithHelp("↓/j/tab", "move down"),
-		),
+func NewChooseModel(choices []string, opts ...ChooseOption) *ChooseModel {
+	model := &ChooseModel{
+		choices: choices,
+		theme:   ChooseThemeDefault,
 	}
 
-	model := ChooseModel{
-		choices:     choices,
-		keys:        chooseKeys,
-		ListHandler: *NewListHandler(len(choices), style),
+	for _, opt := range opts {
+		opt(model)
 	}
+	model.initKeys()
 
-	return &model
+	return model
 }
 
-func NewChooseModel(choices []string) *ChooseModel {
-	return NewChooseModelWithStyle(choices, NewListStyle())
-}
+// Choose lets the user choose one of the given choices.
+func (p Prompt) Choose(choices []string, opts ...ChooseOption) (string, error) {
+	pm := NewChooseModel(choices, opts...)
 
-// ChooseWithStyle lets the user choose one of the given choices. Appearance
-// uses the given style.
-func (p Prompt) ChooseWithStyle(choices []string, style *ListStyle) (string, error) {
-	pm := NewChooseModelWithStyle(choices, style)
 	m, err := p.Run(*pm)
 	if err != nil {
 		return "", err
 	}
 	return m.Data().(string), nil
-}
-
-// Choose lets the user choose one of the given choices. Appearance uses the
-// default style.
-func (p Prompt) Choose(choices []string) (string, error) {
-	return p.ChooseWithStyle(choices, NewListStyle())
 }

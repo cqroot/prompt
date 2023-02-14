@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+// Deprecated: use Choose([]string{}, WithTheme(ChooseThemeHorizontal)) instead.
 type ToggleModel struct {
 	choices []string
 	keys    []key.Binding
