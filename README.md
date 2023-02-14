@@ -5,7 +5,8 @@
     <br />
     <i>
       Based on <a href="https://github.com/charmbracelet/bubbletea" alt="Bubble Tea">Bubble Tea</a>.
-      Inspired by <a href="https://github.com/terkelg/prompts" alt="prompts">Prompts</a>
+      Inspired by <a href="https://github.com/terkelg/prompts" alt="Prompts">Prompts</a>
+        and <a href="https://github.com/charmbracelet/gum" alt="Gum">Gum</a>.
     </i>
   </p>
 
@@ -37,6 +38,8 @@
   </p>
 </div>
 
+![example](https://user-images.githubusercontent.com/46901748/218809805-e750b1c7-32e1-4592-a81c-107b379c504e.gif)
+
 ## Table of Contents
 
 - [Features](#features)
@@ -62,8 +65,6 @@
 
 ### Choose
 
-<details><summary>View screenshots</summary>
-
 **Theme Default**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
@@ -82,11 +83,7 @@
 
 ![choose-theme-line](https://user-images.githubusercontent.com/46901748/218780074-c7988e70-a51d-4101-ae38-a2388989a269.gif)
 
-</details>
-
 ### MultiChoose
-
-<details><summary>View screenshots</summary>
 
 **Theme Default**
 
@@ -100,11 +97,7 @@
 
 ![multichoose-theme-dot](https://user-images.githubusercontent.com/46901748/218780650-f3f216a9-7670-474b-8f5a-7b705a7ae1ab.gif)
 
-</details>
-
 ### Input
-
-<details><summary>View screenshots</summary>
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
@@ -136,21 +129,13 @@
 
 ![input-with-validation](https://user-images.githubusercontent.com/46901748/218799174-9355fcb1-bcef-4fe6-8421-e9472e913010.gif)
 
-</details>
-
 ### Write
-
-<details><summary>View screenshots</summary>
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
 ![write](https://user-images.githubusercontent.com/46901748/218803991-a4f5f563-40df-45e2-b686-da4208cab6a4.gif)
 
-</details>
-
 ### Show help message
-
-<details><summary>View screenshots</summary>
 
 All components support displaying help message for shortcut keys at the bottom.
 
@@ -163,10 +148,6 @@ Examples:
 3. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
 4. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
 5. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
-
-![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
-
-</details>
 
 ## License
 
