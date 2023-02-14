@@ -8,4 +8,4 @@ mkdir "$ROOT_DIR/screenshots"
 
 while read -r tapefile; do
 	cd "$(dirname "$ROOT_DIR/$tapefile")" && vhs <"$ROOT_DIR/$tapefile"
-done < <(cd "$ROOT_DIR" && git status -u | grep screenshot.tape)
+done < <(cd "$ROOT_DIR" && git status -u -s | awk '{print $2}' | grep screenshot.tape)
