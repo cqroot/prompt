@@ -37,17 +37,17 @@ func TestChooseThemeArrowView(t *testing.T) {
 	)
 }
 
-func TestChooseThemeHorizontalView(t *testing.T) {
+func TestChooseThemeLineView(t *testing.T) {
 	require.Equal(t,
 		"item 1 / item 2 / item 3",
-		prompt.ChooseThemeHorizontal.View([]string{"item 1", "item 2", "item 3"}, 0),
+		prompt.ChooseThemeLine.View([]string{"item 1", "item 2", "item 3"}, 0),
 	)
 	require.Equal(t,
 		"item 1 / item 2 / item 3",
-		prompt.ChooseThemeHorizontal.View([]string{"item 1", "item 2", "item 3"}, 1),
+		prompt.ChooseThemeLine.View([]string{"item 1", "item 2", "item 3"}, 1),
 	)
 	require.Equal(t,
 		"item 1 / item 2 / item 3",
-		prompt.ChooseThemeHorizontal.View([]string{"item 1", "item 2", "item 3"}, 2),
+		prompt.ChooseThemeLine.View([]string{"item 1", "item 2", "item 3"}, 2),
 	)
 }

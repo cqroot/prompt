@@ -56,7 +56,7 @@ var ChooseThemeArrow = ChooseTheme{
 	},
 }
 
-var ChooseThemeHorizontal = ChooseTheme{
+var ChooseThemeLine = ChooseTheme{
 	Direction: ChooseDirectionH,
 	View: func(choices []string, cursor int) string {
 		s := strings.Builder{}

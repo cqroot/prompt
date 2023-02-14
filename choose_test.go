@@ -65,7 +65,7 @@ func TestChooseWithThemeArrow(t *testing.T) {
 	)
 }
 
-func TestChooseWithThemeHorizontal(t *testing.T) {
+func TestChooseWithThemeLine(t *testing.T) {
 	testcases := []StringModelTestcase{
 		{Keys: []byte{}, Result: "Item 1"},
 		{Keys: []byte("hhlll"), Result: "Item 2"},
@@ -77,7 +77,7 @@ func TestChooseWithThemeHorizontal(t *testing.T) {
 		func(p *prompt.Prompt) (string, error) {
 			return p.Choose(
 				[]string{"Item 1", "Item 2", "Item 3"},
-				prompt.WithTheme(prompt.ChooseThemeHorizontal),
+				prompt.WithTheme(prompt.ChooseThemeLine),
 			)
 		},
 		"?  › Item 1 / Item 2 / Item 3",
