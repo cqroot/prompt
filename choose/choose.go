@@ -90,7 +90,7 @@ func (m Model) View() string {
 	return m.theme.View(m.choices, m.cursor)
 }
 
-func NewChooseModel(choices []string, opts ...Option) *Model {
+func New(choices []string, opts ...Option) *Model {
 	model := &Model{
 		choices: choices,
 		theme:   ThemeDefault,

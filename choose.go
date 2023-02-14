@@ -8,7 +8,7 @@ var WithChooseTheme = choose.WithTheme
 
 // Choose lets the user choose one of the given choices.
 func (p Prompt) Choose(choices []string, opts ...choose.Option) (string, error) {
-	pm := choose.NewChooseModel(choices, opts...)
+	pm := choose.New(choices, opts...)
 
 	m, err := p.Run(*pm)
 	if err != nil {

@@ -6,12 +6,13 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/choose"
 )
 
 func main() {
 	val, err := prompt.New().Ask("Choose value:").Choose(
 		[]string{"Item 1", "Item 2", "Item 3"},
-		prompt.WithTheme(prompt.ChooseThemeLine),
+		choose.WithTheme(choose.ThemeLine),
 	)
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {

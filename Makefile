@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -v -covermode=count -coverprofile=coverage.out .
+	go test -v $$(go list ./... | grep -v '/examples/') -covermode=count -coverprofile=coverage.out .
 
 .PHONY: check
 check:

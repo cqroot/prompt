@@ -8,7 +8,7 @@ import (
 	"github.com/cqroot/prompt/choose"
 )
 
-func TestChooseThemeDefaultView(t *testing.T) {
+func TestThemeDefaultView(t *testing.T) {
 	require.Equal(t,
 		"\n• item 1\n  item 2\n  item 3\n",
 		choose.ThemeDefault.View([]string{"item 1", "item 2", "item 3"}, 0),
@@ -23,7 +23,7 @@ func TestChooseThemeDefaultView(t *testing.T) {
 	)
 }
 
-func TestChooseThemeArrowView(t *testing.T) {
+func TestThemeArrowView(t *testing.T) {
 	require.Equal(t,
 		"\n❯ item 1\n  item 2\n  item 3\n",
 		choose.ThemeArrow.View([]string{"item 1", "item 2", "item 3"}, 0),
@@ -38,7 +38,7 @@ func TestChooseThemeArrowView(t *testing.T) {
 	)
 }
 
-func TestChooseThemeLineView(t *testing.T) {
+func TestThemeLineView(t *testing.T) {
 	require.Equal(t,
 		"item 1 / item 2 / item 3",
 		choose.ThemeLine.View([]string{"item 1", "item 2", "item 3"}, 0),
