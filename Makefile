@@ -11,3 +11,7 @@ check:
 .PHONY: cover
 cover:
 	go tool cover -html=coverage.out
+
+.PHONY: screenshots
+screenshots:
+	bash $(CURDIR)/scripts/screenshots.bash

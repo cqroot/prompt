@@ -41,6 +41,12 @@
 
 - [Features](#features)
 - [Usage](#usage)
+  - [Choose](#choose)
+    - [Theme Default](#theme-default)
+    - [Theme Arrow](#theme-arrow)
+    - [Theme Line](#theme-line)
+    - [With Help Message](#with-help-message)
+  - [MultiChoose](#multichoose)
   - [Input](#input)
     - [Password input](#password-input)
     - [Password input like linux (do not display any characters)](<#password-input-like-linux-(do-not-display-any-characters)>)
@@ -49,8 +55,6 @@
     - [Input with validation](#input-with-validation)
   - [TextArea](#textarea)
   - [Toggle](#toggle)
-  - [Choose](#choose)
-  - [MultiChoose](#multichoose)
   - [Show help message](#show-help-message)
 - [License](#license)
 
@@ -66,6 +70,38 @@
    `prompt.Prompt` and all child models implement `tea.Model`.
 
 ## Usage
+
+### Choose
+
+#### Theme Default
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
+
+![screenshot-choose](https://user-images.githubusercontent.com/46901748/218741349-6adae01f-ad5d-4eaf-a3fc-3ed78888c896.gif)
+
+#### Theme Arrow
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-arrow/main.go)
+
+![screenshot-choose-theme-arrow](https://user-images.githubusercontent.com/46901748/218741355-56a5a72e-4474-442f-8119-532cb926973f.gif)
+
+#### Theme Line
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-line/main.go)
+
+![screenshot-choose-theme-horizontal](https://user-images.githubusercontent.com/46901748/218741360-d037f4e0-7ee1-4f43-bd2b-613cd8a3b9cf.gif)
+
+#### With Help Message
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
+
+![screenshot-choose-with-help](https://user-images.githubusercontent.com/46901748/218741366-6026aec7-06e5-45d6-8a2d-7ca20083023b.gif)
+
+### MultiChoose
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
+
+![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
 
 ### Input
 
@@ -107,21 +143,8 @@
 
 ### Toggle
 
-[example](https://github.com/cqroot/prompt/blob/main/examples/toggle/main.go)
-
-![screenshot-toggle](https://user-images.githubusercontent.com/46901748/216246356-fb3eb7df-7240-4a09-8899-45797bfe79c7.gif)
-
-### Choose
-
-[example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
-
-![screenshot-choose](https://user-images.githubusercontent.com/46901748/216246342-da8d8b67-983c-41b8-b85d-a4ef2dcab0bd.gif)
-
-### MultiChoose
-
-[example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
-
-![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
+Deprecated: use `Choose([]string{}, WithTheme(ChooseThemeLine))` instead.
+[Preview](#theme-line).
 
 ### Show help message
 
@@ -134,10 +157,10 @@ val, err := prompt.New().Ask("Choose value:").WithHelp(true).
 
 Examples:
 
-1. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
-2. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
-3. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
-4. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
+1. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
+2. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
+3. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
+4. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
 5. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
 
 ![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
