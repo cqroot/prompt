@@ -151,12 +151,8 @@
 
 ### Toggle
 
-<details><summary>View screenshots</summary>
-
 Deprecated: use `Choose([]string{}, WithTheme(ChooseThemeLine))` instead.
 [Preview](#theme-line).
-
-</details>
 
 ### Show help message
 

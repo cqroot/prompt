@@ -20,5 +20,5 @@ func main() {
 			panic(err)
 		}
 	}
-	fmt.Println("Val:", strings.Join(val, ", "))
+	fmt.Println(strings.Join(val, ", "))
 }

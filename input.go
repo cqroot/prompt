@@ -38,12 +38,6 @@ func (m InputModel) DataString() string {
 	return str
 }
 
-// Deprecated: use InputModel.WithInputMode instead.
-func (m *InputModel) SetInputLimit(inputLimit InputMode) *InputModel {
-	m.inputMode = inputLimit
-	return m
-}
-
 func (m *InputModel) WithInputMode(mode InputMode) *InputModel {
 	m.inputMode = mode
 	return m
@@ -134,19 +128,6 @@ func NewInputModel(defaultValue string) *InputModel {
 		ChoiceStyle:       DefaultChoiceStyle,
 	}
 	return &m
-}
-
-// Deprecated: use InputModel.Input("", prompt.WithInputMode()) instead.
-// Input asks the user to enter a string. It restricts the types of characters
-// the user can enter.
-func (p Prompt) InputWithLimit(defaultValue string, inputLimit InputMode) (string, error) {
-	pm := NewInputModel(defaultValue)
-	pm.inputMode = inputLimit
-	m, err := p.Run(*pm)
-	if err != nil {
-		return "", err
-	}
-	return m.Data().(string), nil
 }
 
 // Input asks the user to enter a string.
