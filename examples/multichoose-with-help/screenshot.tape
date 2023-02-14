@@ -1,4 +1,4 @@
-Output ../../screenshots/choose-with-help.gif
+Output ../../screenshots/multichoose-with-help.gif
 
 Set FontFamily "CaskaydiaCove Nerd Font"
 Set FontSize 22
@@ -9,7 +9,7 @@ Set TypingSpeed 50ms
 
 Type 'go run main.go' Enter
 Sleep 1s
-Down@500ms Up@500ms Up@500ms Up@500ms
+Space@500ms Space@500ms Down@500ms Space@500ms Down@500ms Space@500ms
 Enter
 Sleep 2s
 

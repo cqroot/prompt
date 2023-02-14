@@ -40,19 +40,10 @@
 ## Table of Contents
 
 - [Features](#features)
-- [Usage](#usage)
+- [Screenshots](#screenshots)
   - [Choose](#choose)
-    - [Theme Default](#theme-default)
-    - [Theme Arrow](#theme-arrow)
-    - [Theme Line](#theme-line)
-    - [With Help Message](#with-help-message)
   - [MultiChoose](#multichoose)
   - [Input](#input)
-    - [Password input](#password-input)
-    - [Password input like linux (do not display any characters)](<#password-input-like-linux-(do-not-display-any-characters)>)
-    - [Only integers can be entered](#only-integers-can-be-entered)
-    - [Only numbers can be entered](#only-numbers-can-be-entered)
-    - [Input with validation](#input-with-validation)
   - [TextArea](#textarea)
   - [Toggle](#toggle)
   - [Show help message](#show-help-message)
@@ -60,110 +51,132 @@
 
 ## Features
 
-1. `input` lets the user enter a string using the terminal ui.
+1. `choose` lets the user choose one of several strings using the terminal ui.
+2. `multichoose` lets the user choose multiple strings from multiple strings using the terminal ui.
+3. `input` lets the user enter a string using the terminal ui.
    You can specify that only **numbers** or **integers** are allowed.
-2. `toggle` lets the user choose one of several strings using the terminal ui (Usually used for yes or no choices).
-3. `choose` lets the user choose one of several strings using the terminal ui.
-4. `multichoose` lets the user choose multiple strings from multiple strings using the terminal ui.
-5. Show help message for keymaps.
-6. Based on [Bubble Tea]("https://github.com/charmbracelet/bubbletea").
+4. Show help message for keymaps.
+5. Based on [Bubble Tea]("https://github.com/charmbracelet/bubbletea").
    `prompt.Prompt` and all child models implement `tea.Model`.
 
-## Usage
+## Screenshots
 
 ### Choose
 
-#### Theme Default
+<details><summary>View screenshots</summary>
+
+**Theme Default**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
 
-![screenshot-choose](https://user-images.githubusercontent.com/46901748/218741349-6adae01f-ad5d-4eaf-a3fc-3ed78888c896.gif)
+![choose](https://user-images.githubusercontent.com/46901748/218780062-a50a1043-f9ef-449a-8094-b412be831bfd.gif)
 
-#### Theme Arrow
+**Theme Arrow**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-arrow/main.go)
 
-![screenshot-choose-theme-arrow](https://user-images.githubusercontent.com/46901748/218741355-56a5a72e-4474-442f-8119-532cb926973f.gif)
+![choose-theme-arrow](https://user-images.githubusercontent.com/46901748/218780071-08b71a0b-963a-4078-9ac8-14ce89b02bd1.gif)
 
-#### Theme Line
+**Theme Line**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-line/main.go)
 
-![screenshot-choose-theme-horizontal](https://user-images.githubusercontent.com/46901748/218741360-d037f4e0-7ee1-4f43-bd2b-613cd8a3b9cf.gif)
+![choose-theme-line](https://user-images.githubusercontent.com/46901748/218780074-c7988e70-a51d-4101-ae38-a2388989a269.gif)
 
-#### With Help Message
-
-[example](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
-
-![screenshot-choose-with-help](https://user-images.githubusercontent.com/46901748/218741366-6026aec7-06e5-45d6-8a2d-7ca20083023b.gif)
+</details>
 
 ### MultiChoose
 
+<details><summary>View screenshots</summary>
+
+**Theme Default**
+
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
-![screenshot-multichoose](https://user-images.githubusercontent.com/46901748/216246355-92129b7b-c812-4b15-bfbc-7ec7e39e972a.gif)
+![multichoose](https://user-images.githubusercontent.com/46901748/218780644-f32430fa-9d1e-4d8a-b197-8c9d89de9317.gif)
+
+**Theme Dot**
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/multichoose-theme-dot/main.go)
+
+![multichoose-theme-dot](https://user-images.githubusercontent.com/46901748/218780650-f3f216a9-7670-474b-8f5a-7b705a7ae1ab.gif)
+
+</details>
 
 ### Input
+
+<details><summary>View screenshots</summary>
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
 ![screenshot-input](https://user-images.githubusercontent.com/46901748/216246350-d14074b0-0895-4a0b-890f-11c0cd725a04.gif)
 
-#### Password input
+**Password input**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-password/main.go)
 
 ![screenshot-input-echo-password](https://user-images.githubusercontent.com/46901748/218309893-754711a2-88f9-42de-a20f-6a86aeefeba0.gif)
 
-#### Password input like linux (do not display any characters)
+**Password input like linux (do not display any characters)**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-none/main.go)
 
 ![screenshot-input-echo-none](https://user-images.githubusercontent.com/46901748/218309957-468a1da3-f07c-4dc3-aa57-e1844f4f4c0e.gif)
 
-#### Only integers can be entered
+**Only integers can be entered**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-integer-only/main.go)
 
-#### Only numbers can be entered
+**Only numbers can be entered**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-number-only/main.go)
 
-#### Input with validation
+**Input with validation**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-with-validation/main.go)
 
 ![screenshot-input-with-validation](https://user-images.githubusercontent.com/46901748/218308650-dff43d9c-61d4-4373-8ac0-876ad2e329ae.gif)
 
+</details>
+
 ### TextArea
+
+<details><summary>View screenshots</summary>
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
 ![screenshot-textarea](https://user-images.githubusercontent.com/46901748/218306061-d5f0ba9f-e6d5-43c8-ae04-88ae1cf8e758.gif)
 
+</details>
+
 ### Toggle
+
+<details><summary>View screenshots</summary>
 
 Deprecated: use `Choose([]string{}, WithTheme(ChooseThemeLine))` instead.
 [Preview](#theme-line).
 
+</details>
+
 ### Show help message
 
-`Prompt.WithHelp(true)` displays the help message for keymaps.
+<details><summary>View screenshots</summary>
 
-```go
-val, err := prompt.New().Ask("Choose value:").WithHelp(true).
-	Choose([]string{"Item 1", "Item 2", "Item 3"})
-```
+All components support displaying help message for shortcut keys at the bottom.
+
+![choose-with-help](https://user-images.githubusercontent.com/46901748/218780082-7808b54e-c258-427c-a91b-84b14ae7c246.gif)
 
 Examples:
 
 1. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
-2. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
-3. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
-4. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
-5. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
+2. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
+3. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
+4. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
+5. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
 
 ![screenshot-help](https://user-images.githubusercontent.com/46901748/216308618-0b865448-23cd-4029-9a26-d6802b375fa4.png)
+
+</details>
 
 ## License
 
