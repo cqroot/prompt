@@ -109,19 +109,19 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
-![screenshot-input](https://user-images.githubusercontent.com/46901748/216246350-d14074b0-0895-4a0b-890f-11c0cd725a04.gif)
+![input](https://user-images.githubusercontent.com/46901748/218799158-68b7622d-1798-4011-8681-9865da21b5f5.gif)
 
 **Password input**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-password/main.go)
 
-![screenshot-input-echo-password](https://user-images.githubusercontent.com/46901748/218309893-754711a2-88f9-42de-a20f-6a86aeefeba0.gif)
+![input-echo-password](https://user-images.githubusercontent.com/46901748/218799172-ce501335-9821-4bf2-949a-0c08057d810f.gif)
 
 **Password input like linux (do not display any characters)**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-echo-none/main.go)
 
-![screenshot-input-echo-none](https://user-images.githubusercontent.com/46901748/218309957-468a1da3-f07c-4dc3-aa57-e1844f4f4c0e.gif)
+![input-echo-none](https://user-images.githubusercontent.com/46901748/218799167-59b52b0d-228e-4cb3-8bf2-7cf844874100.gif)
 
 **Only integers can be entered**
 
@@ -135,7 +135,7 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input-with-validation/main.go)
 
-![screenshot-input-with-validation](https://user-images.githubusercontent.com/46901748/218308650-dff43d9c-61d4-4373-8ac0-876ad2e329ae.gif)
+![input-with-validation](https://user-images.githubusercontent.com/46901748/218799174-9355fcb1-bcef-4fe6-8421-e9472e913010.gif)
 
 </details>
 
