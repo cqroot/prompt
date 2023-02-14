@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
 func validateIP(ip string) error {
@@ -19,7 +20,7 @@ func validateIP(ip string) error {
 
 func main() {
 	val, err := prompt.New().Ask("Please enter the server IP:").
-		Input("127.0.0.1", prompt.WithValidateFunc(validateIP))
+		Input("127.0.0.1", input.WithValidateFunc(validateIP))
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

@@ -6,11 +6,12 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
 func main() {
 	val, err := prompt.New().Ask("Input your password:").
-		Input("", prompt.WithEchoMode(prompt.EchoPassword))
+		Input("", input.WithEchoMode(input.EchoPassword))
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

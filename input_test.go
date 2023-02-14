@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
 var InputDefaultValue = "default value"
@@ -16,10 +17,10 @@ func TestInput(t *testing.T) {
 		{Keys: []byte(val), Result: val},
 	}
 
-	inputOptions := []prompt.InputOption{
-		prompt.WithEchoMode(prompt.EchoNormal),
-		prompt.WithEchoMode(prompt.EchoPassword),
-		prompt.WithEchoMode(prompt.EchoNone),
+	inputOptions := []input.Option{
+		input.WithEchoMode(input.EchoNormal),
+		input.WithEchoMode(input.EchoPassword),
+		input.WithEchoMode(input.EchoNone),
 	}
 
 	for _, inputOption := range inputOptions {
@@ -46,7 +47,7 @@ func TestInputWithIntegerOnly(t *testing.T) {
 	testStringModel(t,
 		testcases,
 		func(p *prompt.Prompt) (string, error) {
-			return p.Input(InputDefaultValue, prompt.WithInputMode(prompt.InputInteger))
+			return p.Input(InputDefaultValue, input.WithInputMode(input.InputInteger))
 		},
 		"?  › \x1b[7md\x1b[0mefault value",
 		"?  › \x1b[7md\x1b[0mefault value"+`
@@ -65,7 +66,7 @@ func TestInputWithNumberOnly(t *testing.T) {
 	testStringModel(t,
 		testcases,
 		func(p *prompt.Prompt) (string, error) {
-			return p.Input(InputDefaultValue, prompt.WithInputMode(prompt.InputNumber))
+			return p.Input(InputDefaultValue, input.WithInputMode(input.InputNumber))
 		},
 		"?  › \x1b[7md\x1b[0mefault value",
 		"?  › \x1b[7md\x1b[0mefault value"+`

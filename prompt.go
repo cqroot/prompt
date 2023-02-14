@@ -4,6 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
+	"github.com/cqroot/prompt/styles"
 )
 
 type Prompt struct {
@@ -35,14 +37,14 @@ func New() *Prompt {
 		enableHelp: false,
 		help:       help.New(),
 		// Style
-		NormalPrefix:      DefaultNormalPromptPrefix,
-		FinishPrefix:      DefaultFinishPromptPrefix,
-		NormalSuffix:      DefaultNormalPromptSuffix,
-		FinishSuffix:      DefaultFinishPromptSuffix,
-		PrefixStyle:       DefaultNormalPromptPrefixStyle,
-		FinishPrefixStyle: DefaultFinishPromptPrefixStyle,
-		SuffixStyle:       DefaultNormalPromptSuffixStyle,
-		FinishSuffixStyle: DefaultFinishPromptSuffixStyle,
+		NormalPrefix:      styles.DefaultNormalPromptPrefix,
+		FinishPrefix:      styles.DefaultFinishPromptPrefix,
+		NormalSuffix:      styles.DefaultNormalPromptSuffix,
+		FinishSuffix:      styles.DefaultFinishPromptSuffix,
+		PrefixStyle:       styles.DefaultNormalPromptPrefixStyle,
+		FinishPrefixStyle: styles.DefaultFinishPromptPrefixStyle,
+		SuffixStyle:       styles.DefaultNormalPromptSuffixStyle,
+		FinishSuffixStyle: styles.DefaultFinishPromptSuffixStyle,
 	}
 }
 

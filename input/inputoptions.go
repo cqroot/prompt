@@ -1,10 +1,10 @@
-package prompt
+package input
 
 import (
 	"github.com/charmbracelet/bubbles/textinput"
 )
 
-type InputOption func(*InputModel)
+type Option func(*Model)
 
 type EchoMode = textinput.EchoMode
 
@@ -21,8 +21,8 @@ const (
 	EchoNone EchoMode = textinput.EchoNone
 )
 
-func WithEchoMode(mode EchoMode) InputOption {
-	return func(m *InputModel) {
+func WithEchoMode(mode EchoMode) Option {
+	return func(m *Model) {
 		m.WithEchoMode(mode)
 	}
 }
@@ -35,16 +35,16 @@ const (
 	InputNumber                   // only integers and decimals can be entered.
 )
 
-func WithInputMode(mode InputMode) InputOption {
-	return func(m *InputModel) {
+func WithInputMode(mode InputMode) Option {
+	return func(m *Model) {
 		m.WithInputMode(mode)
 	}
 }
 
 type ValidateFunc func(string) error
 
-func WithValidateFunc(vf ValidateFunc) InputOption {
-	return func(m *InputModel) {
+func WithValidateFunc(vf ValidateFunc) Option {
+	return func(m *Model) {
 		m.WithValidateFunc(vf)
 	}
 }

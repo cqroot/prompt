@@ -1,4 +1,4 @@
-package prompt
+package input
 
 import (
 	"strings"
@@ -7,20 +7,17 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"github.com/cqroot/prompt/styles"
 )
 
-type InputModel struct {
-	df                string
-	textInput         textinput.Model
-	validateFunc      ValidateFunc
-	inputMode         InputMode
-	ItemStyle         lipgloss.Style
-	SelectedItemStyle lipgloss.Style
-	ChoiceStyle       lipgloss.Style
+type Model struct {
+	df           string
+	textInput    textinput.Model
+	validateFunc ValidateFunc
+	inputMode    InputMode
 }
 
-func (m InputModel) Data() any {
+func (m Model) Data() any {
 	if m.textInput.Value() == "" {
 		return m.textInput.Placeholder
 	} else {
@@ -28,7 +25,7 @@ func (m InputModel) Data() any {
 	}
 }
 
-func (m InputModel) DataString() string {
+func (m Model) DataString() string {
 	if m.textInput.EchoMode == EchoNormal {
 		return m.Data().(string)
 	}
@@ -38,38 +35,38 @@ func (m InputModel) DataString() string {
 	return str
 }
 
-func (m *InputModel) WithInputMode(mode InputMode) *InputModel {
+func (m *Model) WithInputMode(mode InputMode) *Model {
 	m.inputMode = mode
 	return m
 }
 
-func (m *InputModel) WithEchoMode(mode EchoMode) *InputModel {
+func (m *Model) WithEchoMode(mode EchoMode) *Model {
 	m.textInput.EchoMode = mode
 	return m
 }
 
-func (m *InputModel) WithValidateFunc(vf ValidateFunc) *InputModel {
+func (m *Model) WithValidateFunc(vf ValidateFunc) *Model {
 	m.validateFunc = vf
 	return m
 }
 
-func (m InputModel) KeyBindings() []key.Binding {
+func (m Model) KeyBindings() []key.Binding {
 	return nil
 }
 
-func (m InputModel) UseKeyQ() bool {
+func (m Model) UseKeyQ() bool {
 	return true
 }
 
-func (m InputModel) UseKeyEnter() bool {
+func (m Model) UseKeyEnter() bool {
 	return false
 }
 
-func (m InputModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.inputMode == InputNumber || m.inputMode == InputInteger {
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
@@ -94,23 +91,23 @@ func (m InputModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m InputModel) View() string {
+func (m Model) View() string {
 	view := m.textInput.View()
 
 	if m.textInput.Value() != "" && m.validateFunc != nil {
 		err := m.validateFunc(m.textInput.Value())
 		if err != nil {
-			view = view + DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
-				DefaultNoteStyle.Render(err.Error())
+			view = view + styles.DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
+				styles.DefaultNoteStyle.Render(err.Error())
 		} else {
-			view = view + DefaultFinishPromptPrefixStyle.Render("\n✔")
+			view = view + styles.DefaultFinishPromptPrefixStyle.Render("\n✔")
 		}
 	}
 
 	return view
 }
 
-func NewInputModel(defaultValue string) *InputModel {
+func New(defaultValue string, opts ...Option) *Model {
 	ti := textinput.New()
 	ti.Placeholder = defaultValue
 	ti.Focus()
@@ -118,29 +115,15 @@ func NewInputModel(defaultValue string) *InputModel {
 	ti.Width = 40
 	ti.Prompt = ""
 
-	m := InputModel{
+	m := &Model{
 		textInput: ti,
 		df:        defaultValue,
 		inputMode: InputAll,
-
-		ItemStyle:         DefaultItemStyle,
-		SelectedItemStyle: DefaultSelectedItemStyle,
-		ChoiceStyle:       DefaultChoiceStyle,
 	}
-	return &m
-}
-
-// Input asks the user to enter a string.
-func (p Prompt) Input(defaultValue string, opts ...InputOption) (string, error) {
-	pm := NewInputModel(defaultValue)
 
 	for _, opt := range opts {
-		opt(pm)
+		opt(m)
 	}
 
-	m, err := p.Run(*pm)
-	if err != nil {
-		return "", err
-	}
-	return m.Data().(string), nil
+	return m
 }

@@ -6,11 +6,12 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
 func main() {
 	val, err := prompt.New().Ask("Input an integer:").
-		Input("", prompt.WithInputMode(prompt.InputInteger))
+		Input("", input.WithInputMode(input.InputInteger))
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
