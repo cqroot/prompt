@@ -44,8 +44,7 @@
   - [Choose](#choose)
   - [MultiChoose](#multichoose)
   - [Input](#input)
-  - [TextArea](#textarea)
-  - [Toggle](#toggle)
+  - [Write](#write)
   - [Show help message](#show-help-message)
 - [License](#license)
 
@@ -139,20 +138,15 @@
 
 </details>
 
-### TextArea
+### Write
 
 <details><summary>View screenshots</summary>
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
-![screenshot-textarea](https://user-images.githubusercontent.com/46901748/218306061-d5f0ba9f-e6d5-43c8-ae04-88ae1cf8e758.gif)
+![write](https://user-images.githubusercontent.com/46901748/218803991-a4f5f563-40df-45e2-b686-da4208cab6a4.gif)
 
 </details>
-
-### Toggle
-
-Deprecated: use `Choose([]string{}, WithTheme(ChooseThemeLine))` instead.
-[Preview](#theme-line).
 
 ### Show help message
 

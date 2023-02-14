@@ -18,7 +18,7 @@ func TestTextArea(t *testing.T) {
 	testStringModel(t,
 		testcases,
 		func(p *prompt.Prompt) (string, error) {
-			return p.TextArea(InputDefaultValue)
+			return p.Write(InputDefaultValue)
 		},
 		"?  › \n┃  1 \x1b[7md\x1b[0mefault value                      \n"+
 			`┃  ~                                    

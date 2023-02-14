@@ -10,7 +10,7 @@ import (
 
 func main() {
 	val, err := prompt.New().Ask("Input your story:").WithHelp(true).
-		TextArea("Bla bla bla...")
+		Write("Bla bla bla...")
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

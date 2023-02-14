@@ -1,4 +1,4 @@
-package prompt
+package write
 
 import (
 	"fmt"
@@ -9,11 +9,11 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type TextAreaModel struct {
+type Model struct {
 	textarea textarea.Model
 }
 
-func (m TextAreaModel) Data() any {
+func (m Model) Data() any {
 	if m.textarea.Value() == "" {
 		return m.textarea.Placeholder
 	} else {
@@ -21,7 +21,7 @@ func (m TextAreaModel) Data() any {
 	}
 }
 
-func (m TextAreaModel) DataString() string {
+func (m Model) DataString() string {
 	data := m.Data().(string)
 	if strings.Contains(data, "\n") {
 		return fmt.Sprintf("...(%d bytes)", len(m.Data().(string)))
@@ -30,49 +30,39 @@ func (m TextAreaModel) DataString() string {
 	}
 }
 
-func (m TextAreaModel) KeyBindings() []key.Binding {
+func (m Model) KeyBindings() []key.Binding {
 	return nil
 }
 
-func (m TextAreaModel) UseKeyQ() bool {
+func (m Model) UseKeyQ() bool {
 	return true
 }
 
-func (m TextAreaModel) UseKeyEnter() bool {
+func (m Model) UseKeyEnter() bool {
 	return true
 }
 
-func (m TextAreaModel) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return textarea.Blink
 }
 
-func (m TextAreaModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	m.textarea, cmd = m.textarea.Update(msg)
 	return m, cmd
 }
 
-func (m TextAreaModel) View() string {
+func (m Model) View() string {
 	return "\n" + m.textarea.View()
 }
 
-func NewTextAreaModel(defaultValue string) *TextAreaModel {
+func New(defaultValue string) *Model {
 	ti := textarea.New()
 	ti.Placeholder = defaultValue
 	ti.Focus()
 
-	return &TextAreaModel{
+	return &Model{
 		textarea: ti,
 	}
-}
-
-func (p Prompt) TextArea(defaultValue string) (string, error) {
-	pm := NewTextAreaModel(defaultValue)
-
-	m, err := p.Run(*pm)
-	if err != nil {
-		return "", err
-	}
-	return m.Data().(string), nil
 }
