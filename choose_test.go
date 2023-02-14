@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/choose"
 )
 
 func TestChoose(t *testing.T) {
@@ -46,7 +47,7 @@ func TestChooseWithThemeArrow(t *testing.T) {
 		func(p *prompt.Prompt) (string, error) {
 			return p.Choose(
 				[]string{"Item 1", "Item 2", "Item 3"},
-				prompt.WithTheme(prompt.ChooseThemeArrow),
+				choose.WithTheme(choose.ThemeArrow),
 			)
 		},
 		`?  › 
@@ -77,7 +78,7 @@ func TestChooseWithThemeLine(t *testing.T) {
 		func(p *prompt.Prompt) (string, error) {
 			return p.Choose(
 				[]string{"Item 1", "Item 2", "Item 3"},
-				prompt.WithTheme(prompt.ChooseThemeLine),
+				choose.WithTheme(choose.ThemeLine),
 			)
 		},
 		"?  › Item 1 / Item 2 / Item 3",
