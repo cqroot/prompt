@@ -51,7 +51,7 @@ func New(defaultValue string, opts ...Option) *Model {
 	return m
 }
 
-func (m Model) Data() any {
+func (m Model) Data() string {
 	if m.textInput.Value() == "" {
 		return m.textInput.Placeholder
 	} else {
@@ -61,7 +61,7 @@ func (m Model) Data() any {
 
 func (m Model) DataString() string {
 	if m.textInput.EchoMode == EchoNormal {
-		return m.Data().(string)
+		return m.Data()
 	}
 	m.textInput.Blur()
 	str := m.textInput.View()

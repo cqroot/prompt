@@ -40,12 +40,12 @@ func New(choices []string, opts ...Option) *Model {
 	return m
 }
 
-func (m Model) Data() any {
+func (m Model) Data() string {
 	return m.choices[m.cursor]
 }
 
 func (m Model) DataString() string {
-	return m.Data().(string)
+	return m.Data()
 }
 
 func (m Model) Quitting() bool {

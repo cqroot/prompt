@@ -73,7 +73,7 @@ func TestMultiChooseModel(t *testing.T) {
 		m, ok := tm.(multichoose.Model)
 		require.Equal(t, true, ok)
 
-		require.Equal(t, tc.data, m.Data().([]string), "keys: %s", tc.keys)
+		require.Equal(t, tc.data, m.Data(), "keys: %s", tc.keys)
 		require.Equal(t, strings.Join(tc.data, ", "), m.DataString(), "keys: %s", tc.keys)
 		require.Equal(t, true, m.Quitting())
 		require.Nil(t, m.Error())

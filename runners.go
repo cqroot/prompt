@@ -15,7 +15,7 @@ func (p Prompt) Choose(choices []string, opts ...choose.Option) (string, error) 
 	if err != nil {
 		return "", err
 	}
-	return m.Data().(string), nil
+	return m.(choose.Model).Data(), nil
 }
 
 // MultiChoose lets the user choose multiples from the given choices.
@@ -25,7 +25,7 @@ func (p Prompt) MultiChoose(choices []string, opts ...multichoose.Option) ([]str
 	if err != nil {
 		return nil, err
 	}
-	return m.Data().([]string), nil
+	return m.(multichoose.Model).Data(), nil
 }
 
 // Input asks the user to enter a string.
@@ -36,7 +36,7 @@ func (p Prompt) Input(defaultValue string, opts ...input.Option) (string, error)
 	if err != nil {
 		return "", err
 	}
-	return m.Data().(string), nil
+	return m.(input.Model).Data(), nil
 }
 
 func (p Prompt) Write(defaultValue string, opts ...write.Option) (string, error) {
@@ -46,5 +46,5 @@ func (p Prompt) Write(defaultValue string, opts ...write.Option) (string, error)
 	if err != nil {
 		return "", err
 	}
-	return m.Data().(string), nil
+	return m.(write.Model).Data(), nil
 }

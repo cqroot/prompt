@@ -42,7 +42,7 @@ func New(choices []string, opts ...Option) *Model {
 	return m
 }
 
-func (m Model) Data() any {
+func (m Model) Data() []string {
 	result := make([]string, 0)
 
 	for i := 0; i < len(m.choices); i++ {
@@ -54,7 +54,7 @@ func (m Model) Data() any {
 }
 
 func (m Model) DataString() string {
-	return strings.Join(m.Data().([]string), ", ")
+	return strings.Join(m.Data(), ", ")
 }
 
 func (m Model) Quitting() bool {
