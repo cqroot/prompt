@@ -1,7 +1,6 @@
 package prompt
 
 import (
-	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
@@ -10,10 +9,7 @@ import (
 
 type Prompt struct {
 	quitting       bool
-	err            error
 	model          PromptModel
-	enableHelp     bool
-	help           help.Model
 	programOptions []tea.ProgramOption
 	initView       *string
 	finalView      *string
@@ -32,10 +28,7 @@ type Prompt struct {
 // New returns a *Prompt using the default style.
 func New() *Prompt {
 	return &Prompt{
-		quitting:   false,
-		err:        nil,
-		enableHelp: false,
-		help:       help.New(),
+		quitting: false,
 		// Style
 		NormalPrefix:      styles.DefaultNormalPromptPrefix,
 		FinishPrefix:      styles.DefaultFinishPromptPrefix,
@@ -51,12 +44,6 @@ func New() *Prompt {
 // Ask set prompt message
 func (p *Prompt) Ask(message string) *Prompt {
 	p.Message = message
-	return p
-}
-
-// WithHelp sets whether the help of the keymap is visible
-func (p *Prompt) WithHelp(enable bool) *Prompt {
-	p.enableHelp = enable
 	return p
 }
 
@@ -100,8 +87,8 @@ func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 		return nil, ErrModelConversion
 	}
 
-	if m.err != nil {
-		return nil, m.err
+	if m.model.Error() != nil {
+		return nil, m.model.Error()
 	}
 
 	if p.finalView != nil {

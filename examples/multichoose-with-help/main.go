@@ -7,11 +7,14 @@ import (
 	"strings"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/multichoose"
 )
 
 func main() {
-	val, err := prompt.New().Ask("MultiChoose value:").WithHelp(true).
-		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
+	val, err := prompt.New().Ask("MultiChoose value:").MultiChoose(
+		[]string{"Item 1", "Item 2", "Item 3"},
+		multichoose.WithHelp(true),
+	)
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

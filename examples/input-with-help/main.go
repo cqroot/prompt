@@ -6,11 +6,14 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
 func main() {
-	val, err := prompt.New().Ask("Input your name:").WithHelp(true).
-		Input("Your Name")
+	val, err := prompt.New().Ask("Input your name:").Input(
+		"Your Name",
+		input.WithHelp(true),
+	)
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

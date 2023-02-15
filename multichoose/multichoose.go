@@ -3,16 +3,43 @@ package multichoose
 import (
 	"strings"
 
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/cqroot/prompt/merrors"
 )
 
 type Model struct {
 	choice  uint64
 	choices []string
 	cursor  int
-	keys    []key.Binding
-	theme   Theme
+
+	theme    Theme
+	quitting bool
+	err      error
+	keys     keyMap
+	showHelp bool
+	help     help.Model
+}
+
+func New(choices []string, opts ...Option) *Model {
+	m := &Model{
+		choice:   0,
+		choices:  choices,
+		cursor:   0,
+		theme:    ThemeDefault,
+		quitting: false,
+		err:      nil,
+		keys:     keys(),
+		showHelp: false,
+		help:     help.New(),
+	}
+
+	for _, opt := range opts {
+		opt(m)
+	}
+
+	return m
 }
 
 func (m Model) Data() any {
@@ -30,16 +57,12 @@ func (m Model) DataString() string {
 	return strings.Join(m.Data().([]string), ", ")
 }
 
-func (m Model) KeyBindings() []key.Binding {
-	return m.keys
+func (m Model) Quitting() bool {
+	return m.quitting
 }
 
-func (m Model) UseKeyQ() bool {
-	return false
-}
-
-func (m Model) UseKeyEnter() bool {
-	return false
+func (m Model) Error() error {
+	return m.err
 }
 
 func (m *Model) toggleChoice(index int) {
@@ -78,21 +101,35 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case " ":
-			m.toggleChoice(m.cursor)
-
-		case "up", "k":
+		switch {
+		case key.Matches(msg, m.keys.Prev):
 			m.cursor--
 			if m.cursor < 0 {
 				m.cursor = len(m.choices) - 1
 			}
 
-		case "down", "j", "tab":
+		case key.Matches(msg, m.keys.Next):
 			m.cursor++
 			if m.cursor >= len(m.choices) {
 				m.cursor = 0
 			}
+
+		case key.Matches(msg, m.keys.Choose):
+			m.toggleChoice(m.cursor)
+
+		case key.Matches(msg, m.keys.Confirm):
+			m.quitting = true
+			return m, tea.Quit
+
+		case key.Matches(msg, m.keys.Help):
+			if m.showHelp {
+				m.help.ShowAll = !m.help.ShowAll
+			}
+
+		case key.Matches(msg, m.keys.Quit):
+			m.quitting = true
+			m.err = merrors.ErrUserQuit
+			return m, tea.Quit
 		}
 	}
 
@@ -100,34 +137,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return m.theme(m.choices, m.cursor, m.isSelected)
-}
-
-func New(choices []string, opts ...Option) *Model {
-	multiChooseKeys := []key.Binding{
-		key.NewBinding(
-			key.WithKeys("up", "k"),
-			key.WithHelp("↑/k", "move up"),
-		),
-		key.NewBinding(
-			key.WithKeys("down", "j", "tab"),
-			key.WithHelp("↓/j/tab", "move down"),
-		),
-		key.NewBinding(
-			key.WithKeys("space"),
-			key.WithHelp("space", "choose"),
-		),
+	view := m.theme(m.choices, m.cursor, m.isSelected)
+	if m.showHelp {
+		view += "\n"
+		view += m.help.View(m.keys)
 	}
-
-	model := &Model{
-		choices: choices,
-		keys:    multiChooseKeys,
-		theme:   ThemeDefault,
-	}
-
-	for _, opt := range opts {
-		opt(model)
-	}
-
-	return model
+	return view
 }

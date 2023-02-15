@@ -4,13 +4,42 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/cqroot/prompt/merrors"
 )
 
 type Model struct {
 	textarea textarea.Model
+
+	quitting bool
+	err      error
+	keys     keyMap
+	showHelp bool
+	help     help.Model
+}
+
+func New(defaultValue string, opts ...Option) *Model {
+	ti := textarea.New()
+	ti.Placeholder = defaultValue
+	ti.Focus()
+
+	m := &Model{
+		textarea: ti,
+		quitting: false,
+		err:      nil,
+		keys:     keys(),
+		showHelp: false,
+		help:     help.New(),
+	}
+
+	for _, opt := range opts {
+		opt(m)
+	}
+
+	return m
 }
 
 func (m Model) Data() any {
@@ -30,6 +59,14 @@ func (m Model) DataString() string {
 	}
 }
 
+func (m Model) Quitting() bool {
+	return m.quitting
+}
+
+func (m Model) Error() error {
+	return m.err
+}
+
 func (m Model) KeyBindings() []key.Binding {
 	return nil
 }
@@ -47,6 +84,23 @@ func (m Model) Init() tea.Cmd {
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.help.Width = msg.Width
+
+	case tea.KeyMsg:
+		switch {
+		case key.Matches(msg, m.keys.Confirm):
+			m.quitting = true
+			return m, tea.Quit
+
+		case key.Matches(msg, m.keys.Quit):
+			m.quitting = true
+			m.err = merrors.ErrUserQuit
+			return m, tea.Quit
+		}
+	}
+
 	var cmd tea.Cmd
 
 	m.textarea, cmd = m.textarea.Update(msg)
@@ -54,15 +108,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return "\n" + m.textarea.View()
-}
-
-func New(defaultValue string) *Model {
-	ti := textarea.New()
-	ti.Placeholder = defaultValue
-	ti.Focus()
-
-	return &Model{
-		textarea: ti,
+	view := "\n" + m.textarea.View()
+	if m.showHelp {
+		view += "\n\n"
+		view += m.help.View(m.keys)
 	}
+	return view
 }

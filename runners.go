@@ -39,8 +39,8 @@ func (p Prompt) Input(defaultValue string, opts ...input.Option) (string, error)
 	return m.Data().(string), nil
 }
 
-func (p Prompt) Write(defaultValue string) (string, error) {
-	pm := write.New(defaultValue)
+func (p Prompt) Write(defaultValue string, opts ...write.Option) (string, error) {
+	pm := write.New(defaultValue, opts...)
 
 	m, err := p.Run(*pm)
 	if err != nil {

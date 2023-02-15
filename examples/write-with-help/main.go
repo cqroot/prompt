@@ -6,11 +6,14 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/write"
 )
 
 func main() {
-	val, err := prompt.New().Ask("Input your story:").WithHelp(true).
-		Write("Bla bla bla...")
+	val, err := prompt.New().Ask("Input your story:").Write(
+		"Bla bla bla...",
+		write.WithHelp(true),
+	)
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)

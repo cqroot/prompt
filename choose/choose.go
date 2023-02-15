@@ -1,15 +1,43 @@
 package choose
 
 import (
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
+
+	"github.com/cqroot/prompt/merrors"
 )
 
 type Model struct {
 	choices []string
 	cursor  int
-	keys    []key.Binding
-	theme   Theme
+
+	theme    Theme
+	quitting bool
+	err      error
+	keys     keyMap
+	showHelp bool
+	help     help.Model
+}
+
+func New(choices []string, opts ...Option) *Model {
+	m := &Model{
+		choices:  choices,
+		cursor:   0,
+		theme:    ThemeDefault,
+		quitting: false,
+		err:      nil,
+		showHelp: false,
+		help:     help.New(),
+	}
+
+	for _, opt := range opts {
+		opt(m)
+	}
+
+	m.keys = keys(m.theme.Direction)
+
+	return m
 }
 
 func (m Model) Data() any {
@@ -20,45 +48,12 @@ func (m Model) DataString() string {
 	return m.Data().(string)
 }
 
-func (m *Model) initKeys() {
-	chooseKeys := make([]key.Binding, 0, 4)
-	if m.theme.Direction == DirectionH || m.theme.Direction == DirectionAll {
-		chooseKeys = append(chooseKeys,
-			key.NewBinding(
-				key.WithKeys("left", "h"),
-				key.WithHelp("←/h", "move left"),
-			),
-			key.NewBinding(
-				key.WithKeys("right", "l", "tab", " "),
-				key.WithHelp("→/l/tab/space", "move right"),
-			),
-		)
-	}
-	if m.theme.Direction == DirectionV || m.theme.Direction == DirectionAll {
-		chooseKeys = append(chooseKeys,
-			key.NewBinding(
-				key.WithKeys("up", "k"),
-				key.WithHelp("↑/k", "move up"),
-			),
-			key.NewBinding(
-				key.WithKeys("down", "j", "tab"),
-				key.WithHelp("↓/j/tab", "move down"),
-			),
-		)
-	}
-	m.keys = chooseKeys
+func (m Model) Quitting() bool {
+	return m.quitting
 }
 
-func (m Model) KeyBindings() []key.Binding {
-	return m.keys
-}
-
-func (m Model) UseKeyQ() bool {
-	return false
-}
-
-func (m Model) UseKeyEnter() bool {
-	return false
+func (m Model) Error() error {
+	return m.err
 }
 
 func (m Model) Init() tea.Cmd {
@@ -67,19 +62,36 @@ func (m Model) Init() tea.Cmd {
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.help.Width = msg.Width
+
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, m.keys[0]):
+		case key.Matches(msg, m.keys.Prev):
 			m.cursor--
 			if m.cursor < 0 {
 				m.cursor = len(m.choices) - 1
 			}
 
-		case key.Matches(msg, m.keys[1]):
+		case key.Matches(msg, m.keys.Next):
 			m.cursor++
 			if m.cursor >= len(m.choices) {
 				m.cursor = 0
 			}
+
+		case key.Matches(msg, m.keys.Confirm):
+			m.quitting = true
+			return m, tea.Quit
+
+		case key.Matches(msg, m.keys.Help):
+			if m.showHelp {
+				m.help.ShowAll = !m.help.ShowAll
+			}
+
+		case key.Matches(msg, m.keys.Quit):
+			m.quitting = true
+			m.err = merrors.ErrUserQuit
+			return m, tea.Quit
 		}
 	}
 
@@ -87,19 +99,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return m.theme.View(m.choices, m.cursor)
-}
-
-func New(choices []string, opts ...Option) *Model {
-	model := &Model{
-		choices: choices,
-		theme:   ThemeDefault,
+	view := m.theme.View(m.choices, m.cursor)
+	if m.showHelp {
+		view += "\n"
+		view += m.help.View(m.keys)
 	}
-
-	for _, opt := range opts {
-		opt(model)
-	}
-	model.initKeys()
-
-	return model
+	return view
 }

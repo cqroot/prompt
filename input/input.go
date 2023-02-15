@@ -4,9 +4,11 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/cqroot/prompt/merrors"
 	"github.com/cqroot/prompt/styles"
 )
 
@@ -15,6 +17,38 @@ type Model struct {
 	textInput    textinput.Model
 	validateFunc ValidateFunc
 	inputMode    InputMode
+
+	quitting bool
+	err      error
+	keys     keyMap
+	showHelp bool
+	help     help.Model
+}
+
+func New(defaultValue string, opts ...Option) *Model {
+	ti := textinput.New()
+	ti.Placeholder = defaultValue
+	ti.Focus()
+	ti.CharLimit = 156
+	ti.Width = 40
+	ti.Prompt = ""
+
+	m := &Model{
+		textInput: ti,
+		df:        defaultValue,
+		inputMode: InputAll,
+		quitting:  false,
+		err:       nil,
+		keys:      keys(),
+		showHelp:  false,
+		help:      help.New(),
+	}
+
+	for _, opt := range opts {
+		opt(m)
+	}
+
+	return m
 }
 
 func (m Model) Data() any {
@@ -35,6 +69,14 @@ func (m Model) DataString() string {
 	return str
 }
 
+func (m Model) Quitting() bool {
+	return m.quitting
+}
+
+func (m Model) Error() error {
+	return m.err
+}
+
 func (m *Model) WithInputMode(mode InputMode) *Model {
 	m.inputMode = mode
 	return m
@@ -50,26 +92,28 @@ func (m *Model) WithValidateFunc(vf ValidateFunc) *Model {
 	return m
 }
 
-func (m Model) KeyBindings() []key.Binding {
-	return nil
-}
-
-func (m Model) UseKeyQ() bool {
-	return true
-}
-
-func (m Model) UseKeyEnter() bool {
-	return false
-}
-
 func (m Model) Init() tea.Cmd {
 	return textinput.Blink
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if m.inputMode == InputNumber || m.inputMode == InputInteger {
-		switch msg := msg.(type) {
-		case tea.KeyMsg:
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.help.Width = msg.Width
+
+	case tea.KeyMsg:
+		switch {
+		case key.Matches(msg, m.keys.Confirm):
+			m.quitting = true
+			return m, tea.Quit
+
+		case key.Matches(msg, m.keys.Quit):
+			m.quitting = true
+			m.err = merrors.ErrUserQuit
+			return m, tea.Quit
+		}
+
+		if m.inputMode == InputNumber || m.inputMode == InputInteger {
 			keypress := msg.String()
 			if len(keypress) == 1 {
 				if keypress == "." {
@@ -104,26 +148,10 @@ func (m Model) View() string {
 		}
 	}
 
+	if m.showHelp {
+		view += "\n\n"
+		view += m.help.View(m.keys)
+	}
+
 	return view
-}
-
-func New(defaultValue string, opts ...Option) *Model {
-	ti := textinput.New()
-	ti.Placeholder = defaultValue
-	ti.Focus()
-	ti.CharLimit = 156
-	ti.Width = 40
-	ti.Prompt = ""
-
-	m := &Model{
-		textInput: ti,
-		df:        defaultValue,
-		inputMode: InputAll,
-	}
-
-	for _, opt := range opts {
-		opt(m)
-	}
-
-	return m
 }
