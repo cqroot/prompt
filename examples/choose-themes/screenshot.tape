@@ -1,4 +1,4 @@
-Output ../../screenshots/choose-theme-arrow.gif
+Output ../../screenshots/choose-themes.gif
 
 Set FontFamily "CaskaydiaCove Nerd Font"
 Set FontSize 22
@@ -9,8 +9,15 @@ Set TypingSpeed 50ms
 
 Type 'go run main.go' Enter
 Sleep 1s
-Down@500ms Up@500ms Up@500ms Up@500ms
+
+Down@400ms Up@400ms Up@400ms Up@400ms
 Enter
+
+Sleep 400ms
+
+Right@400ms Left@400ms Left@400ms Left@400ms
+Enter
+
 Sleep 2s
 
 # vim:filetype=conf

@@ -62,37 +62,27 @@
 
 ### Choose
 
-**Theme Default**
-
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
 
 ![choose](https://user-images.githubusercontent.com/46901748/219288366-d4ce04df-ca98-4a03-8a80-e7c26577e86a.gif)
 
-**Theme Arrow**
+**Modify the theme of choose:**
 
-[example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-arrow/main.go)
+[example](https://github.com/cqroot/prompt/blob/main/examples/choose-themes/main.go)
 
-![choose-theme-arrow](https://user-images.githubusercontent.com/46901748/218780071-08b71a0b-963a-4078-9ac8-14ce89b02bd1.gif)
-
-**Theme Line**
-
-[example](https://github.com/cqroot/prompt/blob/main/examples/choose-theme-line/main.go)
-
-![choose-theme-line](https://user-images.githubusercontent.com/46901748/218780074-c7988e70-a51d-4101-ae38-a2388989a269.gif)
+![choose-themes](https://user-images.githubusercontent.com/46901748/219293300-cb1cd6ac-d43f-414f-b526-f490423b7108.gif)
 
 ### MultiChoose
-
-**Theme Default**
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
 ![multichoose](https://user-images.githubusercontent.com/46901748/219288777-1c913ac8-4144-4b96-b5be-3085483d8bae.gif)
 
-**Theme Dot**
+**Modify the theme of choose:**
 
-[example](https://github.com/cqroot/prompt/blob/main/examples/multichoose-theme-dot/main.go)
+[example](https://github.com/cqroot/prompt/blob/main/examples/multichoose-themes/main.go)
 
-![multichoose-theme-dot](https://user-images.githubusercontent.com/46901748/218780650-f3f216a9-7670-474b-8f5a-7b705a7ae1ab.gif)
+![multichoose-themes](https://user-images.githubusercontent.com/46901748/219293895-137d82f6-7344-4ea0-aa34-85110aaa9c0d.gif)
 
 ### Input
 
