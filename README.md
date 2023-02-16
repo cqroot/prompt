@@ -1,13 +1,11 @@
 <div align="center">
-  <h1>Prompt</h1>
+  <h1>✔ Prompt</h1>
   <p>
-    <i>User-friendly, highly customizable interactive prompts for Go</i>
+    User-friendly, highly customizable interactive prompts for Go.
     <br />
-    <i>
-      Based on <a href="https://github.com/charmbracelet/bubbletea" alt="Bubble Tea">Bubble Tea</a>.
-      Inspired by <a href="https://github.com/terkelg/prompts" alt="Prompts">Prompts</a>
-        and <a href="https://github.com/charmbracelet/gum" alt="Gum">Gum</a>.
-    </i>
+    Based on <a href="https://github.com/charmbracelet/bubbletea" alt="Bubble Tea">Bubble Tea</a>.
+    Inspired by <a href="https://github.com/terkelg/prompts" alt="Prompts">Prompts</a>
+      and <a href="https://github.com/charmbracelet/gum" alt="Gum">Gum</a>.
   </p>
 
   <p>
