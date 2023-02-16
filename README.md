@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Prompt</h1>
   <p>
-    <i>User-friendly interactive prompts for Go.</i>
+    <i>User-friendly, highly customizable interactive prompts for Go</i>
     <br />
     <i>
       Based on <a href="https://github.com/charmbracelet/bubbletea" alt="Bubble Tea">Bubble Tea</a>.
@@ -46,6 +46,7 @@
   - [MultiChoose](#multichoose)
   - [Input](#input)
   - [Write](#write)
+  - [Prompt Theme](#prompt-theme)
 - [License](#license)
 
 ## Features
@@ -118,9 +119,17 @@
 
 ### Write
 
-[example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
+[example](https://github.com/cqroot/prompt/blob/main/examples/write/main.go)
 
 ![write](https://user-images.githubusercontent.com/46901748/219289253-7fef6708-c852-4d88-b2d0-376249f46c9b.gif)
+
+### Prompt Theme
+
+All model themes can be customized. The prompt's theme can also be customized.
+
+[example](https://github.com/cqroot/prompt/blob/main/examples/prompt-themes/main.go)
+
+![prompt-themes](https://user-images.githubusercontent.com/46901748/219320761-223f9be7-bb2f-4851-9b80-5a8ebee8074d.gif)
 
 ## License
 
