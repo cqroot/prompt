@@ -25,23 +25,23 @@ func testcases() []Testcase {
 
 	testcases = append(testcases, Testcase{
 		model: *write.New(defaultVal),
-		view: "\n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
-			`┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    `,
+		view: "\n┃ \x1b[7md\x1b[0mefault value                      \n" +
+			`┃                                    
+┃                                    
+┃                                    
+┃                                    
+┃                                    `,
 		keys: []byte{tester.KeyCtrlD},
 		data: defaultVal,
 	})
 	testcases = append(testcases, Testcase{
 		model: *write.New(defaultVal, write.WithHelp(true)),
-		view: "\n┃  1 \x1b[7md\x1b[0mefault value                      \n" +
-			`┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
+		view: "\n┃ \x1b[7md\x1b[0mefault value                      \n" +
+			`┃                                    
+┃                                    
+┃                                    
+┃                                    
+┃                                    
 
 ctrl+d confirm • esc quit`,
 		keys: append([]byte(val), tester.KeyCtrlD),
@@ -69,12 +69,12 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, quitKey := range []byte{tester.KeyEsc, tester.KeyCtrlC} {
-		tm := tester.Exec(t, write.New(""), []byte{quitKey}, "\n┃  1 \x1b[7m \x1b[0m                                  "+`
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    `)
+		tm := tester.Exec(t, write.New(""), []byte{quitKey}, "\n┃ \x1b[7m \x1b[0m                                  "+`
+┃                                    
+┃                                    
+┃                                    
+┃                                    
+┃                                    `)
 		m, ok := tm.(write.Model)
 		require.Equal(t, true, ok)
 		require.Equal(t, merrors.ErrUserQuit, m.Error())

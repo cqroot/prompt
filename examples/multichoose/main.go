@@ -7,11 +7,10 @@ import (
 	"strings"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/multichoose"
 )
 
-func main() {
-	val, err := prompt.New().Ask("MultiChoose value:").
-		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
+func CheckErr(err error) {
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
@@ -20,5 +19,19 @@ func main() {
 			panic(err)
 		}
 	}
-	fmt.Println(strings.Join(val, ", "))
+}
+
+func main() {
+	val1, err := prompt.New().Ask("MultiChoose:").
+		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
+	CheckErr(err)
+
+	val2, err := prompt.New().Ask("MultiChoose with Help:").
+		MultiChoose(
+			[]string{"Item 1", "Item 2", "Item 3"},
+			multichoose.WithHelp(true),
+		)
+	CheckErr(err)
+
+	fmt.Printf("{ %s }, { %s }\n", strings.Join(val1, ", "), strings.Join(val2, ", "))
 }

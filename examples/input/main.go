@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/input"
 )
 
-func main() {
-	val, err := prompt.New().Ask("Input your name:").Input("Your Name")
+func CheckErr(err error) {
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
@@ -18,5 +18,17 @@ func main() {
 			panic(err)
 		}
 	}
-	fmt.Println(val)
+}
+
+func main() {
+	val1, err := prompt.New().Ask("Input:").Input("Blah blah")
+	CheckErr(err)
+
+	val2, err := prompt.New().Ask("Input with Help:").Input(
+		"Blah blah",
+		input.WithHelp(true),
+	)
+	CheckErr(err)
+
+	fmt.Printf("{ %s }, { %s }\n", val1, val2)
 }

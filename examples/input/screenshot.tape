@@ -14,6 +14,12 @@ Set TypingSpeed 100ms
 
 Type 'test test'
 Enter
+
+Sleep 400ms
+
+Type 'test test'
+Enter
+
 Sleep 2s
 
 # vim:filetype=conf

@@ -3,7 +3,7 @@ Output ../../screenshots/write.gif
 Set FontFamily "CaskaydiaCove Nerd Font"
 Set FontSize 22
 Set Width 600
-Set Height 250
+Set Height 330
 Set Padding 20
 Set TypingSpeed 50ms
 
@@ -17,8 +17,14 @@ Enter
 Type 'test'
 Backspace@100ms 10
 Enter
-Type 'Bla bla...'
-Ctrl+S
+Type 'Blah blah...'
+Ctrl+D
+
+Sleep 400ms
+
+Type 'test test'
+Ctrl+D
+
 Sleep 2s
 
 # vim:filetype=conf

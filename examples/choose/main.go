@@ -6,11 +6,10 @@ import (
 	"os"
 
 	"github.com/cqroot/prompt"
+	"github.com/cqroot/prompt/choose"
 )
 
-func main() {
-	val, err := prompt.New().Ask("Choose value:").
-		Choose([]string{"Item 1", "Item 2", "Item 3"})
+func CheckErr(err error) {
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
@@ -19,5 +18,19 @@ func main() {
 			panic(err)
 		}
 	}
-	fmt.Println(val)
+}
+
+func main() {
+	val1, err := prompt.New().Ask("Choose:").
+		Choose([]string{"Item 1", "Item 2", "Item 3"})
+	CheckErr(err)
+
+	val2, err := prompt.New().Ask("Choose with Help:").
+		Choose(
+			[]string{"Item 1", "Item 2", "Item 3"},
+			choose.WithHelp(true),
+		)
+	CheckErr(err)
+
+	fmt.Printf("{ %s }, { %s }\n", val1, val2)
 }
