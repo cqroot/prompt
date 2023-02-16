@@ -38,8 +38,6 @@
   </p>
 </div>
 
-![example](https://user-images.githubusercontent.com/46901748/218809805-e750b1c7-32e1-4592-a81c-107b379c504e.gif)
-
 ## Table of Contents
 
 - [Features](#features)
@@ -48,7 +46,6 @@
   - [MultiChoose](#multichoose)
   - [Input](#input)
   - [Write](#write)
-  - [Show help message](#show-help-message)
 - [License](#license)
 
 ## Features
@@ -69,7 +66,7 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/choose/main.go)
 
-![choose](https://user-images.githubusercontent.com/46901748/218780062-a50a1043-f9ef-449a-8094-b412be831bfd.gif)
+![choose](https://user-images.githubusercontent.com/46901748/219288366-d4ce04df-ca98-4a03-8a80-e7c26577e86a.gif)
 
 **Theme Arrow**
 
@@ -89,7 +86,7 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose/main.go)
 
-![multichoose](https://user-images.githubusercontent.com/46901748/218780644-f32430fa-9d1e-4d8a-b197-8c9d89de9317.gif)
+![multichoose](https://user-images.githubusercontent.com/46901748/219288777-1c913ac8-4144-4b96-b5be-3085483d8bae.gif)
 
 **Theme Dot**
 
@@ -101,7 +98,7 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/input/main.go)
 
-![input](https://user-images.githubusercontent.com/46901748/218799158-68b7622d-1798-4011-8681-9865da21b5f5.gif)
+![input](https://user-images.githubusercontent.com/46901748/219288988-12923602-a112-4876-906d-3575f3c50741.gif)
 
 **Password input**
 
@@ -133,21 +130,7 @@
 
 [example](https://github.com/cqroot/prompt/blob/main/examples/textarea/main.go)
 
-![write](https://user-images.githubusercontent.com/46901748/218803991-a4f5f563-40df-45e2-b686-da4208cab6a4.gif)
-
-### Show help message
-
-All components support displaying help message for shortcut keys at the bottom.
-
-![choose-with-help](https://user-images.githubusercontent.com/46901748/218780082-7808b54e-c258-427c-a91b-84b14ae7c246.gif)
-
-Examples:
-
-1. [Choose with help](https://github.com/cqroot/prompt/blob/main/examples/choose-with-help/main.go)
-2. [MultiChoose with help](https://github.com/cqroot/prompt/blob/main/examples/multichoose-with-help/main.go)
-3. [Input with help](https://github.com/cqroot/prompt/blob/main/examples/input-with-help/main.go)
-4. [TextArea with help](https://github.com/cqroot/prompt/blob/main/examples/textarea-with-help/main.go)
-5. [Toggle with help](https://github.com/cqroot/prompt/blob/main/examples/toggle-with-help/main.go)
+![write](https://user-images.githubusercontent.com/46901748/219289253-7fef6708-c852-4d88-b2d0-376249f46c9b.gif)
 
 ## License
 
