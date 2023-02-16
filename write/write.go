@@ -22,12 +22,13 @@ type Model struct {
 }
 
 func New(defaultValue string, opts ...Option) *Model {
-	ti := textarea.New()
-	ti.Placeholder = defaultValue
-	ti.Focus()
+	ta := textarea.New()
+	ta.Placeholder = defaultValue
+	ta.ShowLineNumbers = false
+	ta.Focus()
 
 	m := &Model{
-		textarea: ti,
+		textarea: ta,
 		quitting: false,
 		err:      nil,
 		keys:     keys(),
