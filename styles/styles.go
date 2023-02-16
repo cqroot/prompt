@@ -5,10 +5,6 @@ import (
 )
 
 var (
-	DefaultNormalPromptPrefix      = "?"
-	DefaultFinishPromptPrefix      = "✔"
-	DefaultNormalPromptSuffix      = "›"
-	DefaultFinishPromptSuffix      = "…"
 	DefaultNormalPromptPrefixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 	DefaultFinishPromptPrefixStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("10"))
 	DefaultErrorPromptPrefixStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
@@ -25,4 +21,3 @@ var (
 	DefaultSelectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 	DefaultChoiceStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 )
-

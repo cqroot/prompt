@@ -2,43 +2,26 @@ package prompt
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
-
-	"github.com/cqroot/prompt/styles"
 )
 
 type Prompt struct {
-	quitting       bool
-	model          PromptModel
-	programOptions []tea.ProgramOption
-	initView       *string
-	finalView      *string
-	// Style
-	Message           string
-	NormalPrefix      string
-	FinishPrefix      string
-	NormalSuffix      string
-	FinishSuffix      string
-	PrefixStyle       lipgloss.Style
-	FinishPrefixStyle lipgloss.Style
-	SuffixStyle       lipgloss.Style
-	FinishSuffixStyle lipgloss.Style
+	quitting bool
+	model    PromptModel
+	Message  string
+	theme    Theme
 }
 
 // New returns a *Prompt using the default style.
-func New() *Prompt {
-	return &Prompt{
+func New(opts ...Option) *Prompt {
+	p := &Prompt{
 		quitting: false,
-		// Style
-		NormalPrefix:      styles.DefaultNormalPromptPrefix,
-		FinishPrefix:      styles.DefaultFinishPromptPrefix,
-		NormalSuffix:      styles.DefaultNormalPromptSuffix,
-		FinishSuffix:      styles.DefaultFinishPromptSuffix,
-		PrefixStyle:       styles.DefaultNormalPromptPrefixStyle,
-		FinishPrefixStyle: styles.DefaultFinishPromptPrefixStyle,
-		SuffixStyle:       styles.DefaultNormalPromptSuffixStyle,
-		FinishSuffixStyle: styles.DefaultFinishPromptSuffixStyle,
+		theme:    ThemeDefault,
 	}
+
+	for _, opt := range opts {
+		opt(p)
+	}
+	return p
 }
 
 // Ask set prompt message
@@ -54,30 +37,12 @@ func (p *Prompt) SetModel(pm PromptModel) *Prompt {
 	return p
 }
 
-// WithProgramOptions sets the `tea.ProgramOption` passed when calling
-// `tea.NewProgram`. This function is mainly used for testing, usually you
-// don't need to use this function.
-func (p *Prompt) WithProgramOptions(opts ...tea.ProgramOption) *Prompt {
-	p.programOptions = append(p.programOptions, opts...)
-	return p
-}
-
-func (p *Prompt) WithTestView(initView *string, finalView *string) *Prompt {
-	p.initView = initView
-	p.finalView = finalView
-	return p
-}
-
 // Run runs the program using the given model, blocking until the user chooses
 // or exits.
 func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 	p.model = pm
 
-	if p.initView != nil {
-		*(p.initView) = p.View()
-	}
-
-	tm, err := tea.NewProgram(p, p.programOptions...).Run()
+	tm, err := tea.NewProgram(p).Run()
 	if err != nil {
 		return nil, err
 	}
@@ -89,10 +54,6 @@ func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
 
 	if m.model.Error() != nil {
 		return nil, m.model.Error()
-	}
-
-	if p.finalView != nil {
-		*(p.finalView) = m.View()
 	}
 
 	return m.model, nil

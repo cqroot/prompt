@@ -1,10 +1,7 @@
 package prompt
 
 import (
-	"strings"
-
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/cqroot/prompt/styles"
 )
 
 type PromptModel interface {
@@ -25,32 +22,11 @@ func (p Prompt) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (p Prompt) View() string {
-	s := strings.Builder{}
-
 	if p.model.Error() != nil {
-		s.WriteString(styles.DefaultErrorPromptPrefixStyle.Render("✖"))
+		return p.theme(p.Message, StateError, p.model.DataString())
 	} else if p.model.Quitting() {
-		s.WriteString(p.FinishPrefixStyle.Render(p.FinishPrefix))
+		return p.theme(p.Message, StateFinish, p.model.DataString())
 	} else {
-		s.WriteString(p.PrefixStyle.Render(p.NormalPrefix))
+		return p.theme(p.Message, StateNormal, p.model.View())
 	}
-
-	s.WriteString(" ")
-	s.WriteString(p.Message)
-	s.WriteString(" ")
-
-	if p.model.Quitting() {
-		s.WriteString(p.FinishSuffixStyle.Render(p.FinishSuffix))
-		s.WriteString(" ")
-		s.WriteString(p.model.DataString())
-		s.WriteString("\n")
-	} else {
-		s.WriteString(p.SuffixStyle.Render(p.NormalSuffix))
-		s.WriteString(" ")
-
-		modelView := p.model.View()
-		s.WriteString(modelView)
-	}
-
-	return s.String()
 }
