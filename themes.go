@@ -3,7 +3,7 @@ package prompt
 import (
 	"strings"
 
-	"github.com/cqroot/prompt/styles"
+	"github.com/cqroot/prompt/constants"
 )
 
 type State int
@@ -21,11 +21,11 @@ func ThemeDefault(msg string, state State, model string) string {
 
 	switch state {
 	case StateNormal:
-		s.WriteString(styles.DefaultFinishPromptPrefixStyle.Render("?"))
+		s.WriteString(constants.DefaultFinishPromptPrefixStyle.Render("?"))
 	case StateFinish:
-		s.WriteString(styles.DefaultFinishPromptPrefixStyle.Render("✔"))
+		s.WriteString(constants.DefaultFinishPromptPrefixStyle.Render("✔"))
 	case StateError:
-		s.WriteString(styles.DefaultErrorPromptPrefixStyle.Render("✖"))
+		s.WriteString(constants.DefaultErrorPromptPrefixStyle.Render("✖"))
 	}
 
 	s.WriteString(" ")
@@ -33,11 +33,11 @@ func ThemeDefault(msg string, state State, model string) string {
 	s.WriteString(" ")
 
 	if state == StateNormal {
-		s.WriteString(styles.DefaultNormalPromptSuffixStyle.Render("›"))
+		s.WriteString(constants.DefaultNormalPromptSuffixStyle.Render("›"))
 		s.WriteString(" ")
 		s.WriteString(model)
 	} else {
-		s.WriteString(styles.DefaultFinishPromptSuffixStyle.Render("…"))
+		s.WriteString(constants.DefaultFinishPromptSuffixStyle.Render("…"))
 		s.WriteString(" ")
 		s.WriteString(model)
 		s.WriteString("\n")

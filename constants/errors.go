@@ -1,4 +1,4 @@
-package merrors
+package constants
 
 import "errors"
 

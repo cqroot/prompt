@@ -8,8 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/cqroot/prompt/merrors"
-	"github.com/cqroot/prompt/styles"
+	"github.com/cqroot/prompt/constants"
 )
 
 type Model struct {
@@ -109,7 +108,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case key.Matches(msg, m.keys.Quit):
 			m.quitting = true
-			m.err = merrors.ErrUserQuit
+			m.err = constants.ErrUserQuit
 			return m, tea.Quit
 		}
 
@@ -141,10 +140,10 @@ func (m Model) View() string {
 	if m.textInput.Value() != "" && m.validateFunc != nil {
 		err := m.validateFunc(m.textInput.Value())
 		if err != nil {
-			view = view + styles.DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
-				styles.DefaultNoteStyle.Render(err.Error())
+			view = view + constants.DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
+				constants.DefaultNoteStyle.Render(err.Error())
 		} else {
-			view = view + styles.DefaultFinishPromptPrefixStyle.Render("\n✔")
+			view = view + constants.DefaultFinishPromptPrefixStyle.Render("\n✔")
 		}
 	}
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cqroot/prompt/merrors"
+	"github.com/cqroot/prompt/constants"
 	"github.com/cqroot/prompt/tester"
 	"github.com/cqroot/prompt/write"
 )
@@ -77,6 +77,6 @@ func TestModel(t *testing.T) {
 ┃                                    `)
 		m, ok := tm.(write.Model)
 		require.Equal(t, true, ok)
-		require.Equal(t, merrors.ErrUserQuit, m.Error())
+		require.Equal(t, constants.ErrUserQuit, m.Error())
 	}
 }

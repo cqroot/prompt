@@ -3,10 +3,10 @@ package prompt
 import (
 	"errors"
 
-	"github.com/cqroot/prompt/merrors"
+	"github.com/cqroot/prompt/constants"
 )
 
 var (
 	ErrModelConversion = errors.New("model conversion failed")
-	ErrUserQuit        = merrors.ErrUserQuit
+	ErrUserQuit        = constants.ErrUserQuit
 )

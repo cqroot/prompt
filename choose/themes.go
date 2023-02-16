@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cqroot/prompt/styles"
+	"github.com/cqroot/prompt/constants"
 )
 
 type Theme struct {
@@ -20,9 +20,9 @@ var ThemeDefault = Theme{
 
 		for i := 0; i < len(choices); i++ {
 			if cursor == i {
-				s.WriteString(styles.DefaultSelectedItemStyle.Render(fmt.Sprintf("• %s", choices[i])))
+				s.WriteString(constants.DefaultSelectedItemStyle.Render(fmt.Sprintf("• %s", choices[i])))
 			} else {
-				s.WriteString(styles.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
+				s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
 			}
 			s.WriteString("\n")
 		}
@@ -39,9 +39,9 @@ var ThemeArrow = Theme{
 
 		for i := 0; i < len(choices); i++ {
 			if cursor == i {
-				s.WriteString(styles.DefaultSelectedItemStyle.Render(fmt.Sprintf("❯ %s", choices[i])))
+				s.WriteString(constants.DefaultSelectedItemStyle.Render(fmt.Sprintf("❯ %s", choices[i])))
 			} else {
-				s.WriteString(styles.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
+				s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
 			}
 			s.WriteString("\n")
 		}
@@ -58,9 +58,9 @@ var ThemeLine = Theme{
 		result := make([]string, len(choices))
 		for index, choice := range choices {
 			if index == cursor {
-				result[index] = styles.DefaultSelectedItemStyle.Render(choice)
+				result[index] = constants.DefaultSelectedItemStyle.Render(choice)
 			} else {
-				result[index] = styles.DefaultItemStyle.Render(choice)
+				result[index] = constants.DefaultItemStyle.Render(choice)
 			}
 		}
 		s.WriteString(strings.Join(result, " / "))

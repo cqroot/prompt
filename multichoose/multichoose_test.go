@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cqroot/prompt/merrors"
+	"github.com/cqroot/prompt/constants"
 	"github.com/cqroot/prompt/multichoose"
 	"github.com/cqroot/prompt/tester"
 	"github.com/stretchr/testify/require"
@@ -83,6 +83,6 @@ func TestMultiChooseModel(t *testing.T) {
 		tm := tester.Exec(t, multichoose.New([]string{}), []byte{quitKey}, "\n")
 		m, ok := tm.(multichoose.Model)
 		require.Equal(t, true, ok)
-		require.Equal(t, merrors.ErrUserQuit, m.Error())
+		require.Equal(t, constants.ErrUserQuit, m.Error())
 	}
 }

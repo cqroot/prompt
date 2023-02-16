@@ -8,7 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textarea"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/cqroot/prompt/merrors"
+	"github.com/cqroot/prompt/constants"
 )
 
 type Model struct {
@@ -97,7 +97,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case key.Matches(msg, m.keys.Quit):
 			m.quitting = true
-			m.err = merrors.ErrUserQuit
+			m.err = constants.ErrUserQuit
 			return m, tea.Quit
 		}
 	}
