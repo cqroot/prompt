@@ -2,7 +2,7 @@ package multichoose
 
 import "github.com/charmbracelet/bubbles/key"
 
-type keyMap struct {
+type KeyMap struct {
 	Prev    key.Binding
 	Next    key.Binding
 	Choose  key.Binding
@@ -11,19 +11,19 @@ type keyMap struct {
 	Quit    key.Binding
 }
 
-func (k keyMap) ShortHelp() []key.Binding {
+func (k KeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Help, k.Choose, k.Confirm, k.Quit}
 }
 
-func (k keyMap) FullHelp() [][]key.Binding {
+func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Prev, k.Next, k.Choose},  // first column
 		{k.Help, k.Confirm, k.Quit}, // second column
 	}
 }
 
-func keys() keyMap {
-	keys := keyMap{
+func keys() KeyMap {
+	keys := KeyMap{
 		Prev: key.NewBinding(
 			key.WithKeys("up", "k"),
 			key.WithHelp("↑/k", "move up"),

@@ -2,23 +2,23 @@ package write
 
 import "github.com/charmbracelet/bubbles/key"
 
-type keyMap struct {
+type KeyMap struct {
 	Confirm key.Binding
 	Quit    key.Binding
 }
 
-func (k keyMap) ShortHelp() []key.Binding {
+func (k KeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Confirm, k.Quit}
 }
 
-func (k keyMap) FullHelp() [][]key.Binding {
+func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Confirm, k.Quit},
 	}
 }
 
-func keys() keyMap {
-	keys := keyMap{
+func keys() KeyMap {
+	keys := KeyMap{
 		Confirm: key.NewBinding(
 			key.WithKeys("ctrl+d"),
 			key.WithHelp("ctrl+d", "confirm"),

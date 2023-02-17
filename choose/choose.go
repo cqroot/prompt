@@ -15,7 +15,7 @@ type Model struct {
 	theme    Theme
 	quitting bool
 	err      error
-	keys     keyMap
+	keys     KeyMap
 	showHelp bool
 	help     help.Model
 }

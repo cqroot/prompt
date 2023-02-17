@@ -2,7 +2,7 @@ package choose
 
 import "github.com/charmbracelet/bubbles/key"
 
-type keyMap struct {
+type KeyMap struct {
 	Prev    key.Binding
 	Next    key.Binding
 	Help    key.Binding
@@ -10,19 +10,19 @@ type keyMap struct {
 	Quit    key.Binding
 }
 
-func (k keyMap) ShortHelp() []key.Binding {
+func (k KeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Help, k.Confirm, k.Quit}
 }
 
-func (k keyMap) FullHelp() [][]key.Binding {
+func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Prev, k.Next},            // first column
 		{k.Help, k.Confirm, k.Quit}, // second column
 	}
 }
 
-func keys(direction Direction) keyMap {
-	keys := keyMap{
+func keys(direction Direction) KeyMap {
+	keys := KeyMap{
 		Help: key.NewBinding(
 			key.WithKeys("?"),
 			key.WithHelp("?", "toggle help"),

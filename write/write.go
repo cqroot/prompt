@@ -16,7 +16,7 @@ type Model struct {
 
 	quitting bool
 	err      error
-	keys     keyMap
+	keys     KeyMap
 	showHelp bool
 	help     help.Model
 }
