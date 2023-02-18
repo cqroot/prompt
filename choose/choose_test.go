@@ -72,16 +72,21 @@ func testcases() []Testcase {
 
 	for _, hTc := range hTcs {
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items, choose.WithTheme(choose.ThemeLine)),
-			view:  "Item 1 / Item 2 / Item 3\n",
-			keys:  hTc.keys,
-			data:  hTc.data,
+			model: *choose.New(items,
+				choose.WithTheme(choose.ThemeLine),
+				choose.WithKeyMap(choose.HorizontalKeyMap)),
+			view: "Item 1 / Item 2 / Item 3\n",
+			keys: hTc.keys,
+			data: hTc.data,
 		})
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items, choose.WithTheme(choose.ThemeLine), choose.WithHelp(true)),
-			view:  "Item 1 / Item 2 / Item 3\n\n? toggle help • enter confirm • q quit",
-			keys:  hTc.keys,
-			data:  hTc.data,
+			model: *choose.New(items,
+				choose.WithTheme(choose.ThemeLine),
+				choose.WithHelp(true),
+				choose.WithKeyMap(choose.HorizontalKeyMap)),
+			view: "Item 1 / Item 2 / Item 3\n\n? toggle help • enter confirm • q quit",
+			keys: hTc.keys,
+			data: hTc.data,
 		})
 	}
 
