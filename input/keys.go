@@ -17,23 +17,13 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
-func keys() KeyMap {
-	keys := KeyMap{
-		Confirm: key.NewBinding(
-			key.WithKeys("enter"),
-			key.WithHelp("enter", "confirm"),
-		),
-		Quit: key.NewBinding(
-			key.WithKeys("esc", "ctrl+c"),
-			key.WithHelp("esc", "quit"),
-		),
-	}
-
-	return keys
-}
-
-func WithHelp(show bool) Option {
-	return func(m *Model) {
-		m.showHelp = show
-	}
+var DefaultKeyMap = KeyMap{
+	Confirm: key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "confirm"),
+	),
+	Quit: key.NewBinding(
+		key.WithKeys("esc", "ctrl+c"),
+		key.WithHelp("esc", "quit"),
+	),
 }

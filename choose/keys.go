@@ -21,8 +21,8 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
-func keys(direction Direction) KeyMap {
-	keys := KeyMap{
+var (
+	DefaultKeyMap = KeyMap{
 		Help: key.NewBinding(
 			key.WithKeys("?"),
 			key.WithHelp("?", "toggle help"),
@@ -35,34 +35,36 @@ func keys(direction Direction) KeyMap {
 			key.WithKeys("q", "esc", "ctrl+c"),
 			key.WithHelp("q", "quit"),
 		),
-	}
-
-	if direction == DirectionH {
-		keys.Prev = key.NewBinding(
-			key.WithKeys("left", "h"),
-			key.WithHelp("←/h", "move left"),
-		)
-		keys.Next = key.NewBinding(
-			key.WithKeys("right", "l", "tab", " "),
-			key.WithHelp("→/l/tab/space", "move right"),
-		)
-	}
-	if direction == DirectionV {
-		keys.Prev = key.NewBinding(
+		Prev: key.NewBinding(
 			key.WithKeys("up", "k"),
 			key.WithHelp("↑/k", "move up"),
-		)
-		keys.Next = key.NewBinding(
+		),
+		Next: key.NewBinding(
 			key.WithKeys("down", "j", "tab"),
 			key.WithHelp("↓/j/tab", "move down"),
-		)
+		),
 	}
 
-	return keys
-}
-
-func WithHelp(show bool) Option {
-	return func(m *Model) {
-		m.showHelp = show
+	HorizontalKeyMap = KeyMap{
+		Help: key.NewBinding(
+			key.WithKeys("?"),
+			key.WithHelp("?", "toggle help"),
+		),
+		Confirm: key.NewBinding(
+			key.WithKeys("enter"),
+			key.WithHelp("enter", "confirm"),
+		),
+		Quit: key.NewBinding(
+			key.WithKeys("q", "esc", "ctrl+c"),
+			key.WithHelp("q", "quit"),
+		),
+		Prev: key.NewBinding(
+			key.WithKeys("left", "h"),
+			key.WithHelp("←/h", "move left"),
+		),
+		Next: key.NewBinding(
+			key.WithKeys("right", "l", "tab", " "),
+			key.WithHelp("→/l/tab/space", "move right"),
+		),
 	}
-}
+)

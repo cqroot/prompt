@@ -1,14 +1,12 @@
 package choose
 
-type Direction int
-
-const (
-	DirectionAll Direction = iota
-	DirectionH
-	DirectionV
-)
-
 type Option func(*Model)
+
+func WithHelp(show bool) Option {
+	return func(m *Model) {
+		m.showHelp = show
+	}
+}
 
 func WithTheme(theme Theme) Option {
 	return func(m *Model) {

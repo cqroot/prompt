@@ -31,7 +31,7 @@ func New(defaultValue string, opts ...Option) *Model {
 		textarea: ta,
 		quitting: false,
 		err:      nil,
-		keys:     keys(),
+		keys:     DefaultKeyMap,
 		showHelp: false,
 		help:     help.New(),
 	}

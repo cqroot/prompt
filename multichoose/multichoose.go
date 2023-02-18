@@ -30,7 +30,7 @@ func New(choices []string, opts ...Option) *Model {
 		theme:    ThemeDefault,
 		quitting: false,
 		err:      nil,
-		keys:     keys(),
+		keys:     DefaultKeyMap,
 		showHelp: false,
 		help:     help.New(),
 	}

@@ -22,39 +22,29 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
-func keys() KeyMap {
-	keys := KeyMap{
-		Prev: key.NewBinding(
-			key.WithKeys("up", "k"),
-			key.WithHelp("↑/k", "move up"),
-		),
-		Next: key.NewBinding(
-			key.WithKeys("down", "j", "tab"),
-			key.WithHelp("↓/j/tab", "move down"),
-		),
-		Choose: key.NewBinding(
-			key.WithKeys(" "),
-			key.WithHelp("space", "choose"),
-		),
-		Confirm: key.NewBinding(
-			key.WithKeys("enter"),
-			key.WithHelp("enter", "confirm"),
-		),
-		Help: key.NewBinding(
-			key.WithKeys("?"),
-			key.WithHelp("?", "toggle help"),
-		),
-		Quit: key.NewBinding(
-			key.WithKeys("q", "esc", "ctrl+c"),
-			key.WithHelp("q", "quit"),
-		),
-	}
-
-	return keys
-}
-
-func WithHelp(show bool) Option {
-	return func(m *Model) {
-		m.showHelp = show
-	}
+var DefaultKeyMap = KeyMap{
+	Prev: key.NewBinding(
+		key.WithKeys("up", "k"),
+		key.WithHelp("↑/k", "move up"),
+	),
+	Next: key.NewBinding(
+		key.WithKeys("down", "j", "tab"),
+		key.WithHelp("↓/j/tab", "move down"),
+	),
+	Choose: key.NewBinding(
+		key.WithKeys(" "),
+		key.WithHelp("space", "choose"),
+	),
+	Confirm: key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "confirm"),
+	),
+	Help: key.NewBinding(
+		key.WithKeys("?"),
+		key.WithHelp("?", "toggle help"),
+	),
+	Quit: key.NewBinding(
+		key.WithKeys("q", "esc", "ctrl+c"),
+		key.WithHelp("q", "quit"),
+	),
 }

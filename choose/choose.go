@@ -27,6 +27,7 @@ func New(choices []string, opts ...Option) *Model {
 		theme:    ThemeDefault,
 		quitting: false,
 		err:      nil,
+		keys:     DefaultKeyMap,
 		showHelp: false,
 		help:     help.New(),
 	}
@@ -34,8 +35,6 @@ func New(choices []string, opts ...Option) *Model {
 	for _, opt := range opts {
 		opt(m)
 	}
-
-	m.keys = keys(m.theme.Direction)
 
 	return m
 }
@@ -99,7 +98,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	view := m.theme.View(m.choices, m.cursor)
+	view := m.theme(m.choices, m.cursor)
 	if m.showHelp {
 		view += "\n"
 		view += m.help.View(m.keys)

@@ -38,7 +38,7 @@ func New(defaultValue string, opts ...Option) *Model {
 		inputMode: InputAll,
 		quitting:  false,
 		err:       nil,
-		keys:      keys(),
+		keys:      DefaultKeyMap,
 		showHelp:  false,
 		help:      help.New(),
 	}

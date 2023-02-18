@@ -30,6 +30,7 @@ func main() {
 	val2, err := prompt.New().Ask("Theme Line:").Choose(
 		[]string{"Item 1", "Item 2", "Item 3"},
 		choose.WithTheme(choose.ThemeLine),
+		choose.WithKeyMap(choose.HorizontalKeyMap),
 	)
 	CheckErr(err)
 
