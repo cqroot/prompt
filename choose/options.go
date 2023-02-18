@@ -15,3 +15,9 @@ func WithTheme(theme Theme) Option {
 		m.theme = theme
 	}
 }
+
+func WithKeyMap(keyMap KeyMap) Option {
+	return func(m *Model) {
+		m.keys = keyMap
+	}
+}
