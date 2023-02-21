@@ -14,6 +14,8 @@ func WithKeyMap(keyMap KeyMap) Option {
 	}
 }
 
+// Default is 400.
+// https://github.com/charmbracelet/bubbles/blob/master/textarea/textarea.go#L23
 func WithCharLimit(limit int) Option {
 	return func(m *Model) {
 		m.textarea.CharLimit = limit
