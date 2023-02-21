@@ -13,3 +13,9 @@ func WithKeyMap(keyMap KeyMap) Option {
 		m.keys = keyMap
 	}
 }
+
+func WithCharLimit(limit int) Option {
+	return func(m *Model) {
+		m.textarea.CharLimit = limit
+	}
+}

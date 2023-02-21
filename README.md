@@ -45,6 +45,7 @@
   - [Input](#input)
   - [Write](#write)
   - [Prompt Theme](#prompt-theme)
+- [Customization](#customization)
 - [License](#license)
 
 ## Features
@@ -128,6 +129,17 @@ All model themes can be customized. The prompt's theme can also be customized.
 [example](https://github.com/cqroot/prompt/blob/main/examples/prompt-themes/main.go)
 
 ![prompt-themes](https://user-images.githubusercontent.com/46901748/219320761-223f9be7-bb2f-4851-9b80-5a8ebee8074d.gif)
+
+## Customization
+
+Some options can be passed when using these models, such as whether to display help information, etc.
+
+All available options and examples can be seen in the following files:
+
+- Choose [options](https://github.com/cqroot/prompt/blob/main/choose/options.go).
+- MultiChoose [options](https://github.com/cqroot/prompt/blob/main/multichoose/options.go).
+- Input [options](https://github.com/cqroot/prompt/blob/main/input/options.go).
+- Write [options](https://github.com/cqroot/prompt/blob/main/write/options.go), [example](https://github.com/cqroot/prompt/blob/main/examples/write-options/main.go).
 
 ## License
 
