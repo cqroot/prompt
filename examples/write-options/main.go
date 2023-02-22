@@ -25,6 +25,8 @@ func main() {
 		"Blah blah blah...",
 		write.WithHelp(true),
 		write.WithCharLimit(800),
+		write.WithWidth(20),
+		write.WithLineNumbers(true),
 	)
 	CheckErr(err)
 

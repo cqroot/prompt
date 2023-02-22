@@ -21,3 +21,15 @@ func WithCharLimit(limit int) Option {
 		m.textarea.CharLimit = limit
 	}
 }
+
+func WithLineNumbers(enable bool) Option {
+	return func(m *Model) {
+		m.textarea.ShowLineNumbers = true
+	}
+}
+
+func WithWidth(width int) Option {
+	return func(m *Model) {
+		m.textarea.SetWidth(width)
+	}
+}
