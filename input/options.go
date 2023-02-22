@@ -60,3 +60,9 @@ func WithValidateFunc(vf ValidateFunc) Option {
 		m.WithValidateFunc(vf)
 	}
 }
+
+func WithWidth(width int) Option {
+	return func(m *Model) {
+		m.textInput.Width = width
+	}
+}
