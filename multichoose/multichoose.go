@@ -6,11 +6,13 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/cqroot/multichoose"
+
 	"github.com/cqroot/prompt/constants"
 )
 
 type Model struct {
-	choice  uint64
+	mc      *multichoose.MultiChoose
 	choices []string
 	cursor  int
 
@@ -24,7 +26,7 @@ type Model struct {
 
 func New(choices []string, opts ...Option) *Model {
 	m := &Model{
-		choice:   0,
+		mc:       multichoose.New(len(choices)),
 		choices:  choices,
 		cursor:   0,
 		theme:    ThemeDefault,
@@ -46,7 +48,7 @@ func (m Model) Data() []string {
 	result := make([]string, 0)
 
 	for i := 0; i < len(m.choices); i++ {
-		if m.isSelected(i) {
+		if m.mc.IsSelected(i) {
 			result = append(result, m.choices[i])
 		}
 	}
@@ -63,35 +65,6 @@ func (m Model) Quitting() bool {
 
 func (m Model) Error() error {
 	return m.err
-}
-
-func (m *Model) toggleChoice(index int) {
-	i := uint64(index)
-	if m.isSelected(index) {
-		m.deselectItem(i)
-	} else {
-		m.selectItem(i)
-	}
-}
-
-func (m Model) isSelected(index int) bool {
-	i := uint64(index)
-	curr := uint64(1) << i
-	if (m.choice & curr) != 0 {
-		return true
-	} else {
-		return false
-	}
-}
-
-func (m *Model) selectItem(index uint64) {
-	curr := uint64(1) << index
-	m.choice = m.choice | curr
-}
-
-func (m *Model) deselectItem(index uint64) {
-	curr := uint64(1) << index
-	m.choice = m.choice & (^curr)
 }
 
 func (m Model) Init() tea.Cmd {
@@ -118,7 +91,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case key.Matches(msg, m.keys.Choose):
-			m.toggleChoice(m.cursor)
+			m.mc.Toggle(m.cursor)
 
 		case key.Matches(msg, m.keys.Confirm):
 			m.quitting = true
@@ -140,7 +113,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	view := m.theme(m.choices, m.cursor, m.isSelected)
+	view := m.theme(m.choices, m.cursor, m.mc.IsSelected)
 	if m.showHelp {
 		view += "\n"
 		view += m.help.View(m.keys)

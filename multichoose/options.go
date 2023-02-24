@@ -19,3 +19,9 @@ func WithKeyMap(keyMap KeyMap) Option {
 		m.keys = keyMap
 	}
 }
+
+func WithLimit(limit int) Option {
+	return func(m *Model) {
+		m.mc.SetLimit(limit)
+	}
+}

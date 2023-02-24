@@ -137,7 +137,7 @@ Some options can be passed when using these models, such as whether to display h
 All available options and examples can be seen in the following files:
 
 - Choose [options](https://github.com/cqroot/prompt/blob/main/choose/options.go).
-- MultiChoose [options](https://github.com/cqroot/prompt/blob/main/multichoose/options.go).
+- MultiChoose [options](https://github.com/cqroot/prompt/blob/main/multichoose/options.go), [example](https://github.com/cqroot/prompt/blob/main/examples/multichoose-options/main.go).
 - Input [options](https://github.com/cqroot/prompt/blob/main/input/options.go).
 - Write [options](https://github.com/cqroot/prompt/blob/main/write/options.go), [example](https://github.com/cqroot/prompt/blob/main/examples/write-options/main.go).
 
