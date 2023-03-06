@@ -12,24 +12,26 @@ type Model struct {
 	choices []string
 	cursor  int
 
-	theme    Theme
-	quitting bool
-	err      error
-	keys     KeyMap
-	showHelp bool
-	help     help.Model
+	theme          Theme
+	quitting       bool
+	err            error
+	keys           KeyMap
+	showHelp       bool
+	help           help.Model
+	teaProgramOpts []tea.ProgramOption
 }
 
 func New(choices []string, opts ...Option) *Model {
 	m := &Model{
-		choices:  choices,
-		cursor:   0,
-		theme:    ThemeDefault,
-		quitting: false,
-		err:      nil,
-		keys:     DefaultKeyMap,
-		showHelp: false,
-		help:     help.New(),
+		choices:        choices,
+		cursor:         0,
+		theme:          ThemeDefault,
+		quitting:       false,
+		err:            nil,
+		keys:           DefaultKeyMap,
+		showHelp:       false,
+		help:           help.New(),
+		teaProgramOpts: make([]tea.ProgramOption, 0),
 	}
 
 	for _, opt := range opts {
@@ -53,6 +55,10 @@ func (m Model) Quitting() bool {
 
 func (m Model) Error() error {
 	return m.err
+}
+
+func (m Model) TeaProgramOpts() []tea.ProgramOption {
+	return m.teaProgramOpts
 }
 
 func (m Model) Init() tea.Cmd {

@@ -1,6 +1,14 @@
 package choose
 
+import tea "github.com/charmbracelet/bubbletea"
+
 type Option func(*Model)
+
+func WithTeaProgramOpts(opts ...tea.ProgramOption) Option {
+	return func(m *Model) {
+		m.teaProgramOpts = append(m.teaProgramOpts, opts...)
+	}
+}
 
 func WithHelp(show bool) Option {
 	return func(m *Model) {

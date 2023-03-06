@@ -17,11 +17,12 @@ type Model struct {
 	validateFunc ValidateFunc
 	inputMode    InputMode
 
-	quitting bool
-	err      error
-	keys     KeyMap
-	showHelp bool
-	help     help.Model
+	quitting       bool
+	err            error
+	keys           KeyMap
+	showHelp       bool
+	help           help.Model
+	teaProgramOpts []tea.ProgramOption
 }
 
 func New(defaultValue string, opts ...Option) *Model {
@@ -33,14 +34,15 @@ func New(defaultValue string, opts ...Option) *Model {
 	ti.Prompt = ""
 
 	m := &Model{
-		textInput: ti,
-		df:        defaultValue,
-		inputMode: InputAll,
-		quitting:  false,
-		err:       nil,
-		keys:      DefaultKeyMap,
-		showHelp:  false,
-		help:      help.New(),
+		textInput:      ti,
+		df:             defaultValue,
+		inputMode:      InputAll,
+		quitting:       false,
+		err:            nil,
+		keys:           DefaultKeyMap,
+		showHelp:       false,
+		help:           help.New(),
+		teaProgramOpts: make([]tea.ProgramOption, 0),
 	}
 
 	for _, opt := range opts {
@@ -74,6 +76,10 @@ func (m Model) Quitting() bool {
 
 func (m Model) Error() error {
 	return m.err
+}
+
+func (m Model) TeaProgramOpts() []tea.ProgramOption {
+	return m.teaProgramOpts
 }
 
 func (m *Model) WithInputMode(mode InputMode) *Model {

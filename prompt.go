@@ -39,10 +39,10 @@ func (p *Prompt) SetModel(pm PromptModel) *Prompt {
 
 // Run runs the program using the given model, blocking until the user chooses
 // or exits.
-func (p *Prompt) Run(pm PromptModel) (PromptModel, error) {
+func (p *Prompt) Run(pm PromptModel, opts ...tea.ProgramOption) (PromptModel, error) {
 	p.model = pm
 
-	tm, err := tea.NewProgram(p).Run()
+	tm, err := tea.NewProgram(p, opts...).Run()
 	if err != nil {
 		return nil, err
 	}

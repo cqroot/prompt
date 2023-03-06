@@ -9,6 +9,7 @@ type PromptModel interface {
 	DataString() string // Returns a string for display in the result position.
 	Quitting() bool
 	Error() error
+	TeaProgramOpts() []tea.ProgramOption
 }
 
 func (p Prompt) Init() tea.Cmd {
