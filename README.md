@@ -16,7 +16,7 @@
       <img src="https://codecov.io/gh/cqroot/prompt/branch/main/graph/badge.svg" alt="Codecov" />
     </a>
     <a href="https://goreportcard.com/report/github.com/cqroot/prompt">
-      <img src="https://goreportcard.com/badge/github.com/cqroot/prompt" alt="Go Reference" />
+      <img src="https://goreportcard.com/badge/github.com/cqroot/prompt" alt="Go Report Card" />
     </a>
     <a href="https://pkg.go.dev/github.com/cqroot/prompt">
       <img src="https://pkg.go.dev/badge/github.com/cqroot/prompt.svg" alt="Go Reference" />
