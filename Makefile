@@ -9,7 +9,7 @@ check:
 	gofumpt -l .
 
 .PHONY: cover
-cover:
+cover: test
 	go tool cover -html=coverage.out
 
 .PHONY: screenshots

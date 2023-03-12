@@ -45,3 +45,12 @@ func ThemeDefault(msg string, state State, model string) string {
 
 	return s.String()
 }
+
+// ThemeDefaultClear is basically the same as ThemeDefault, but it will
+// clear the screen after the selection is completed or after exiting.
+func ThemeDefaultClear(msg string, state State, model string) string {
+	if state == StateFinish {
+		return ""
+	}
+	return ThemeDefault(msg, state, model)
+}
