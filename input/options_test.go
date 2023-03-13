@@ -2,6 +2,7 @@ package input_test
 
 import (
 	"bytes"
+	"errors"
 	"reflect"
 	"testing"
 
@@ -25,4 +26,26 @@ func TestWithTeaProgramOpts(t *testing.T) {
 
 	require.True(t, reflect.ValueOf(withInput) == reflect.ValueOf(model.TeaProgramOpts()[0]))
 	require.True(t, reflect.ValueOf(withOutput) == reflect.ValueOf(model.TeaProgramOpts()[1]))
+}
+
+func TestWithValidateFunc(t *testing.T) {
+	var in bytes.Buffer
+	var out bytes.Buffer
+
+	validateErr := errors.New("validation error")
+	validateFunc := func(string) error {
+		return validateErr
+	}
+
+	in.Write([]byte("\r\n"))
+
+	model := input.New("", input.WithValidateFunc(validateFunc))
+
+	tm, err := tea.NewProgram(model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
+	require.Nil(t, err)
+
+	m, ok := tm.(input.Model)
+	require.True(t, ok)
+
+	require.Equal(t, m.Error(), validateErr)
 }

@@ -10,9 +10,11 @@ import (
 	"github.com/cqroot/prompt/input"
 )
 
+var ErrInvalidIP = errors.New("invalid ip")
+
 func validateIP(ip string) error {
 	if net.ParseIP(ip) == nil {
-		return errors.New(ip + " is not a valid ip")
+		return fmt.Errorf("%s: %w", ip, ErrInvalidIP)
 	} else {
 		return nil
 	}
@@ -24,6 +26,9 @@ func main() {
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
+			os.Exit(1)
+		} else if errors.Is(err, ErrInvalidIP) {
+			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		} else {
 			panic(err)

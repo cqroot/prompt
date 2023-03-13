@@ -109,6 +109,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.keys.Confirm):
+			if m.err == nil && m.validateFunc != nil {
+				m.err = m.validateFunc(m.textInput.Value())
+			}
 			m.quitting = true
 			return m, tea.Quit
 
