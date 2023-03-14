@@ -123,8 +123,6 @@ func (m Model) View() string {
 		if err != nil {
 			view = view + constants.DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
 				constants.DefaultNoteStyle.Render(err.Error())
-		} else {
-			view = view + constants.DefaultFinishPromptPrefixStyle.Render("\n✔")
 		}
 	}
 
