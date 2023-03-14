@@ -12,7 +12,8 @@ import (
 )
 
 type Model struct {
-	textarea textarea.Model
+	textarea     textarea.Model
+	validateFunc ValidateFunc
 
 	quitting       bool
 	err            error
@@ -78,12 +79,9 @@ func (m Model) KeyBindings() []key.Binding {
 	return nil
 }
 
-func (m Model) UseKeyQ() bool {
-	return true
-}
-
-func (m Model) UseKeyEnter() bool {
-	return true
+func (m *Model) WithValidateFunc(vf ValidateFunc) *Model {
+	m.validateFunc = vf
+	return m
 }
 
 func (m Model) Init() tea.Cmd {
@@ -98,6 +96,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.keys.Confirm):
+			if m.err == nil && m.validateFunc != nil {
+				m.err = m.validateFunc(m.textarea.Value())
+			}
 			m.quitting = true
 			return m, tea.Quit
 
@@ -116,6 +117,17 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	view := "\n" + m.textarea.View()
+
+	if m.textarea.Value() != "" && m.validateFunc != nil {
+		err := m.validateFunc(m.textarea.Value())
+		if err != nil {
+			view = view + constants.DefaultErrorPromptPrefixStyle.Render("\n✖  ") +
+				constants.DefaultNoteStyle.Render(err.Error())
+		} else {
+			view = view + constants.DefaultFinishPromptPrefixStyle.Render("\n✔")
+		}
+	}
+
 	if m.showHelp {
 		view += "\n\n"
 		view += m.help.View(m.keys)

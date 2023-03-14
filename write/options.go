@@ -36,6 +36,14 @@ func WithLineNumbers(enable bool) Option {
 	}
 }
 
+type ValidateFunc func(string) error
+
+func WithValidateFunc(vf ValidateFunc) Option {
+	return func(m *Model) {
+		m.WithValidateFunc(vf)
+	}
+}
+
 func WithWidth(width int) Option {
 	return func(m *Model) {
 		m.textarea.SetWidth(width)
