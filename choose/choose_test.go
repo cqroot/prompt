@@ -44,26 +44,26 @@ func testcases() []Testcase {
 
 	for _, vTc := range vTcs {
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items),
+			model: *choose.NewWithStrings(items),
 			view:  "\n• Item 1\n  Item 2\n  Item 3\n",
 			keys:  vTc.keys,
 			data:  vTc.data,
 		})
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items, choose.WithHelp(true)),
+			model: *choose.NewWithStrings(items, choose.WithHelp(true)),
 			view:  "\n• Item 1\n  Item 2\n  Item 3\n\n? toggle help • enter confirm • q quit",
 			keys:  vTc.keys,
 			data:  vTc.data,
 		})
 
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items, choose.WithTheme(choose.ThemeArrow)),
+			model: *choose.NewWithStrings(items, choose.WithTheme(choose.ThemeArrow)),
 			view:  "\n❯ Item 1\n  Item 2\n  Item 3\n",
 			keys:  vTc.keys,
 			data:  vTc.data,
 		})
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items, choose.WithTheme(choose.ThemeArrow), choose.WithHelp(true)),
+			model: *choose.NewWithStrings(items, choose.WithTheme(choose.ThemeArrow), choose.WithHelp(true)),
 			view:  "\n❯ Item 1\n  Item 2\n  Item 3\n\n? toggle help • enter confirm • q quit",
 			keys:  vTc.keys,
 			data:  vTc.data,
@@ -72,7 +72,7 @@ func testcases() []Testcase {
 
 	for _, hTc := range hTcs {
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items,
+			model: *choose.NewWithStrings(items,
 				choose.WithTheme(choose.ThemeLine),
 				choose.WithKeyMap(choose.HorizontalKeyMap)),
 			view: "Item 1 / Item 2 / Item 3\n",
@@ -80,7 +80,7 @@ func testcases() []Testcase {
 			data: hTc.data,
 		})
 		testcases = append(testcases, Testcase{
-			model: *choose.New(items,
+			model: *choose.NewWithStrings(items,
 				choose.WithTheme(choose.ThemeLine),
 				choose.WithHelp(true),
 				choose.WithKeyMap(choose.HorizontalKeyMap)),
@@ -111,7 +111,7 @@ func TestModel(t *testing.T) {
 	}
 
 	for _, quitKey := range []byte{'q', tester.KeyEsc, tester.KeyCtrlC} {
-		tm := tester.Exec(t, choose.New([]string{}), []byte{quitKey}, "\n")
+		tm := tester.Exec(t, choose.NewWithStrings([]string{}), []byte{quitKey}, "\n")
 		m, ok := tm.(choose.Model)
 		require.Equal(t, true, ok)
 		require.Equal(t, constants.ErrUserQuit, m.Error())

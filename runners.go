@@ -9,6 +9,17 @@ import (
 
 // Choose lets the user choose one of the given choices.
 func (p Prompt) Choose(choices []string, opts ...choose.Option) (string, error) {
+	pm := choose.NewWithStrings(choices, opts...)
+
+	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)
+	if err != nil {
+		return "", err
+	}
+	return m.(choose.Model).Data(), nil
+}
+
+// Choose lets the user choose one of the given choices.
+func (p Prompt) AdvancedChoose(choices []choose.Choice, opts ...choose.Option) (string, error) {
 	pm := choose.New(choices, opts...)
 
 	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)

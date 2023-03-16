@@ -8,8 +8,13 @@ import (
 	"github.com/cqroot/prompt/constants"
 )
 
+type Choice struct {
+	Text string
+	Note string
+}
+
 type Model struct {
-	choices []string
+	choices []Choice
 	cursor  int
 
 	theme          Theme
@@ -21,7 +26,15 @@ type Model struct {
 	teaProgramOpts []tea.ProgramOption
 }
 
-func New(choices []string, opts ...Option) *Model {
+func NewWithStrings(choices []string, opts ...Option) *Model {
+	_choices := make([]Choice, 0, len(choices))
+	for _, choice := range choices {
+		_choices = append(_choices, Choice{Text: choice})
+	}
+	return New(_choices, opts...)
+}
+
+func New(choices []Choice, opts ...Option) *Model {
 	m := &Model{
 		choices:        choices,
 		cursor:         0,
@@ -42,7 +55,7 @@ func New(choices []string, opts ...Option) *Model {
 }
 
 func (m Model) Data() string {
-	return m.choices[m.cursor]
+	return m.choices[m.cursor].Text
 }
 
 func (m Model) DataString() string {
