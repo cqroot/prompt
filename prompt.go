@@ -5,17 +5,19 @@ import (
 )
 
 type Prompt struct {
-	quitting bool
-	model    PromptModel
-	Message  string
-	theme    Theme
+	quitting       bool
+	model          PromptModel
+	Message        string
+	theme          Theme
+	teaProgramOpts []tea.ProgramOption
 }
 
 // New returns a *Prompt using the default style.
 func New(opts ...Option) *Prompt {
 	p := &Prompt{
-		quitting: false,
-		theme:    ThemeDefault,
+		quitting:       false,
+		theme:          ThemeDefault,
+		teaProgramOpts: make([]tea.ProgramOption, 0),
 	}
 
 	for _, opt := range opts {

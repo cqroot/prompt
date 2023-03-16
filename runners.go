@@ -11,7 +11,7 @@ import (
 func (p Prompt) Choose(choices []string, opts ...choose.Option) (string, error) {
 	pm := choose.New(choices, opts...)
 
-	m, err := p.Run(*pm, pm.TeaProgramOpts()...)
+	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)
 	if err != nil {
 		return "", err
 	}
@@ -21,7 +21,8 @@ func (p Prompt) Choose(choices []string, opts ...choose.Option) (string, error) 
 // MultiChoose lets the user choose multiples from the given choices.
 func (p Prompt) MultiChoose(choices []string, opts ...multichoose.Option) ([]string, error) {
 	pm := multichoose.New(choices, opts...)
-	m, err := p.Run(*pm, pm.TeaProgramOpts()...)
+
+	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +33,7 @@ func (p Prompt) MultiChoose(choices []string, opts ...multichoose.Option) ([]str
 func (p Prompt) Input(defaultValue string, opts ...input.Option) (string, error) {
 	pm := input.New(defaultValue, opts...)
 
-	m, err := p.Run(*pm, pm.TeaProgramOpts()...)
+	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)
 	if err != nil {
 		return "", err
 	}
@@ -42,7 +43,7 @@ func (p Prompt) Input(defaultValue string, opts ...input.Option) (string, error)
 func (p Prompt) Write(defaultValue string, opts ...write.Option) (string, error) {
 	pm := write.New(defaultValue, opts...)
 
-	m, err := p.Run(*pm, pm.TeaProgramOpts()...)
+	m, err := p.Run(*pm, append(p.teaProgramOpts, pm.TeaProgramOpts()...)...)
 	if err != nil {
 		return "", err
 	}
