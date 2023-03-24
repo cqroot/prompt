@@ -6,6 +6,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/cqroot/prompt/choose"
+	"github.com/cqroot/prompt/constants"
 	"github.com/cqroot/prompt/tester"
 	"github.com/stretchr/testify/require"
 )
@@ -53,9 +54,28 @@ func TestChoose(t *testing.T) {
 		var out bytes.Buffer
 
 		in.Write(testcase.keys)
-		m, err := tea.NewProgram(testcase.model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
+		tm, err := tea.NewProgram(testcase.model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
 		require.Nil(t, err)
 
-		require.Equal(t, testcase.data, m.(choose.Model).Data())
+		m, ok := tm.(choose.Model)
+		require.Equal(t, true, ok)
+
+		require.Equal(t, testcase.data, m.Data())
+		require.Equal(t, testcase.data, m.DataString())
+		require.Equal(t, true, m.Quitting())
 	}
+}
+
+func TestErrors(t *testing.T) {
+	var in bytes.Buffer
+	var out bytes.Buffer
+
+	in.Write([]byte("q"))
+	tm, err := tea.NewProgram(*choose.NewWithStrings([]string{"item"}), tea.WithInput(&in), tea.WithOutput(&out)).Run()
+	require.Nil(t, err)
+
+	m, ok := tm.(choose.Model)
+	require.Equal(t, true, ok)
+
+	require.Equal(t, constants.ErrUserQuit, m.Error())
 }
