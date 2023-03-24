@@ -7,17 +7,31 @@ import (
 	"github.com/cqroot/prompt/constants"
 )
 
-type Theme func([]string, int) string
+type Theme func([]Choice, int) string
 
-var ThemeDefault = func(choices []string, cursor int) string {
+var ThemeDefault = func(choices []Choice, cursor int) string {
 	s := strings.Builder{}
 	s.WriteString("\n")
 
+	maxLen := 0
+	for _, choice := range choices {
+		if maxLen < len(choice.Text) {
+			maxLen = len(choice.Text)
+		}
+	}
+
 	for i := 0; i < len(choices); i++ {
+		text := choices[i].Text
+		note := choices[i].Note
+		if note != "" {
+			note = strings.Repeat(" ", maxLen-len(text)+2) + constants.DefaultNoteStyle.Render(note)
+		}
+		choice := text + note
+
 		if cursor == i {
-			s.WriteString(constants.DefaultSelectedItemStyle.Render(fmt.Sprintf("• %s", choices[i])))
+			s.WriteString(constants.DefaultSelectedItemStyle.Render("• " + choice))
 		} else {
-			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
+			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  " + choice)))
 		}
 		s.WriteString("\n")
 	}
@@ -25,15 +39,29 @@ var ThemeDefault = func(choices []string, cursor int) string {
 	return s.String()
 }
 
-var ThemeArrow = func(choices []string, cursor int) string {
+var ThemeArrow = func(choices []Choice, cursor int) string {
 	s := strings.Builder{}
 	s.WriteString("\n")
 
+	maxLen := 0
+	for _, choice := range choices {
+		if maxLen < len(choice.Text) {
+			maxLen = len(choice.Text)
+		}
+	}
+
 	for i := 0; i < len(choices); i++ {
+		text := choices[i].Text
+		note := choices[i].Note
+		if note != "" {
+			note = strings.Repeat(" ", maxLen-len(text)+2) + constants.DefaultNoteStyle.Render(note)
+		}
+		choice := text + note
+
 		if cursor == i {
-			s.WriteString(constants.DefaultSelectedItemStyle.Render(fmt.Sprintf("❯ %s", choices[i])))
+			s.WriteString(constants.DefaultSelectedItemStyle.Render(("❯ " + choice)))
 		} else {
-			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  %s", choices[i])))
+			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  " + choice)))
 		}
 		s.WriteString("\n")
 	}
@@ -41,15 +69,15 @@ var ThemeArrow = func(choices []string, cursor int) string {
 	return s.String()
 }
 
-var ThemeLine = func(choices []string, cursor int) string {
+var ThemeLine = func(choices []Choice, cursor int) string {
 	s := strings.Builder{}
 
 	result := make([]string, len(choices))
 	for index, choice := range choices {
 		if index == cursor {
-			result[index] = constants.DefaultSelectedItemStyle.Render(choice)
+			result[index] = constants.DefaultSelectedItemStyle.Render(choice.Text)
 		} else {
-			result[index] = constants.DefaultItemStyle.Render(choice)
+			result[index] = constants.DefaultItemStyle.Render(choice.Text)
 		}
 	}
 	s.WriteString(strings.Join(result, " / "))

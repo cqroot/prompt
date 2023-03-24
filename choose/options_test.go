@@ -18,7 +18,7 @@ func TestWithTeaProgramOpts(t *testing.T) {
 	withInput := tea.WithInput(&in)
 	withOutput := tea.WithOutput(&out)
 
-	model := choose.New(
+	model := choose.NewWithStrings(
 		[]string{"Item 1", "Item 2", "Item 3"},
 		choose.WithTeaProgramOpts(withInput, withOutput),
 	)
