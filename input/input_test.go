@@ -3,11 +3,11 @@ package input_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
-	"github.com/cqroot/prompt/input"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/cqroot/prompt/constants"
+	"github.com/cqroot/prompt/input"
 	"github.com/cqroot/prompt/tester"
+	"github.com/stretchr/testify/require"
 )
 
 type Testcase struct {
@@ -74,7 +74,7 @@ func TestModel(t *testing.T) {
 		require.Nil(t, m.Error())
 	}
 
-	for _, quitKey := range []byte{tester.KeyEsc, tester.KeyCtrlC} {
+	for _, quitKey := range []byte{byte(tea.KeyEsc), byte(tea.KeyCtrlC)} {
 		tm := tester.Exec(t, input.New(""), []byte{quitKey}, "\x1b[7m \x1b[0m                                        ")
 		m, ok := tm.(input.Model)
 		require.Equal(t, true, ok)

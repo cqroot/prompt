@@ -3,6 +3,7 @@ package write_test
 import (
 	"testing"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/stretchr/testify/require"
 
 	"github.com/cqroot/prompt/constants"
@@ -31,7 +32,7 @@ func testcases() []Testcase {
 ┃                                    
 ┃                                    
 ┃                                    `,
-		keys: []byte{tester.KeyCtrlD},
+		keys: []byte{byte(tea.KeyCtrlD)},
 		data: defaultVal,
 	})
 	testcases = append(testcases, Testcase{
@@ -44,7 +45,7 @@ func testcases() []Testcase {
 ┃                                    
 
 ctrl+d confirm • esc quit`,
-		keys: append([]byte(val), tester.KeyCtrlD),
+		keys: append([]byte(val), byte(tea.KeyCtrlD)),
 		data: val,
 	})
 
@@ -68,7 +69,7 @@ func TestModel(t *testing.T) {
 		require.Nil(t, m.Error())
 	}
 
-	for _, quitKey := range []byte{tester.KeyEsc, tester.KeyCtrlC} {
+	for _, quitKey := range []byte{byte(tea.KeyEsc), byte(tea.KeyCtrlC)} {
 		tm := tester.Exec(t, write.New(""), []byte{quitKey}, "\n┃ \x1b[7m \x1b[0m                                  "+`
 ┃                                    
 ┃                                    

@@ -7,10 +7,8 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/stretchr/testify/require"
-
-	"github.com/cqroot/prompt/tester"
 	"github.com/cqroot/prompt/write"
+	"github.com/stretchr/testify/require"
 )
 
 func TestWithTeaProgramOpts(t *testing.T) {
@@ -38,7 +36,7 @@ func TestWithValidateFunc(t *testing.T) {
 		return validateErr
 	}
 
-	in.Write([]byte{tester.KeyCtrlD})
+	in.Write([]byte{byte(tea.KeyCtrlD)})
 
 	model := write.New("", write.WithValidateFunc(validateFunc))
 

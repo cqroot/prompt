@@ -9,14 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const (
-	KeyCtrlC byte = 3
-	KeyCtrlD byte = 4
-	KeyTab   byte = 9
-	// KeyCtrlS byte = 19
-	KeyEsc byte = 27
-)
-
 func Exec(t *testing.T, model tea.Model, keys []byte, initView string) tea.Model {
 	require.Equal(t, initView, model.View(), "init view with keys: %s", strconv.Quote(string(keys)))
 
