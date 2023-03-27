@@ -1,83 +1,126 @@
 package write_test
 
 import (
+	"bytes"
+	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/stretchr/testify/require"
-
 	"github.com/cqroot/prompt/constants"
-	"github.com/cqroot/prompt/tester"
 	"github.com/cqroot/prompt/write"
+	"github.com/stretchr/testify/require"
 )
 
-type Testcase struct {
-	model write.Model
-	keys  []byte
-	data  string
-	view  string
+func TestMultiChoose(t *testing.T) {
+	defaultVal := "default value"
+	val := "abcdefghij\r\nklmnopqrst\r\nuvwxyz1.2.\r\n3.4.5.6.7.\r\n8.9.0-=~!@\r\n#$%^&*()_+\r\n[]\\{}|;':\",./<>?"
+
+	for _, testcase := range []struct {
+		model      write.Model
+		keys       []byte
+		data       string
+		dataString string
+	}{
+		{
+			model:      *write.New(defaultVal),
+			keys:       []byte{byte(tea.KeyCtrlD)},
+			data:       defaultVal,
+			dataString: defaultVal,
+		},
+		{
+			model:      *write.New(defaultVal),
+			keys:       append([]byte(val), byte(tea.KeyCtrlD)),
+			data:       val,
+			dataString: "...(82 bytes)",
+		},
+	} {
+		var in bytes.Buffer
+		var out bytes.Buffer
+
+		in.Write(testcase.keys)
+		tm, err := tea.NewProgram(testcase.model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
+		require.Nil(t, err)
+
+		m, ok := tm.(write.Model)
+		require.Equal(t, true, ok)
+
+		require.Equal(t, strings.ReplaceAll(testcase.data, "\r", ""), m.Data())
+		require.Equal(t, testcase.dataString, m.DataString())
+		require.Equal(t, true, m.Quitting())
+	}
 }
 
-func testcases() []Testcase {
-	testcases := make([]Testcase, 0, 20)
+func TestErrors(t *testing.T) {
+	var in bytes.Buffer
+	var out bytes.Buffer
 
+	in.Write([]byte{byte(tea.KeyCtrlC)})
+	tm, err := tea.NewProgram(*write.New(""), tea.WithInput(&in), tea.WithOutput(&out)).Run()
+	require.Nil(t, err)
+
+	m, ok := tm.(write.Model)
+	require.Equal(t, true, ok)
+
+	require.Equal(t, constants.ErrUserQuit, m.Error())
+}
+
+func TestThemes(t *testing.T) {
 	defaultVal := "default value"
-	val := `abcdefghijklmnopqrstuvwxyz1.2.3.4.5.6.7.8.9.0-=~!@#$%^&*()_+[]\{}|;':",./<>?`
 
-	testcases = append(testcases, Testcase{
-		model: *write.New(defaultVal),
-		view: "\n┃ \x1b[7md\x1b[0mefault value                      \n" +
-			`┃                                    
+	for _, testcase := range []struct {
+		model write.Model
+		view  string
+	}{
+		{
+			model: *write.New(defaultVal),
+			view: "\n┃ \x1b[7md\x1b[0mefault value                      " +
+				`
+┃                                    
 ┃                                    
 ┃                                    
 ┃                                    
 ┃                                    `,
-		keys: []byte{byte(tea.KeyCtrlD)},
-		data: defaultVal,
-	})
-	testcases = append(testcases, Testcase{
-		model: *write.New(defaultVal, write.WithHelp(true)),
-		view: "\n┃ \x1b[7md\x1b[0mefault value                      \n" +
-			`┃                                    
+		},
+		{
+			model: *write.New(defaultVal, write.WithHelp(true)),
+			view: "\n┃ \x1b[7md\x1b[0mefault value                      " + `
+┃                                    
 ┃                                    
 ┃                                    
 ┃                                    
 ┃                                    
 
 ctrl+d confirm • esc quit`,
-		keys: append([]byte(val), byte(tea.KeyCtrlD)),
-		data: val,
-	})
-
-	return testcases
-}
-
-func TestModel(t *testing.T) {
-	for _, tc := range testcases() {
-		tm := tester.Exec(t,
-			tc.model,
-			tc.keys,
-			tc.view,
-		)
-
-		m, ok := tm.(write.Model)
-		require.Equal(t, true, ok)
-
-		require.Equal(t, tc.data, m.Data(), "keys: %s", tc.keys)
-		require.Equal(t, tc.data, m.DataString(), "keys: %s", tc.keys)
-		require.Equal(t, true, m.Quitting())
-		require.Nil(t, m.Error())
-	}
-
-	for _, quitKey := range []byte{byte(tea.KeyEsc), byte(tea.KeyCtrlC)} {
-		tm := tester.Exec(t, write.New(""), []byte{quitKey}, "\n┃ \x1b[7m \x1b[0m                                  "+`
+		},
+		{
+			model: *write.New(defaultVal, write.WithLineNumbers(true)),
+			view: "\n┃  1 \x1b[7md\x1b[0mefault value                      " + `
+┃  ~                                    
+┃  ~                                    
+┃  ~                                    
+┃  ~                                    
+┃  ~                                    `,
+		},
+		{
+			model: func() write.Model {
+				var tm tea.Model
+				tm = write.New(defaultVal, write.WithCharLimit(2))
+				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("test")})
+				return tm.(write.Model)
+			}(),
+			view: "\n┃ te\x1b[7m \x1b[0m                                " +
+				`
 ┃                                    
 ┃                                    
 ┃                                    
 ┃                                    
-┃                                    `)
-		m, ok := tm.(write.Model)
-		require.Equal(t, true, ok)
-		require.Equal(t, constants.ErrUserQuit, m.Error())
+┃                                    `,
+		},
+		{
+			model: *write.New(defaultVal, write.WithWidth(3)),
+			view:  "\n┃ \x1b[7m.\x1b[0m\n┃  \n┃  \n┃  \n┃  \n┃  ",
+		},
+	} {
+		require.Equal(t, testcase.view, testcase.model.View())
 	}
 }
