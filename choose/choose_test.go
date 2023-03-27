@@ -7,7 +7,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/cqroot/prompt/choose"
 	"github.com/cqroot/prompt/constants"
-	"github.com/cqroot/prompt/tester"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +30,7 @@ func TestChoose(t *testing.T) {
 		},
 		{
 			model: *choose.NewWithStrings(items),
-			keys:  []byte{'k', 'k', tester.KeyTab, tester.KeyTab, tester.KeyTab, '\r', '\n'},
+			keys:  []byte{'k', 'k', byte(tea.KeyTab), byte(tea.KeyTab), byte(tea.KeyTab), '\r', '\n'},
 			data:  "Item 2",
 		},
 		{
@@ -46,7 +45,7 @@ func TestChoose(t *testing.T) {
 		},
 		{
 			model: *choose.NewWithStrings(items, choose.WithKeyMap(choose.HorizontalKeyMap)),
-			keys:  []byte{'h', 'h', tester.KeyTab, tester.KeyTab, tester.KeyTab, '\r', '\n'},
+			keys:  []byte{'h', 'h', byte(tea.KeyTab), byte(tea.KeyTab), byte(tea.KeyTab), '\r', '\n'},
 			data:  "Item 2",
 		},
 	} {
