@@ -15,8 +15,8 @@ var ThemeDefault = func(choices []Choice, cursor int) string {
 
 	maxLen := 0
 	for _, choice := range choices {
-		if maxLen < len(choice.Text) {
-			maxLen = len(choice.Text)
+		if maxLen < len([]rune(choice.Text)) {
+			maxLen = len([]rune(choice.Text))
 		}
 	}
 
@@ -24,7 +24,7 @@ var ThemeDefault = func(choices []Choice, cursor int) string {
 		text := choices[i].Text
 		note := choices[i].Note
 		if note != "" {
-			note = strings.Repeat(" ", maxLen-len(text)+2) + constants.DefaultNoteStyle.Render(note)
+			note = strings.Repeat(" ", maxLen-len([]rune(text))+2) + constants.DefaultNoteStyle.Render(note)
 		}
 		choice := text + note
 
@@ -45,8 +45,8 @@ var ThemeArrow = func(choices []Choice, cursor int) string {
 
 	maxLen := 0
 	for _, choice := range choices {
-		if maxLen < len(choice.Text) {
-			maxLen = len(choice.Text)
+		if maxLen < len([]rune(choice.Text)) {
+			maxLen = len([]rune(choice.Text))
 		}
 	}
 
@@ -54,7 +54,7 @@ var ThemeArrow = func(choices []Choice, cursor int) string {
 		text := choices[i].Text
 		note := choices[i].Note
 		if note != "" {
-			note = strings.Repeat(" ", maxLen-len(text)+2) + constants.DefaultNoteStyle.Render(note)
+			note = strings.Repeat(" ", maxLen-len([]rune(text))+2) + constants.DefaultNoteStyle.Render(note)
 		}
 		choice := text + note
 

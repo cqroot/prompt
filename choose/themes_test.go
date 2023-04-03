@@ -14,8 +14,13 @@ func TestThemes(t *testing.T) {
 		{Text: "Another item", Note: "The note for item 2"},
 		{Text: "Item 3", Note: "The note for item 3"},
 	}
+	emojis := []choose.Choice{
+		{Text: "✨", Note: "The note for item 1"},
+		{Text: "🐛", Note: "The note for item 2"},
+		{Text: "⚡️", Note: "The note for item 3"},
+	}
 
-	for _, testcase := range []struct {
+	for idx, testcase := range []struct {
 		model choose.Model
 		view  string
 	}{
@@ -36,6 +41,14 @@ func TestThemes(t *testing.T) {
 `,
 		},
 		{
+			model: *choose.New(emojis),
+			view: `
+• ✨   The note for item 1
+  🐛   The note for item 2
+  ⚡️  The note for item 3
+`,
+		},
+		{
 			model: *choose.NewWithStrings(items, choose.WithTheme(choose.ThemeArrow)),
 			view:  "\n❯ Item 1\n  Item 2\n  Item 3\n",
 		},
@@ -45,6 +58,14 @@ func TestThemes(t *testing.T) {
 ❯ Item 1        The note for item 1
   Another item  The note for item 2
   Item 3        The note for item 3
+`,
+		},
+		{
+			model: *choose.New(emojis, choose.WithTheme(choose.ThemeArrow)),
+			view: `
+❯ ✨   The note for item 1
+  🐛   The note for item 2
+  ⚡️  The note for item 3
 `,
 		},
 		{
@@ -60,6 +81,6 @@ func TestThemes(t *testing.T) {
 			view:  "Item 1 / Another item / Item 3\n",
 		},
 	} {
-		require.Equal(t, testcase.view, testcase.model.View())
+		require.Equal(t, testcase.view, testcase.model.View(), "index = %d", idx)
 	}
 }
