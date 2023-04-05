@@ -73,7 +73,7 @@ func TestThemes(t *testing.T) {
 	}{
 		{
 			model: *write.New(defaultVal),
-			view: "\n┃ \x1b[7md\x1b[0mefault value                      " +
+			view: "\n┃ default value                      " +
 				`
 ┃                                    
 ┃                                    
@@ -83,7 +83,7 @@ func TestThemes(t *testing.T) {
 		},
 		{
 			model: *write.New(defaultVal, write.WithHelp(true)),
-			view: "\n┃ \x1b[7md\x1b[0mefault value                      " + `
+			view: "\n┃ default value                      " + `
 ┃                                    
 ┃                                    
 ┃                                    
@@ -94,7 +94,7 @@ ctrl+d confirm • esc quit`,
 		},
 		{
 			model: *write.New(defaultVal, write.WithLineNumbers(true)),
-			view: "\n┃  1 \x1b[7md\x1b[0mefault value                      " + `
+			view: "\n┃  1 default value                      " + `
 ┃  ~                                    
 ┃  ~                                    
 ┃  ~                                    
@@ -108,7 +108,7 @@ ctrl+d confirm • esc quit`,
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("test")})
 				return tm.(write.Model)
 			}(),
-			view: "\n┃ te\x1b[7m \x1b[0m                                " +
+			view: "\n┃ te                                 " +
 				`
 ┃                                    
 ┃                                    
@@ -118,7 +118,7 @@ ctrl+d confirm • esc quit`,
 		},
 		{
 			model: *write.New(defaultVal, write.WithWidth(3)),
-			view:  "\n┃ \x1b[7m.\x1b[0m\n┃  \n┃  \n┃  \n┃  \n┃  ",
+			view:  "\n┃ .\n┃  \n┃  \n┃  \n┃  \n┃  ",
 		},
 	} {
 		require.Equal(t, testcase.view, testcase.model.View())

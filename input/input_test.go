@@ -79,11 +79,11 @@ func TestThemes(t *testing.T) {
 	}{
 		{
 			model: *input.New(defaultVal),
-			view:  "\x1b[7md\x1b[0mefault value",
+			view:  "default value",
 		},
 		{
 			model: *input.New(defaultVal, input.WithHelp(true)),
-			view:  "\x1b[7md\x1b[0mefault value\n\nenter confirm • esc quit",
+			view:  "default value\n\nenter confirm • esc quit",
 		},
 		{
 			model: func() input.Model {
@@ -93,7 +93,7 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "test\x1b[7m \x1b[0m                                    ",
+			view: "test                                     ",
 		},
 		{
 			model: func() input.Model {
@@ -103,7 +103,7 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "\x1b[7m \x1b[0m                                    ",
+			view: "                                     ",
 		},
 		{
 			model: func() input.Model {
@@ -113,7 +113,7 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "****\x1b[7m \x1b[0m                                    ",
+			view: "****                                     ",
 		},
 	} {
 		require.Equal(t, testcase.view, testcase.model.View())
