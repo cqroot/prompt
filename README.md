@@ -41,6 +41,7 @@
 - [Features](#features)
 - [Screenshots](#screenshots)
   - [Choose](#choose)
+  - [AdvancedChoose](#advancedchoose)
   - [MultiChoose](#multichoose)
   - [Input](#input)
   - [Write](#write)
@@ -71,6 +72,12 @@
 [example](https://github.com/cqroot/prompt/blob/main/_examples/choose-themes/main.go)
 
 ![choose-themes](https://user-images.githubusercontent.com/46901748/219293300-cb1cd6ac-d43f-414f-b526-f490423b7108.gif)
+
+### AdvancedChoose
+
+[example](https://github.com/cqroot/prompt/blob/main/_examples/advancedchoose/main.go)
+
+![advancedchoose](https://user-images.githubusercontent.com/46901748/232372136-ac5fc71f-25bb-4379-979a-f0e16a7058d8.gif)
 
 ### MultiChoose
 

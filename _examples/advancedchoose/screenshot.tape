@@ -1,4 +1,4 @@
-Output ../../screenshots/choose.gif
+Output ../../screenshots/advancedchoose.gif
 
 Set FontFamily "CaskaydiaCove Nerd Font"
 Set FontSize 22
