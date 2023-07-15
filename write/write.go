@@ -97,7 +97,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch {
 		case key.Matches(msg, m.keys.Confirm):
 			if m.err == nil && m.validateFunc != nil {
-				m.err = m.validateFunc(m.textarea.Value())
+				currVal := m.textarea.Value()
+				if currVal == "" {
+					currVal = m.textarea.Placeholder
+				}
+				m.err = m.validateFunc(currVal)
 			}
 			m.quitting = true
 			return m, tea.Quit

@@ -33,8 +33,11 @@ func TestWithValidateFunc(t *testing.T) {
 	var out bytes.Buffer
 
 	validateErr := errors.New("validation error")
-	validateFunc := func(string) error {
-		return validateErr
+	validateFunc := func(s string) error {
+		if s != "test" {
+			return validateErr
+		}
+		return nil
 	}
 
 	in.Write([]byte("\r\n"))
@@ -48,4 +51,29 @@ func TestWithValidateFunc(t *testing.T) {
 	require.True(t, ok)
 
 	require.Equal(t, m.Error(), validateErr)
+}
+
+func TestDefaultValueWithValidateFunc(t *testing.T) {
+	var in bytes.Buffer
+	var out bytes.Buffer
+
+	validateErr := errors.New("validation error")
+	validateFunc := func(s string) error {
+		if s != "test" {
+			return validateErr
+		}
+		return nil
+	}
+
+	in.Write([]byte("\r\n"))
+
+	model := input.New("test", input.WithValidateFunc(validateFunc))
+
+	tm, err := tea.NewProgram(model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
+	require.Nil(t, err)
+
+	m, ok := tm.(input.Model)
+	require.True(t, ok)
+
+	require.Nil(t, m.Error())
 }

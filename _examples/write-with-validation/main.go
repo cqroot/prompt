@@ -21,7 +21,7 @@ func validateLength(content string) error {
 
 func main() {
 	val, err := prompt.New().Ask("Write something:").
-		Write("", write.WithValidateFunc(validateLength))
+		Write("Blah Blah Blah Blah", write.WithValidateFunc(validateLength))
 	if err != nil {
 		if errors.Is(err, prompt.ErrUserQuit) {
 			fmt.Fprintln(os.Stderr, "Error:", err)
