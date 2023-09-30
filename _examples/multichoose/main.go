@@ -29,6 +29,7 @@ func main() {
 	val2, err := prompt.New().Ask("MultiChoose with Help:").
 		MultiChoose(
 			[]string{"Item 1", "Item 2", "Item 3"},
+			multichoose.WithDefaultIndexes(1, []int{1, 2}),
 			multichoose.WithHelp(true),
 		)
 	CheckErr(err)
