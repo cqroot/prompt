@@ -28,8 +28,8 @@ func WithKeyMap(keyMap KeyMap) Option {
 	}
 }
 
-func WithDefaultIndex(idx int) Option {
+func WithDefaultIndex(index int) Option {
 	return func(m *Model) {
-		m.cursor = idx
+		m.cursor = index
 	}
 }

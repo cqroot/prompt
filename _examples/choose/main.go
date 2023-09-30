@@ -28,8 +28,8 @@ func main() {
 	val2, err := prompt.New().Ask("Choose with Help:").
 		Choose(
 			[]string{"Item 1", "Item 2", "Item 3"},
-			choose.WithHelp(true),
 			choose.WithDefaultIndex(1),
+			choose.WithHelp(true),
 		)
 	CheckErr(err)
 

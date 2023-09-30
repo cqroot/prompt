@@ -33,3 +33,12 @@ func WithLimit(limit int) Option {
 		m.mc.SetLimit(limit)
 	}
 }
+
+func WithDefaultIndexes(cursor int, indexes []int) Option {
+	return func(m *Model) {
+		m.cursor = cursor
+		for _, index := range indexes {
+			m.mc.Toggle(index)
+		}
+	}
+}
