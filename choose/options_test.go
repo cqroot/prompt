@@ -38,7 +38,7 @@ func TestWithDefaultIndex(t *testing.T) {
 		{
 			model: *choose.NewWithStrings(items, choose.WithDefaultIndex(1)),
 			keys:  []byte("\r\n"),
-			data:  "Item2",
+			data:  "Item 2",
 		},
 	} {
 		var in bytes.Buffer
