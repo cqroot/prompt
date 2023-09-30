@@ -27,3 +27,9 @@ func WithKeyMap(keyMap KeyMap) Option {
 		m.keys = keyMap
 	}
 }
+
+func WithDefaultIndex(idx int) Option {
+	return func(m *Model) {
+		m.cursor = idx
+	}
+}
