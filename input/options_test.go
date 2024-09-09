@@ -80,7 +80,6 @@ func TestDefaultValueWithValidateFunc(t *testing.T) {
 }
 
 func TestWithCharLimit(t *testing.T) {
-	// Initialize input and output buffers
 	var in bytes.Buffer
 	var out bytes.Buffer
 
@@ -88,21 +87,17 @@ func TestWithCharLimit(t *testing.T) {
 
 	in.Write(inputString)
 
-	// Create a new model with a custom char limit using WithCharLimit
 	model := input.New(
 		"test",
 		input.WithCharLimit(400),
 	)
 
-	// Run the model using tea program
 	tm, err := tea.NewProgram(model, tea.WithInput(&in), tea.WithOutput(&out)).Run()
 	require.Nil(t, err)
 
-	// Retrieve the final model after running the tea program
 	m, ok := tm.(input.Model)
 	require.True(t, ok)
 
-	// Check if the CharLimit is correctly set
 	require.Equal(t, 400, len(m.Data()))
 }
 
