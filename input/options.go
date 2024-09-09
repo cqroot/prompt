@@ -73,3 +73,9 @@ func WithWidth(width int) Option {
 		m.textInput.Width = width
 	}
 }
+
+func WithCharLimit(limit int) Option {
+	return func(m *Model) {
+		m.textInput.CharLimit = limit
+	}
+}
