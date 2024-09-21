@@ -1,7 +1,6 @@
 package choose
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/cqroot/prompt/constants"
@@ -31,7 +30,7 @@ var ThemeDefault = func(choices []Choice, cursor int) string {
 		if cursor == i {
 			s.WriteString(constants.DefaultSelectedItemStyle.Render("• " + choice))
 		} else {
-			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  " + choice)))
+			s.WriteString(constants.DefaultItemStyle.Render("  " + choice))
 		}
 		s.WriteString("\n")
 	}
@@ -61,7 +60,7 @@ var ThemeArrow = func(choices []Choice, cursor int) string {
 		if cursor == i {
 			s.WriteString(constants.DefaultSelectedItemStyle.Render(("❯ " + choice)))
 		} else {
-			s.WriteString(constants.DefaultItemStyle.Render(fmt.Sprintf("  " + choice)))
+			s.WriteString(constants.DefaultItemStyle.Render("  " + choice))
 		}
 		s.WriteString("\n")
 	}
