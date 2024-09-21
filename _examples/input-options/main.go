@@ -25,6 +25,7 @@ func main() {
 		"Blah blah",
 		input.WithHelp(true),
 		input.WithWidth(5),
+		input.WithCharLimit(5),
 	)
 	CheckErr(err)
 
