@@ -26,7 +26,11 @@ func main() {
 		MultiChoose([]string{"Item 1", "Item 2", "Item 3"})
 	CheckErr(err)
 
-	val2, err := prompt.New().Ask("MultiChoose with Help:").
+	val2, err := prompt.New().Ask("MultiChoose:").
+		MultiChooseIndex([]string{"Item 1", "Item 2", "Item 3"})
+	CheckErr(err)
+
+	val3, err := prompt.New().Ask("MultiChoose with Help:").
 		MultiChoose(
 			[]string{"Item 1", "Item 2", "Item 3"},
 			multichoose.WithDefaultIndexes(1, []int{1, 2}),
@@ -34,5 +38,5 @@ func main() {
 		)
 	CheckErr(err)
 
-	fmt.Printf("{ %s }, { %s }\n", strings.Join(val1, ", "), strings.Join(val2, ", "))
+	fmt.Printf("{ %s }, { %v }, { %s }\n", strings.Join(val1, ", "), val2, strings.Join(val3, ", "))
 }

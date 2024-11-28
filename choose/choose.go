@@ -54,6 +54,10 @@ func New(choices []Choice, opts ...Option) *Model {
 	return m
 }
 
+func (m Model) Index() int {
+	return m.cursor
+}
+
 func (m Model) Data() string {
 	return m.choices[m.cursor].Text
 }

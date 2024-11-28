@@ -17,36 +17,43 @@ func TestMultiChoose(t *testing.T) {
 	for _, testcase := range []struct {
 		model multichoose.Model
 		keys  []byte
+		index []int
 		data  []string
 	}{
 		{
 			model: *multichoose.New(items),
 			keys:  []byte("\r\n"),
+			index: []int{},
 			data:  []string{},
 		},
 		{
 			model: *multichoose.New(items),
 			keys:  []byte("kk jj \r\n"),
+			index: []int{0, 1},
 			data:  []string{"Item 1", "Item 2"},
 		},
 		{
 			model: *multichoose.New(items),
 			keys:  []byte("kk  jj \r\n"),
+			index: []int{0},
 			data:  []string{"Item 1"},
 		},
 		{
 			model: *multichoose.New(items),
 			keys:  []byte("kk jj  \r\n"),
+			index: []int{1},
 			data:  []string{"Item 2"},
 		},
 		{
 			model: *multichoose.New(items),
 			keys:  []byte("kk  jj  \r\n"),
+			index: []int{},
 			data:  []string{},
 		},
 		{
 			model: *multichoose.New(items),
 			keys:  []byte{'k', 'k', ' ', byte(tea.KeyTab), byte(tea.KeyTab), ' ', '\r', '\n'},
+			index: []int{0, 1},
 			data:  []string{"Item 1", "Item 2"},
 		},
 	} {
@@ -60,6 +67,7 @@ func TestMultiChoose(t *testing.T) {
 		m, ok := tm.(multichoose.Model)
 		require.Equal(t, true, ok)
 
+		require.Equal(t, testcase.index, m.Index())
 		require.Equal(t, testcase.data, m.Data())
 		require.Equal(t, strings.Join(testcase.data, ", "), m.DataString())
 		require.Equal(t, true, m.Quitting())

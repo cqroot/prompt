@@ -46,6 +46,17 @@ func New(choices []string, opts ...Option) *Model {
 	return m
 }
 
+func (m Model) Index() []int {
+	result := make([]int, 0)
+
+	for i := 0; i < len(m.choices); i++ {
+		if m.mc.IsSelected(i) {
+			result = append(result, i)
+		}
+	}
+	return result
+}
+
 func (m Model) Data() []string {
 	result := make([]string, 0)
 

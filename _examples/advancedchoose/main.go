@@ -30,6 +30,14 @@ func main() {
 	CheckErr(err)
 
 	val2, err := prompt.New().Ask("Choose:").
+		AdvancedChooseIndex([]choose.Choice{
+			{Text: "Item 1", Note: "The note for item 1"},
+			{Text: "Another item", Note: "The note for item 2"},
+			{Text: "Item 3", Note: "The note for item 3"},
+		})
+	CheckErr(err)
+
+	val3, err := prompt.New().Ask("Choose:").
 		AdvancedChoose(
 			[]choose.Choice{
 				{Text: "Item 1", Note: "The note for item 1"},
@@ -40,5 +48,5 @@ func main() {
 		)
 	CheckErr(err)
 
-	fmt.Printf("{ %s }, { %s }\n", val1, val2)
+	fmt.Printf("{ %s }, { %d }, { %s }\n", val1, val2, val3)
 }

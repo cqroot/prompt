@@ -16,37 +16,37 @@ func TestChoose(t *testing.T) {
 	for _, testcase := range []struct {
 		model choose.Model
 		keys  []byte
-		data  string
+		index int
 	}{
 		{
 			model: *choose.NewWithStrings(items),
 			keys:  []byte("\r\n"),
-			data:  "Item 1",
+			index: 0,
 		},
 		{
 			model: *choose.NewWithStrings(items),
 			keys:  []byte("kkjjj\r\n"),
-			data:  "Item 2",
+			index: 1,
 		},
 		{
 			model: *choose.NewWithStrings(items),
 			keys:  []byte{'k', 'k', byte(tea.KeyTab), byte(tea.KeyTab), byte(tea.KeyTab), '\r', '\n'},
-			data:  "Item 2",
+			index: 1,
 		},
 		{
 			model: *choose.NewWithStrings(items, choose.WithKeyMap(choose.HorizontalKeyMap)),
 			keys:  []byte("\r\n"),
-			data:  "Item 1",
+			index: 0,
 		},
 		{
 			model: *choose.NewWithStrings(items, choose.WithKeyMap(choose.HorizontalKeyMap)),
 			keys:  []byte("hhlll\r\n"),
-			data:  "Item 2",
+			index: 1,
 		},
 		{
 			model: *choose.NewWithStrings(items, choose.WithKeyMap(choose.HorizontalKeyMap)),
 			keys:  []byte{'h', 'h', byte(tea.KeyTab), byte(tea.KeyTab), byte(tea.KeyTab), '\r', '\n'},
-			data:  "Item 2",
+			index: 1,
 		},
 	} {
 		var in bytes.Buffer
@@ -59,8 +59,9 @@ func TestChoose(t *testing.T) {
 		m, ok := tm.(choose.Model)
 		require.Equal(t, true, ok)
 
-		require.Equal(t, testcase.data, m.Data())
-		require.Equal(t, testcase.data, m.DataString())
+		require.Equal(t, testcase.index, m.Index())
+		require.Equal(t, items[testcase.index], m.Data())
+		require.Equal(t, items[testcase.index], m.DataString())
 		require.Equal(t, true, m.Quitting())
 	}
 }

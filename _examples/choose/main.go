@@ -25,7 +25,11 @@ func main() {
 		Choose([]string{"Item 1", "Item 2", "Item 3"})
 	CheckErr(err)
 
-	val2, err := prompt.New().Ask("Choose with Help:").
+	val2, err := prompt.New().Ask("Choose:").
+		ChooseIndex([]string{"Item 1", "Item 2", "Item 3"})
+	CheckErr(err)
+
+	val3, err := prompt.New().Ask("Choose with Help:").
 		Choose(
 			[]string{"Item 1", "Item 2", "Item 3"},
 			choose.WithDefaultIndex(1),
@@ -33,5 +37,5 @@ func main() {
 		)
 	CheckErr(err)
 
-	fmt.Printf("{ %s }, { %s }\n", val1, val2)
+	fmt.Printf("{ %s }, { %d }, { %s }\n", val1, val2, val3)
 }
