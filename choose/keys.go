@@ -36,12 +36,12 @@ var (
 			key.WithHelp("q", "quit"),
 		),
 		Prev: key.NewBinding(
-			key.WithKeys("up", "k"),
-			key.WithHelp("↑/k", "move up"),
+			key.WithKeys("up", "k", "ctrl+p"),
+			key.WithHelp("↑/k/ctrl+p", "move up"),
 		),
 		Next: key.NewBinding(
-			key.WithKeys("down", "j", "tab"),
-			key.WithHelp("↓/j/tab", "move down"),
+			key.WithKeys("down", "j", "tab", "ctrl+n"),
+			key.WithHelp("↓/j/ctrl+n/tab", "move down"),
 		),
 	}
 
@@ -59,12 +59,12 @@ var (
 			key.WithHelp("q", "quit"),
 		),
 		Prev: key.NewBinding(
-			key.WithKeys("left", "h"),
-			key.WithHelp("←/h", "move left"),
+			key.WithKeys("left", "h", "ctrl+b"),
+			key.WithHelp("←/h/ctrl+b", "move left"),
 		),
 		Next: key.NewBinding(
-			key.WithKeys("right", "l", "tab", " "),
-			key.WithHelp("→/l/tab/space", "move right"),
+			key.WithKeys("right", "l", "ctrl+f", "tab", " "),
+			key.WithHelp("→/l/ctrl+f/tab/space", "move right"),
 		),
 	}
 )

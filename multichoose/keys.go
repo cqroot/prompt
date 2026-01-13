@@ -24,12 +24,12 @@ func (k KeyMap) FullHelp() [][]key.Binding {
 
 var DefaultKeyMap = KeyMap{
 	Prev: key.NewBinding(
-		key.WithKeys("up", "k"),
-		key.WithHelp("↑/k", "move up"),
+		key.WithKeys("up", "k", "ctrl+p"),
+		key.WithHelp("↑/k/ctrl+p", "move up"),
 	),
 	Next: key.NewBinding(
-		key.WithKeys("down", "j", "tab"),
-		key.WithHelp("↓/j/tab", "move down"),
+		key.WithKeys("down", "j", "ctrl+n", "tab"),
+		key.WithHelp("↓/j/ctrl+n/tab", "move down"),
 	),
 	Choose: key.NewBinding(
 		key.WithKeys(" "),
