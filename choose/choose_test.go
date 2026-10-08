@@ -78,3 +78,13 @@ func TestErrors(t *testing.T) {
 
 	require.Equal(t, constants.ErrUserQuit, m.Error())
 }
+
+func TestBatchedRunes(t *testing.T) {
+	items := []string{"Item 1", "Item 2", "Item 3"}
+
+	var tm tea.Model = *choose.NewWithStrings(items)
+	tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("jj")})
+	m := tm.(choose.Model)
+
+	require.Equal(t, "Item 3", m.Data())
+}

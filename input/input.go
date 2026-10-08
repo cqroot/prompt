@@ -125,18 +125,34 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
-		if m.inputMode == InputNumber || m.inputMode == InputInteger {
-			keypress := msg.String()
-			if len(keypress) == 1 {
-				if keypress == "." {
-					if m.inputMode != InputNumber ||
-						strings.Contains(m.textInput.Value(), ".") {
-						return m, nil
-					}
-				} else {
-					if !unicode.IsNumber([]rune(keypress)[0]) {
-						return m, nil
-					}
+		if msg.Type == tea.KeyRunes && len(msg.Runes) > 1 {
+			var cmd tea.Cmd
+			for _, r := range msg.Runes {
+				var subCmd tea.Cmd
+				m, subCmd = m.updateSingleKey(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{r}, Alt: msg.Alt})
+				cmd = tea.Batch(cmd, subCmd)
+			}
+			return m, cmd
+		}
+	}
+
+	var cmd tea.Cmd
+	m.textInput, cmd = m.textInput.Update(msg)
+	return m, cmd
+}
+
+func (m Model) updateSingleKey(msg tea.KeyMsg) (Model, tea.Cmd) {
+	if m.inputMode == InputNumber || m.inputMode == InputInteger {
+		keypress := msg.String()
+		if len(keypress) == 1 {
+			if keypress == "." {
+				if m.inputMode != InputNumber ||
+					strings.Contains(m.textInput.Value(), ".") {
+					return m, nil
+				}
+			} else {
+				if !unicode.IsNumber([]rune(keypress)[0]) {
+					return m, nil
 				}
 			}
 		}

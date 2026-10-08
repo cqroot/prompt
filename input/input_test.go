@@ -2,9 +2,11 @@ package input_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/cqroot/prompt/constants"
 	"github.com/cqroot/prompt/input"
 	"github.com/stretchr/testify/require"
@@ -73,17 +75,21 @@ func TestErrors(t *testing.T) {
 func TestThemes(t *testing.T) {
 	defaultVal := "default value"
 
+	pad := func(width int, s string) string {
+		return s + strings.Repeat(" ", width-lipgloss.Width(s))
+	}
+
 	for _, testcase := range []struct {
 		model input.Model
 		view  string
 	}{
 		{
 			model: *input.New(defaultVal),
-			view:  "default value",
+			view:  pad(40, "default value"),
 		},
 		{
 			model: *input.New(defaultVal, input.WithHelp(true)),
-			view:  "default value\n\nenter confirm • esc quit",
+			view:  pad(40, "default value") + "\n\nenter confirm • esc quit",
 		},
 		{
 			model: func() input.Model {
@@ -93,7 +99,7 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "test                                     ",
+			view: pad(41, "test"),
 		},
 		{
 			model: func() input.Model {
@@ -103,7 +109,7 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "                                     ",
+			view: pad(37, ""),
 		},
 		{
 			model: func() input.Model {
@@ -113,9 +119,17 @@ func TestThemes(t *testing.T) {
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyEnter})
 				return tm.(input.Model)
 			}(),
-			view: "****                                     ",
+			view: pad(41, "****"),
 		},
 	} {
 		require.Equal(t, testcase.view, testcase.model.View())
 	}
+}
+
+func TestBatchedRunesWithInputMode(t *testing.T) {
+	var tm tea.Model = *input.New("default", input.WithInputMode(input.InputInteger))
+	tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("ab12cd34")})
+	m := tm.(input.Model)
+
+	require.Equal(t, "1234", m.Data())
 }

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/cqroot/prompt/constants"
 	"github.com/cqroot/prompt/write"
 	"github.com/stretchr/testify/require"
@@ -67,39 +68,46 @@ func TestErrors(t *testing.T) {
 func TestThemes(t *testing.T) {
 	defaultVal := "default value"
 
+	// The textarea renders each line padded to its full width (40 columns by
+	// default), so build the expected filler explicitly instead of relying on
+	// hard-coded trailing whitespace.
+	pad := func(s string) string {
+		return s + strings.Repeat(" ", 40-lipgloss.Width(s))
+	}
+	blank := pad("┃")
+
 	for _, testcase := range []struct {
 		model write.Model
 		view  string
 	}{
 		{
 			model: *write.New(defaultVal),
-			view: "\n┃ default value                      " +
-				`
-┃                                    
-┃                                    
-┃                                    
-┃                                    
-┃                                    `,
+			view: "\n" + pad("┃ default value") + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank,
 		},
 		{
 			model: *write.New(defaultVal, write.WithHelp(true)),
-			view: "\n┃ default value                      " + `
-┃                                    
-┃                                    
-┃                                    
-┃                                    
-┃                                    
-
-ctrl+d confirm • esc quit`,
+			view: "\n" + pad("┃ default value") + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				"\n" +
+				"ctrl+d confirm • esc quit",
 		},
 		{
 			model: *write.New(defaultVal, write.WithLineNumbers(true)),
-			view: "\n┃  1 default value                      " + `
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    
-┃  ~                                    `,
+			view: "\n" + pad("┃   1 default value") + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank,
 		},
 		{
 			model: func() write.Model {
@@ -108,17 +116,16 @@ ctrl+d confirm • esc quit`,
 				tm, _ = tm.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("test")})
 				return tm.(write.Model)
 			}(),
-			view: "\n┃ te                                 " +
-				`
-┃                                    
-┃                                    
-┃                                    
-┃                                    
-┃                                    `,
+			view: "\n" + pad("┃ te") + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank + "\n" +
+				blank,
 		},
 		{
 			model: *write.New(defaultVal, write.WithWidth(3)),
-			view:  "\n┃ .\n┃  \n┃  \n┃  \n┃  \n┃  ",
+			view:  "\n┃ d\n┃ e\n┃ f\n┃ a\n┃ u\n┃ l",
 		},
 	} {
 		require.Equal(t, testcase.view, testcase.model.View())

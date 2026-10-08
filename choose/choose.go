@@ -84,6 +84,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.help.Width = msg.Width
 
 	case tea.KeyMsg:
+		if msg.Type == tea.KeyRunes && len(msg.Runes) > 1 {
+			var model tea.Model = m
+			for _, r := range msg.Runes {
+				var cmd tea.Cmd
+				model, cmd = model.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{r}, Alt: msg.Alt})
+				if model.(Model).quitting {
+					return model, cmd
+				}
+			}
+			return model, nil
+		}
+
 		switch {
 		case key.Matches(msg, m.keys.Prev):
 			m.cursor--
