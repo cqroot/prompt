@@ -16,6 +16,10 @@ type Model struct {
 	choices []string
 	cursor  int
 
+	// scrolling viewport
+	height int
+	offset int
+
 	theme          Theme
 	quitting       bool
 	err            error
@@ -77,10 +81,57 @@ func (m Model) Init() tea.Cmd {
 	return nil
 }
 
+// pageSize returns how many options fit in the terminal at once. It is derived
+// from the terminal height, leaving room for the leading blank line and, when
+// enabled, the help line. When the height is unknown it does not scroll.
+func (m Model) pageSize() int {
+	if m.height <= 0 {
+		return len(m.choices)
+	}
+
+	size := m.height - 1 // leading blank line
+	if m.showHelp {
+		size-- // help line
+	}
+	if size < 1 {
+		size = 1
+	}
+	return size
+}
+
+// clampOffset moves the offset so that the cursor stays inside the visible
+// window. When every option fits, the offset is always zero.
+func (m *Model) clampOffset() {
+	size := m.pageSize()
+	total := len(m.choices)
+
+	if size >= total || size <= 0 {
+		m.offset = 0
+		return
+	}
+
+	if m.cursor < m.offset {
+		m.offset = m.cursor
+	}
+	if m.cursor >= m.offset+size {
+		m.offset = m.cursor - size + 1
+	}
+
+	max := total - size
+	if m.offset > max {
+		m.offset = max
+	}
+	if m.offset < 0 {
+		m.offset = 0
+	}
+}
+
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.help.Width = msg.Width
+		m.height = msg.Height
+		m.clampOffset()
 
 	case tea.KeyMsg:
 		switch {
@@ -89,12 +140,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor < 0 {
 				m.cursor = len(m.choices) - 1
 			}
+			m.clampOffset()
 
 		case key.Matches(msg, m.keys.Next):
 			m.cursor++
 			if m.cursor >= len(m.choices) {
 				m.cursor = 0
 			}
+			m.clampOffset()
 
 		case key.Matches(msg, m.keys.Choose):
 			m.mc.Toggle(m.cursor)
@@ -119,7 +172,25 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	view := m.theme(m.choices, m.cursor, m.mc.IsSelected)
+	size := m.pageSize()
+	total := len(m.choices)
+
+	var view string
+	if size >= total || size <= 0 {
+		view = m.theme(m.choices, m.cursor, m.mc.IsSelected)
+	} else {
+		end := m.offset + size
+		if end > total {
+			end = total
+		}
+		window := m.choices[m.offset:end]
+
+		isSelected := func(i int) bool {
+			return m.mc.IsSelected(m.offset + i)
+		}
+		view = m.theme(window, m.cursor-m.offset, isSelected)
+	}
+
 	if m.showHelp {
 		view += "\n"
 		view += m.help.View(m.keys)
